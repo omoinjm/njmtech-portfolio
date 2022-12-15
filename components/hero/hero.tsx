@@ -14,9 +14,8 @@ export const Hero = () => {
    const [index, setIndex] = useState(1);
    const toRotate = [
       'Software Engineer',
-      'Web Designer',
-      'UI/UX Designer',
-      'Freelancer',
+      'Cloud',
+      'DevOps',
    ];
    const period = 500;
 
