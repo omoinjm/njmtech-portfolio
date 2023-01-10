@@ -3,6 +3,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
 
+/****** COLOURS ******/
+:root {
+	--light-bg-color: #fff;
+	--light-color: #121212;
+	--dark-bg-color: #121212;
+	--dark-color: #fff;
+}
+
 /************ Custom Font ************/
 @font-face {
 	font-family: Centra;
@@ -121,7 +129,7 @@ nav.navbar {
 	position: fixed;
 	width: 100%;
 	top: 0;
-	z-index: 9999;
+	z-index: 999;
 	transition: 0.32s ease-in-out;
 }
 nav.navbar.scrolled {
@@ -267,10 +275,17 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 }
 
 /************ Banner Css ************/
+.banner#dark {
+	background-image: url('/images/img/banner-bg.png');
+}
+
+.banner#light {
+	background-image: url('/images/img/light-mode/banner-bg.png');
+}
+
 .banner {
 	margin-top: 0;
 	padding: 260px 0 100px 0;
-	background-image: url('/images/img/banner-bg.png');
 	background-position: top center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -419,6 +434,14 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 }
 .project .nav-pills .wrapper {
 	width: 33.33333%;
+}
+.project .nav-pills .wrapper .icons {
+	font-size: 30;
+}
+@media (max-width: 575px) {
+	.project .nav-pills .wrapper .icons {
+		font-size: 5;
+	}
 }
 .project .nav-pills .nav-link {
 	background-color: transparent;
@@ -713,7 +736,7 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 }
 .footer .social-icon {
 	display: flex;
-	justify-content: end;
+	justify-content: flex-end;
 	flex-direction: row;
 }
 .footer p {
@@ -735,17 +758,17 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 /****** TOAST ******/
 .Toastify__toast--error {
 	border-radius: 10px !important;
-	background: rgba(255, 0, 0, 0.5) !important;
+	background: rgba(255, 0, 0, 0.3) !important;
 }
 
 .Toastify__toast--success {
 	border-radius: 10px !important;
-	background: rgba(0, 255, 0, 0.5) !important;
+	background: rgba(0, 255, 0, 0.3) !important;
 }
 
 .Toastify__toast--warning {
 	border-radius: 10px !important;
-	background: rgba(231, 131, 38, 0.5) !important;
+	background: rgba(231, 131, 38, 0.3) !important;
 }
 
 .Toastify__toast {
@@ -761,13 +784,13 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 .Toastify__toast-body {
 	color: white;
 	font-size: 16px;
-	padding-left: 20px;
+	/* padding-left: 20px; */
 	line-height: 20px;
 	padding: 0px;
 	padding-top: 25px;
 	width: 100%;
 	font-weight: 400;
-	margin-left: 25px !important;
+	/* margin-left: 25px !important; */
 }
 
 .Toastify__toast > button > svg {

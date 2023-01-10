@@ -54,7 +54,7 @@ export interface ITabProjects {
 	tabKey: string;
 	tabName: string;
 	project?: IProjects[];
-	icon: any;
+	icon: string;
 }
 
 interface IStack {

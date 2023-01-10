@@ -1,4 +1,3 @@
-import { CiGlobe, CiSettings, CiShoppingCart } from 'react-icons/ci';
 import { ISkills, ITabProjects } from '../interfaces';
 import {
 	appProjects,
@@ -27,20 +26,20 @@ export const projectTabs: ITabProjects[] = [
 		tabKey: 'first',
 		tabName: 'Web Site',
 		project: webSiteProjects,
-		icon: CiGlobe,
+		icon: 'bi bi-globe',
 	},
 	{
 		id: 1,
 		tabKey: 'second',
 		tabName: 'App',
 		project: appProjects,
-		icon: CiSettings,
+		icon: 'bi bi-gear',
 	},
 	{
 		id: 2,
 		tabKey: 'third',
 		tabName: 'E-Commerce',
 		project: eCommerceProjects,
-		icon: CiShoppingCart,
+		icon: 'bi bi-cart',
 	},
 ];

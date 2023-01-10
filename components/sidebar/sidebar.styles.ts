@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export const SidebarContainer = styled.aside<{ isOpen?: boolean }>`
 	position: fixed;
-	z-index: 999;
+	z-index: 9999;
 	width: 100%;
 	height: 100%;
 	background: #0d0d0d;
@@ -15,6 +15,7 @@ export const SidebarContainer = styled.aside<{ isOpen?: boolean }>`
 	transition: 0.3s ease-in-out;
 	opacity: ${({ isOpen }) => (isOpen ? '100%' : '0')};
 	top: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
+	overflow: hidden;
 `;
 
 export const CloseIcon = styled(AiOutlineClose)`

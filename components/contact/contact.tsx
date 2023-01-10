@@ -16,7 +16,7 @@ export const Contact = () => {
    };
    const [formDetails, setFormDetails] = useState(formInitialDetails);
    const [buttonText, setButtonText] = useState('Send');
-   const [status, setStatus] = useState({});
+   const [status, setStatus] = useState({ success: false, message: '' });
 
    const onFormUpdate = (category: any, value: any) => {
       setFormDetails({
@@ -29,7 +29,7 @@ export const Contact = () => {
       e.preventDefault();
 
       setButtonText('Sending...');
-      let response = await fetch('http://localhost:5000/contact', {
+      let response = await fetch('http://localhost:3000/api/contact', {
          method: 'POST',
          headers: {
             'Content-Type': 'application/json;charset=utf-8',
@@ -40,14 +40,14 @@ export const Contact = () => {
       let result = await response.json();
       setFormDetails(formInitialDetails);
       if (result.code === 200) {
-         setStatus({ succes: true, message: 'Message sent successfully' });
-         toast.success('Email sent successfully');
+         setStatus({ success: true, message: 'Message sent successfully' });
+         toast.success(status.message);
       } else {
          setStatus({
-            succes: false,
+            success: false,
             message: 'Something went wrong, please try again later.',
          });
-         toast.error('Something went wrong, please try again later.');
+         toast.error(status.message);
       }
    };
 

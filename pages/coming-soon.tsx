@@ -53,7 +53,7 @@ const Error = styled.div<{ height?: number | null | undefined }>`
   height: calc(${(props) => props.height}px / 1.4);
 `;
 
-const NotFoundError = () => {
+const CommingSoon = () => {
    const size = useWindowSize();
 
    return (
@@ -64,4 +64,4 @@ const NotFoundError = () => {
    );
 };
 
-export default NotFoundError;
+export default CommingSoon;

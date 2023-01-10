@@ -1,17 +1,25 @@
 import 'animate.css';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { ArrowRightCircle } from 'react-bootstrap-icons';
 import TrackVisibility from 'react-on-screen';
 import { Cursor } from 'react-simple-typewriter';
 import { Img } from './hero.styles';
 
+export const ThemeContext = createContext<any>(null);
+
 export const Hero = () => {
+   const [theme, setTheme] = useState("dark")
    const [loopNum, setLoopNum] = useState(0);
    const [isDeleting, setIsDeleting] = useState(false);
    const [text, setText] = useState('');
    const [delta, setDelta] = useState(300 - Math.random() * 100);
    const [index, setIndex] = useState(1);
+
+   const toggleTheme = () => {
+      setTheme((curr) => (curr === "dark" ? "light" : "dark"));
+   }
+
    const toRotate = [
       'Software Engineer',
       'Cloud',
@@ -57,57 +65,59 @@ export const Hero = () => {
    };
 
    return (
-      <section className="banner" id="home">
-         <Container>
-            <Row className="aligh-items-center">
-               <Col xs={12} md={6} xl={7}>
-                  <TrackVisibility>
-                     {({ isVisible }) => (
-                        <div
-                           className={
-                              isVisible ? 'animate__animated animate__fadeIn' : ''
-                           }
-                        >
-                           <span className="tagline">Nhlanhla Junior Malaza</span>
-                           <h1>
-                              I&apos;m a <span>{text}</span>
-                              <Cursor />.
-                           </h1>
-                           <p>
-                              A passionate software developer, willing to learn and adapt
-                              to any software environment. I am always striving to improve
-                              myself and my skills. I enjoy working with others and within
-                              a team.
-                           </p>
-                           <button onClick={() => console.log('connect')}>
-                              <a
-                                 href="https://resume.io/r/xIyIsoKTH"
-                                 target="_blank"
-                                 aria-label="Resume"
-                                 rel="noreferrer"
-                              >
-                                 View Resume <ArrowRightCircle size={25} />
-                              </a>
-                           </button>
-                        </div>
-                     )}
-                  </TrackVisibility>
-               </Col>
-               <Col xs={12} md={6} xl={5}>
-                  <TrackVisibility>
-                     {({ isVisible }) => (
-                        <div
-                           className={
-                              isVisible ? 'animate__animated animate__zoomIn' : ''
-                           }
-                        >
-                           <Img width={20} height={20} src='/assets/Saly-13.svg' alt="Header Img" />
-                        </div>
-                     )}
-                  </TrackVisibility>
-               </Col>
-            </Row>
-         </Container>
-      </section>
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+         <section className="banner" id={theme}>
+            <Container>
+               <Row className="aligh-items-center">
+                  <Col xs={12} md={6} xl={7}>
+                     <TrackVisibility>
+                        {({ isVisible }) => (
+                           <div
+                              className={
+                                 isVisible ? 'animate__animated animate__fadeIn' : ''
+                              }
+                           >
+                              <span className="tagline">Nhlanhla Junior Malaza</span>
+                              <h1>
+                                 I&apos;m a <span>{text}</span>
+                                 <Cursor />.
+                              </h1>
+                              <p>
+                                 A passionate software developer, willing to learn and adapt
+                                 to any software environment. I am always striving to improve
+                                 myself and my skills. I enjoy working with others and within
+                                 a team.
+                              </p>
+                              <button onClick={() => console.log('connect')}>
+                                 <a
+                                    href="https://resume.io/r/xIyIsoKTH"
+                                    target="_blank"
+                                    aria-label="Resume"
+                                    rel="noreferrer"
+                                 >
+                                    View Resume <ArrowRightCircle size={25} />
+                                 </a>
+                              </button>
+                           </div>
+                        )}
+                     </TrackVisibility>
+                  </Col>
+                  <Col xs={12} md={6} xl={5}>
+                     <TrackVisibility>
+                        {({ isVisible }) => (
+                           <div
+                              className={
+                                 isVisible ? 'animate__animated animate__zoomIn' : ''
+                              }
+                           >
+                              <Img width={20} height={20} src='/assets/Saly-13.svg' alt="Header Img" />
+                           </div>
+                        )}
+                     </TrackVisibility>
+                  </Col>
+               </Row>
+            </Container>
+         </section>
+      </ThemeContext.Provider >
    );
 };

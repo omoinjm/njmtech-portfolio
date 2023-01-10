@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Footer } from './footer/footer';
 import { NavBar } from './navbar/navbar';
 import { Sidebar } from './sidebar/sidebar';
+import GoToTop from "./GoToTop";
 
 type LayoutProps = {
    children: React.ReactNode,
@@ -16,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
 
    return (
       <main>
+         <GoToTop />
          <Sidebar isOpen={isOpen} toggle={toggle} />
          <NavBar toggle={toggle} />
          {children}
