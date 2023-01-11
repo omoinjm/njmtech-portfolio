@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import { ILinks } from '../interfaces';
 import { Footer } from './footer/footer';
+import GoToTop from "./GoToTop";
 import { NavBar } from './navbar/navbar';
 import { Sidebar } from './sidebar/sidebar';
-import GoToTop from "./GoToTop";
-
 type LayoutProps = {
    children: React.ReactNode,
+   data: ILinks
 };
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, data }: LayoutProps) => {
    const [isOpen, setIsOpen] = useState(false);
 
    const toggle = () => {
@@ -18,10 +19,10 @@ const Layout = ({ children }: LayoutProps) => {
    return (
       <main>
          <GoToTop />
-         <Sidebar isOpen={isOpen} toggle={toggle} />
-         <NavBar toggle={toggle} />
+         <Sidebar isOpen={isOpen} toggle={toggle} data={data?.pageLinks} />
+         <NavBar toggle={toggle} data={data?.pageLinks} />
          {children}
-         <Footer />
+         <Footer data={data?.footerLinks} />
       </main>
    )
 }

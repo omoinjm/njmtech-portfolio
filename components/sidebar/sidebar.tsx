@@ -1,5 +1,3 @@
-import React from 'react';
-import { pageLinks } from '../../data';
 import {
    CloseIcon,
    Icon,
@@ -11,7 +9,7 @@ import {
    SideBtnWrap
 } from './sidebar.styles';
 
-export const Sidebar = ({ isOpen, toggle }: any) => {
+export const Sidebar = ({ isOpen, toggle, data }: any) => {
    return (
       <SidebarContainer isOpen={isOpen} onClick={toggle}>
          <Icon onClick={toggle}>
@@ -19,7 +17,7 @@ export const Sidebar = ({ isOpen, toggle }: any) => {
          </Icon>
          <SidebarWrapper>
             <SidebarMenu>
-               {pageLinks.map((option, index) => {
+               {data?.map((option: any, index: number) => {
                   return (
                      <SidebarLink key={index} to={option.link} onClick={toggle}>
                         {option.name}

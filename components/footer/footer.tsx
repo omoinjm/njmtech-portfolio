@@ -1,9 +1,8 @@
 import Image from 'next/image';
 import { Col, Container, Row } from 'react-bootstrap';
-import { footerLinks } from '../../data';
 import { MailchimpForm } from '../mailchimp/mailchimpForm';
 
-export const Footer = () => {
+export const Footer = ({ data }: any) => {
    return (
       <footer className="footer">
          <Container>
@@ -16,7 +15,7 @@ export const Footer = () => {
                </Col>
                <Col size={12} sm={6} className="text-center text-sm-end">
                   <div className="social-icon">
-                     {footerLinks.map((item, index) => {
+                     {data?.map((item: any, index: number) => {
                         return (
                            <div key={index}>
                               <a href={item.link} target="_blank" rel="noreferrer">

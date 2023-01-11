@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { AiOutlineBars } from 'react-icons/ai';
 import { Link } from 'react-scroll';
-import { pageLinks } from '../../data';
 import { MobileIcon } from './navbar.styles';
 
-export const NavBar = ({ toggle }: any) => {
+export const NavBar = ({ toggle, data }: any) => {
    const [activeLink, setActiveLink] = useState('home');
    const [scrolled, setScrolled] = useState(false);
 
@@ -38,7 +37,7 @@ export const NavBar = ({ toggle }: any) => {
             </MobileIcon>
             <Navbar.Collapse id="basic-navbar-nav">
                <Nav className="ms-auto">
-                  {pageLinks.map((option, index) => {
+                  {data?.map((option: any, index: number) => {
                      return (
                         <div key={index}>
                            <Link

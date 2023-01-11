@@ -4,6 +4,11 @@ export interface IAge {
 	age: number;
 }
 
+export interface ILinks {
+	pageLinks?: IRoutes[];
+	footerLinks?: IFooter[];
+}
+
 export interface IRoutes {
 	id: number;
 	link: string;
@@ -38,6 +43,14 @@ export interface IButton {
 	fontBig?: boolean;
 }
 
+export interface ITabProjects {
+	id: number;
+	tabKey: string;
+	tabName: string;
+	project?: IProjects[];
+	icon: string;
+}
+
 export interface IProjects {
 	id: number;
 	title: string;
@@ -47,14 +60,6 @@ export interface IProjects {
 	codeV: boolean;
 	code: string;
 	stack?: IStack[];
-}
-
-export interface ITabProjects {
-	id: number;
-	tabKey: string;
-	tabName: string;
-	project?: IProjects[];
-	icon: string;
 }
 
 interface IStack {

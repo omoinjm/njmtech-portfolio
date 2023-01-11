@@ -1,11 +1,10 @@
 import Image from 'next/image';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { skillImg } from '../../data';
 import getAge from '../../utils';
 import { About } from './skill.styles';
 
-export const Skills = () => {
+export const Skills = ({ data }: any) => {
    const responsive = {
       superLargeDesktop: {
          // the naming can be any, depends on you.
@@ -48,7 +47,7 @@ export const Skills = () => {
                         arrows={false}
                         className="owl-carousel owl-theme skill-slider"
                      >
-                        {skillImg.map((item, index) => {
+                        {data?.map((item: any, index: number) => {
                            return (
                               <div className="item" key={index}>
                                  <Image width={40}

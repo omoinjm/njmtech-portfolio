@@ -1,13 +1,14 @@
 
 import { Analytics } from '@vercel/analytics/react';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import type { AppProps } from "next/app";
-import Layout from "../components/layout";
-import "../styles/globals.css";
-
+import { useEffect, useState } from 'react';
 import { createGlobalStyle } from 'styled-components';
+import Layout from "../components/layout";
+import { ILinks } from '../interfaces';
+import "../styles/globals.css";
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -25,10 +26,20 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const [data, setData] = useState<ILinks>({});
+
+  useEffect(() => {
+    fetch('/api/links')
+      .then(response => response.json())
+      .then(json => {
+        setData(json);
+      })
+  }, []);
+
   return (
     <>
       <GlobalStyle />
-      <Layout>
+      <Layout data={data}>
         <Component {...pageProps} />
         <Analytics />
       </Layout>

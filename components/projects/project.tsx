@@ -1,12 +1,11 @@
 import 'animate.css';
 import Image from 'next/image';
-import { SSRProvider, Col, Container, Nav, Row, Tab } from 'react-bootstrap';
+import { Col, Container, Nav, Row, SSRProvider, Tab } from 'react-bootstrap';
 import TrackVisibility from 'react-on-screen';
-import { projectTabs } from '../../data';
 import { ProjectCard } from '../card/card';
 import { Wrapper } from './project.styles';
 
-export const Projects = () => {
+export const Projects = ({ data }: any) => {
    return (
       <SSRProvider>
          <section className="project" id="project">
@@ -33,7 +32,7 @@ export const Projects = () => {
                                     className="nav-pills mb-5 justify-content-center align-items-center"
                                     id="pills-tab"
                                  >
-                                    {projectTabs.map((item, index) => {
+                                    {data?.map((item: any, index: number) => {
                                        return (
                                           <Wrapper className="wrapper" key={index}>
                                              <Nav.Item>
@@ -51,7 +50,7 @@ export const Projects = () => {
                                        isVisible ? 'animate__animated animate__slideInUp' : ''
                                     }
                                  >
-                                    {projectTabs.map((item: any, index: number) => {
+                                    {data?.map((item: any, index: number) => {
                                        return (
                                           <Tab.Pane eventKey={item.tabKey} key={index}>
                                              <Row>
