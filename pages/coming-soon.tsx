@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface IArea {
@@ -50,7 +50,7 @@ const Error = styled.div<{ height?: number | null | undefined }>`
   align-items: center;
   padding: 0 2em;
   color: #fff;
-  height: calc(${(props) => props.height}px / 1.4);
+  height: calc(${(props) => props.height}px / 1.46);
 `;
 
 const CommingSoon = () => {

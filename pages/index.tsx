@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Nhlanhla Malaza</title>
+        <title>Nhlanhla Junior Malaza</title>
         <meta
           name="google-site-verification"
           content="uhCz2o1FOPTi4BlD_3yZ1Nw_ER4VAybFWURc5vBaIVo"
