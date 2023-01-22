@@ -31,6 +31,8 @@
 		"styled-components": "^5.3.6"
 	},
 	"devDependencies": {
+		"@next/swc-linux-x64-gnu": "^13.1.4",
+		"@next/swc-linux-x64-musl": "^13.1.4",
 		"@types/node": "^18.11.9",
 		"@types/nodemailer": "^6.4.6",
 		"@types/react": "^18.0.25",
