@@ -40,16 +40,11 @@ jobs:
       - name: 'Show me my variables'
         shell: bash
         run: | 
-          echo $DEPLOY_HOST
+          echo "$DEPLOY_HOST"
           echo $ENV_NAME
           echo $NODE_VERSION
           echo $DEPLOY_KEY
           echo $AWS_APP_NAME
-
-      - name: Test SSH connection
-        shell: bash
-        run: |
-          ssh -i $DEPLOY_KEY ubuntu@54.144.211.235
 
       # - name: 'Build Next.js app'
       #  shell: bash
