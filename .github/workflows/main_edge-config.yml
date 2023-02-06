@@ -46,8 +46,12 @@ jobs:
           echo $DEPLOY_KEY
           echo $AWS_APP_NAME
           echo "$DEPLOY_KEY" > ssh-private-key
+          
+          npm ci
+          npm run build
+
           chmod 600 ssh-private-key
-          ssh -i ssh-private-key ubuntu@54.144.211.235
+          scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ssh-private-key $GITHUB_WORKSPACE/.next ubuntu@54.144.211.235:/var/www/54.144.211.235/.next
 
       # - name: 'Build Next.js app'
       #  shell: bash
