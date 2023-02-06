@@ -45,6 +45,9 @@ jobs:
           echo $NODE_VERSION
           echo $DEPLOY_KEY
           echo $AWS_APP_NAME
+          echo "$DEPLOY_KEY" > ssh-private-key
+          chmod 600 ssh-private-key
+          ssh -i ssh-private-key ubuntu@54.144.211.235
 
       # - name: 'Build Next.js app'
       #  shell: bash
