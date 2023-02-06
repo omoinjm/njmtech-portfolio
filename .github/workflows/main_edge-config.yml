@@ -1,0 +1,49 @@
+# Node.js
+# Docs for the Azure Web Apps Deploy action:
+# https://github.com/azure/functions-action
+# Build a Node.js project with Azure Pipelines.
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Add steps that publish artifacts, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+name: Build and deploy Node.js project to AWS Lightsail server
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  # set this to the project path, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './'
+  # set this to the node version to use (supports 8.x, 10.x, 12.x)
+  NODE_VERSION: '16.x'
+  AZURE_FUNCTION_APP_NAME: 'new-site-nextjs'
+  PUBLIC_KEYS: ${{ secrets.PUBLIC_KEY }}
+  ENV_NAME: production
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2
+
+      - name: Setup Node ${{ env.NODE_VERSION }} Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 'Resolve Project Dependencies Using Npm and Run Tests'
+        shell: bash
+        run: |
+          npm ci
+          npm run build --if-present
+
+      - name: 'Deploy to AWS server'
+        shell: bash
+        run: | 
+          sudo scp -r -i $PUBLIC_KEYS ./.next ubuntu@54.90.76.40:/var/www/54.90.76.40/.next
+          echo "Finished and done!"
