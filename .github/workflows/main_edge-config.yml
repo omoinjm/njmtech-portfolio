@@ -19,7 +19,7 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './'
   # set this to the node version to use (supports 8.x, 10.x, 12.x)
   NODE_VERSION: '16.x'
-  AZURE_FUNCTION_APP_NAME: 'new-site-nextjs'
+  AWS_APP_NAME: 'new-site-nextjs'
   PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
   DEPLOY_HOST: 54.90.76.40
   ENV_NAME: production
@@ -32,19 +32,28 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
 
-      - name: Setup Node ${{ env.NODE_VERSION }} Environment
+      - name: 'Setup Node ${{ env.NODE_VERSION }} Environment'
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 'Build Next.js app'
-        shell: bash
-        run: |
-          npm install
-          npm run build
-
-      - name: 'Deploy to AWS server'
+      - name: 'Show me my variables'
         shell: bash
         run: | 
-          scp -o StrictHostKeyChecking=no -r -i $PUBLIC_KEY $GITHUB_WORKSPACE/.next ubuntu@$DEPLOY_HOST:/var/www/54.90.76.40/.next
-          echo "Finished and done!"
+          echo $DEPLOY_HOST
+          echo $ENV_NAME
+          echo $NODE_VERSION
+          echo $PUBLIC_KEY
+          echo $AWS_APP_NAME
+
+      # - name: 'Build Next.js app'
+      #  shell: bash
+      #  run: |
+      #    npm install
+      #    npm run build
+
+      # - name: 'Deploy to AWS server'
+      #  shell: bash
+      #  run: | 
+      #    scp -o StrictHostKeyChecking=no -r -i $PUBLIC_KEY $GITHUB_WORKSPACE/.next ubuntu@$DEPLOY_HOST:/var/www/54.90.76.40/.next
+      #    echo "Finished and done!"
