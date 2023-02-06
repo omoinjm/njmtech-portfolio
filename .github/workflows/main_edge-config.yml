@@ -32,11 +32,6 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
 
-      - name: 'Set up SSH key'
-        uses: actions/upload-ssh-key@v1
-        with:
-          ssh-private-key: ${{ env.PUBLIC_KEY }}
-
       - name: Setup Node ${{ env.NODE_VERSION }} Environment
         uses: actions/setup-node@v2
         with:
@@ -51,5 +46,5 @@ jobs:
       - name: 'Deploy to AWS server'
         shell: bash
         run: | 
-          scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/.next ubuntu@$DEPLOY_HOST:/var/www/54.90.76.40/.next
+          scp -o StrictHostKeyChecking=no -r -i $PUBLIC_KEY $GITHUB_WORKSPACE/.next ubuntu@$DEPLOY_HOST:/var/www/54.90.76.40/.next
           echo "Finished and done!"
