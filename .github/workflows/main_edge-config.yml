@@ -21,6 +21,7 @@ env:
   NODE_VERSION: '16.x'
   AZURE_FUNCTION_APP_NAME: 'new-site-nextjs'
   PUBLIC_KEYS: ${{ secrets.PUBLIC_KEY }}
+  DEPLOY_HOST: 54.90.76.40
   ENV_NAME: production
 
 jobs:
@@ -45,5 +46,5 @@ jobs:
       - name: 'Deploy to AWS server'
         shell: bash
         run: | 
-          sudo scp -r -i $PUBLIC_KEYS ./.next ubuntu@54.90.76.40:/var/www/54.90.76.40/.next
+          scp -r -i $PUBLIC_KEYS $GITHUB_WORKSPACE/.next ubuntu@$DEPLOY_HOST:/var/www/54.90.76.40/.next
           echo "Finished and done!"
