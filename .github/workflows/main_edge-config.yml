@@ -46,10 +46,10 @@ jobs:
           echo $DEPLOY_KEY
           echo $AWS_APP_NAME
 
-      - name: Setup SSH Key
-        uses: ssh-actions/setup-ssh@v1
-        with:
-          ssh-private-key: ${{ env.DEPLOY_KEY }}
+      - name: Test SSH connection
+        shell: bash
+        run: |
+          ssh -i $DEPLOY_KEY ubuntu@54.144.211.235
 
       # - name: 'Build Next.js app'
       #  shell: bash
