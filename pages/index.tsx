@@ -50,7 +50,7 @@ const Home: NextPage = () => {
         <meta itemProp="name" content="Nhlanhla Junior Malaza" />
         <meta itemProp="url" content="https://njm.vercel.app/" />
         <meta property="og:type" content="website" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064193/public/favicon_zqeo1n.ico" />
       </Head>
       <Hero />
       <Skills data={skills} />
