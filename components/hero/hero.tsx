@@ -110,7 +110,7 @@ export const Hero = () => {
                                  isVisible ? 'animate__animated animate__zoomIn' : ''
                               }
                            >
-                              <Img width={20} height={20} src='/assets/Saly-13.svg' alt="Header Img" />
+                              <Img width={20} height={20} src='https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064224/public/assets/Saly-13_kwjz95.svg' alt="Header Img" />
                            </div>
                         )}
                      </TrackVisibility>

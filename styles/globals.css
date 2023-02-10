@@ -14,17 +14,17 @@
 /************ Custom Font ************/
 @font-face {
 	font-family: Centra;
-	src: url('/font/CentraNo2-Bold.ttf');
+	src: url('https://res.cloudinary.com/dfta3fn6p/raw/upload/v1676064194/public/font/CentraNo2-Bold_au8daq.ttf');
 	font-weight: 700;
 }
 @font-face {
 	font-family: Centra;
-	src: url('/font/CentraNo2-Medium.ttf');
+	src: url('https://res.cloudinary.com/dfta3fn6p/raw/upload/v1676064195/public/font/CentraNo2-Medium_f8e0ma.ttf');
 	font-weight: 500;
 }
 @font-face {
 	font-family: Centra;
-	src: url('/font/CentraNo2-Book.ttf');
+	src: url('https://res.cloudinary.com/dfta3fn6p/raw/upload/v1676064194/public/font/CentraNo2-Book_ekdisj.ttf');
 	font-weight: 400;
 }
 
@@ -276,11 +276,11 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 
 /************ Banner Css ************/
 .banner#dark {
-	background-image: url('/images/img/banner-bg.png');
+	background-image: url('https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064202/public/images/img/banner-bg_j1fyzz.png');
 }
 
 .banner#light {
-	background-image: url('/images/img/light-mode/banner-bg.png');
+	background-image: url('https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064207/public/images/img/light-mode/banner-bg_j6m16r.png');
 }
 
 .banner {
@@ -637,7 +637,7 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 /************ Footer Css ************/
 .footer {
 	padding: 0 0 50px 0;
-	background-image: url('/images/img/footer-bg.png');
+	background-image: url('https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064207/public/images/img/footer-bg_dfzbqn.png');
 	background-position: center center;
 	background-size: cover;
 	background-repeat: no-repeat;

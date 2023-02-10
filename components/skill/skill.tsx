@@ -97,7 +97,7 @@ export const Skills = ({ data }: any) => {
             width={40}
             height={40}
             className="background-image-left"
-            src="/assets/color-sharp.png"
+            src="https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064195/public/assets/color-sharp_u65iaw.png"
             alt="Background"
          />
       </section>

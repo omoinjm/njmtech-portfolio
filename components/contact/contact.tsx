@@ -63,7 +63,7 @@ export const Contact = () => {
                            className={
                               isVisible ? 'animate__animated animate__zoomIn' : ''
                            }
-                           src='/assets/g1.svg'
+                           src='https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064204/public/images/img/contact-img_mgofi2.svg'
                            alt="Contact Us"
                         />
                      )}

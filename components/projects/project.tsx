@@ -72,7 +72,7 @@ export const Projects = ({ data }: any) => {
             <Image
                width={40} height={40}
                className="background-image-right"
-               src='/assets/color-sharp2.png'
+               src='https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064196/public/assets/color-sharp2_un9fuh.png'
                alt="Background"
             />
          </section>
