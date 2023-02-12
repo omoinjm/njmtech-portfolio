@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import getAge from '../../utils';
-import { About } from './skill.styles';
+import { About, Skill } from './skill.styles';
 
 export const Skills = ({ data }: any) => {
    const responsive = {
@@ -26,7 +26,7 @@ export const Skills = ({ data }: any) => {
    };
 
    return (
-      <section className="skill" id="skill">
+      <Skill className="skill" id="skill">
          <div className="container">
             <div className="row">
                <div className="col-12">
@@ -93,13 +93,6 @@ export const Skills = ({ data }: any) => {
                </div>
             </div>
          </div>
-         <Image
-            width={40}
-            height={40}
-            className="background-image-left"
-            src="https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064195/public/assets/color-sharp_u65iaw.png"
-            alt="Background"
-         />
-      </section>
+      </Skill>
    );
 };

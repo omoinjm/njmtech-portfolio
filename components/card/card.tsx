@@ -1,8 +1,7 @@
-import Image from 'next/image';
 import { Col } from 'react-bootstrap';
 import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { VscGithub } from 'react-icons/vsc';
-import { Icons, Stack } from './card.styles';
+import { Icons, Img, Stack } from './card.styles';
 
 export const ProjectCard = ({
    title,
@@ -16,7 +15,7 @@ export const ProjectCard = ({
    return (
       <Col size={12} sm={6} md={4}>
          <div className="proj-imgbx">
-            <Image width={500} height={500} src={imgUrl} alt={title} />
+            <Img src={imgUrl} alt={title} />
             <Stack className="proj-txtx">
                <Icons>
                   {codeV ? (
