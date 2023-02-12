@@ -10,7 +10,7 @@ const nextConfig = {
 	},
 	webpack: (config, options) => {
 		config.module.rules.push({
-			test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+			test: /\.(png)$/,
 			use: {
 				loader: 'url-loader',
 				options: {
