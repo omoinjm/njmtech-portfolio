@@ -22,8 +22,8 @@ export const Hero = () => {
 
    const toRotate = [
       'Software Engineer',
-      'Cloud',
-      'DevOps',
+      'Cloud Engineer',
+      'DevOps Engineer',
    ];
    const period = 500;
 
