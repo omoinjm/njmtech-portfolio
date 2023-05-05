@@ -3,12 +3,12 @@ import Image from 'next/image';
 import { Col, Container, Nav, Row, SSRProvider, Tab } from 'react-bootstrap';
 import TrackVisibility from 'react-on-screen';
 import { ProjectCard } from '../card/card';
-import { Wrapper } from './project.styles';
+import { Project, Wrapper } from './project.styles';
 
 export const Projects = ({ data }: any) => {
    return (
       <SSRProvider>
-         <section className="project" id="project">
+         <Project className="project" id="project">
             <Container>
                <Row>
                   <Col size={12}>
@@ -69,13 +69,7 @@ export const Projects = ({ data }: any) => {
                   </Col>
                </Row>
             </Container>
-            <Image
-               width={40} height={40}
-               className="background-image-right"
-               src='https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064196/public/assets/color-sharp2_un9fuh.png'
-               alt="Background"
-            />
-         </section>
+         </Project>
       </SSRProvider>
    );
 };

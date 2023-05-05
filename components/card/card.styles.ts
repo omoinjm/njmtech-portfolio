@@ -1,4 +1,11 @@
+import Image from 'next/image';
 import styled from 'styled-components';
+
+export const Img = styled.img`
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+`;
 
 export const Stack = styled.div`
 	ul {
