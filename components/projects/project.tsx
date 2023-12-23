@@ -36,7 +36,7 @@ export const Projects = ({ data }: any) => {
                                        return (
                                           <Wrapper className="wrapper" key={index}>
                                              <Nav.Item>
-                                                <Nav.Link title={item.tabName} eventKey={item.tabKey}>
+                                                <Nav.Link title={item.tab_name} eventKey={item.tab_key}>
                                                    <i className={`${item.icon} icons`}></i>
                                                 </Nav.Link>
                                              </Nav.Item>
@@ -52,7 +52,7 @@ export const Projects = ({ data }: any) => {
                                  >
                                     {data?.map((item: any, index: number) => {
                                        return (
-                                          <Tab.Pane eventKey={item.tabKey} key={index}>
+                                          <Tab.Pane eventKey={item.tab_key} key={index}>
                                              <Row>
                                                 {item.project.map((project: any, index: number) => {
                                                    return <ProjectCard key={index} {...project} />;

@@ -1,26 +1,28 @@
+import Link from 'next/link'
 import { Col } from 'react-bootstrap';
-import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { VscGithub } from 'react-icons/vsc';
 import { Icons, Img, Stack } from './card.styles';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 export const ProjectCard = ({
-   title,
-   description,
-   imgUrl,
-   codeV,
-   code,
    live,
+   title,
    stack,
+   img_url,
+   code_url,
+   description,
+   code_visibility,
+   is_current_domian
 }: any) => {
    return (
       <Col size={12} sm={6} md={4}>
          <div className="proj-imgbx">
-            <Img src={imgUrl} alt={title} />
+            <Img src={img_url} alt={title} />
             <Stack className="proj-txtx">
                <Icons>
-                  {codeV ? (
+                  {code_visibility ? (
                      <a
-                        href={code}
+                        href={code_url}
                         target="_blank"
                         rel="noreferrer"
                         aria-label="GitHub"
@@ -30,14 +32,25 @@ export const ProjectCard = ({
                   ) : (
                      ''
                   )}
-                  <a
-                     href={live}
-                     target="_blank"
-                     rel="noreferrer"
-                     aria-label="Live site"
-                  >
+
+                  {is_current_domian ? (
+                     <Link
+                        href={live}
+                        
+                     >
+                        {<BsBoxArrowUpRight />}
+                     </Link>
+                  ) : (
+                     <a
+                        href={live}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Live site"
+                     >
                      {<BsBoxArrowUpRight />}
-                  </a>
+                     </a>
+                  )}
+                  
                </Icons>
                <h4>{title}</h4>
                <span>{description}</span>
@@ -45,7 +58,7 @@ export const ProjectCard = ({
                   {stack.map((option: any, index: any) => {
                      return (
                         <div key={index}>
-                           <li>{option.name}</li>
+                           <li>{option}</li>
                         </div>
                      );
                   })}

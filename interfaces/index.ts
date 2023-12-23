@@ -1,12 +1,12 @@
 export interface IAge {
-	birthDate: Date;
-	today: Date;
 	age: number;
+	today: Date;
+	birthDate: Date;
 }
 
 export interface ILinks {
-	pageLinks?: IRoutes[];
-	footerLinks?: IFooter[];
+	page_links?: IRoutes[];
+	footer_links?: IFooter[];
 }
 
 export interface IRoutes {
@@ -18,35 +18,28 @@ export interface IRoutes {
 export interface IFooter {
 	id: number;
 	link: string;
-	imgUrl: string;
-	altName: string;
+	img_url: string;
+	alt_name: string;
 }
 
 export interface IForm {
 	name: string;
+	sent: boolean;
 	email: string;
 	subject: string;
 	message: string;
-	sent: boolean;
 }
 
 export interface ISkills {
 	id: number;
-	imgUrl: string;
-	imgName: string;
-}
-
-export interface IButton {
-	primary?: boolean;
-	big?: boolean;
-	dark?: boolean;
-	fontBig?: boolean;
+	img_url: string;
+	img_name: string;
 }
 
 export interface ITabProjects {
 	id: number;
-	tabKey: string;
-	tabName: string;
+	tab_key: string;
+	tab_name: string;
 	project?: IProjects[];
 	icon: string;
 }
@@ -55,14 +48,14 @@ export interface IProjects {
 	id: number;
 	title: string;
 	description: string;
-	imgUrl: string;
+	img_url: string;
 	live: string;
-	codeV: boolean;
-	code: string;
+	code_visibility: boolean;
+	code_url: string;
 	stack?: IStack[];
 }
 
 interface IStack {
-	name: string;
-	icon: string;
+	stack: string[];
 }
+  

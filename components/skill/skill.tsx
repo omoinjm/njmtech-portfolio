@@ -5,6 +5,7 @@ import getAge from "../../utils";
 import { About } from "./skill.styles";
 
 export const Skills = ({ data }: any) => {
+
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -53,10 +54,10 @@ export const Skills = ({ data }: any) => {
                       <Image
                         width={40}
                         height={40}
-                        src={item.imgUrl}
-                        alt={item.imgName}
+                        src={item.img_url}
+                        alt={item.img_name}
                       />
-                      <h5>{item.imgName}</h5>
+                      <h5>{item.img_name}</h5>
                     </div>
                   );
                 })}

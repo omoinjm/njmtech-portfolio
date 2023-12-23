@@ -19,10 +19,10 @@ const Layout = ({ children, data }: LayoutProps) => {
    return (
       <main>
          <GoToTop />
-         <Sidebar isOpen={isOpen} toggle={toggle} data={data?.pageLinks} />
-         <NavBar toggle={toggle} data={data?.pageLinks} />
+         <Sidebar isOpen={isOpen} toggle={toggle} data={data?.page_links} />
+         <NavBar toggle={toggle} data={data?.page_links} />
          {children}
-         <Footer data={data?.footerLinks} />
+         <Footer data={data?.footer_links} />
       </main>
    )
 }

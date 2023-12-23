@@ -19,7 +19,7 @@ export const Footer = ({ data }: any) => {
                         return (
                            <div key={index}>
                               <a href={item.link} target="_blank" rel="noreferrer">
-                                 <Image width={20} height={20} src={item.imgUrl} alt={item.altName} />
+                                 <Image width={20} height={20} src={item.img_url} alt={item.alt_name} />
                               </a>
                            </div>
                         );
