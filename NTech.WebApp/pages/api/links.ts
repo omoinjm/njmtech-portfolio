@@ -1,4 +1,3 @@
-import { get } from "@vercel/edge-config";
 import { NextRequest, NextResponse } from "next/server";
 import { ILinks } from "../../db/models";
 import NavFooterRepo from "../../db/repository/nav_footer_repo";

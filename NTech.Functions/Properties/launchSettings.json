@@ -2,8 +2,13 @@
   "profiles": {
     "NTech.Functions": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7252",
-      "launchBrowser": false
+      "commandLineArgs": "--port 7252"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 33686,
+      "useSSL": false
     }
   }
 }

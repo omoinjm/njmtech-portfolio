@@ -1,43 +1,43 @@
 import { NavFooter } from "../../db/models";
 import { MailchimpForm } from "../mailchimp/mailchimpForm";
-import { FooterContainer, Cols, Rows, Containers } from "./footer.styles";
+import { NFooter, NCol, NRow, NContainer, NLink, Img } from "./footer.styles";
 
 export const Footer = ({ data }: any) => {
   return (
-    <FooterContainer className="footer">
-      <Containers>
-        <Rows className="align-items-center">
+    <NFooter className="footer">
+      <NContainer>
+        <NRow className="align-items-center">
           <MailchimpForm />
-          <Cols size={12} sm={6}>
+          <NCol size={12} sm={6}>
             <span className="logo-name">
               NJM<span>TECH</span>
             </span>
-          </Cols>
-          <Cols size={12} sm={6} className="text-center text-sm-end">
+          </NCol>
+          <NCol size={12} sm={6} className="text-center text-sm-end">
             <div className="social-icon">
               {data?.map((item: NavFooter, index: number) => {
                 return (
                   <div key={index}>
-                    <Link
+                    <NLink
                       href={item.route_url}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      <Image
+                      <Img
                         width={20}
                         height={20}
                         src={item.icon}
                         alt={item.name}
                       />
-                    </Link>
+                    </NLink>
                   </div>
                 );
               })}
             </div>
             <p>Copyright 2022. All Rights Reserved</p>
-          </Cols>
-        </Rows>
-      </Containers>
-    </FooterContainer>
+          </NCol>
+        </NRow>
+      </NContainer>
+    </NFooter>
   );
 };

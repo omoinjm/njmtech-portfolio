@@ -1,0 +1,55 @@
+{
+  "sortedMiddleware": [],
+  "middleware": {},
+  "functions": {
+    "/api/links": {
+      "files": [
+        "server/edge-runtime-webpack.js",
+        "server/pages/api/links.js"
+      ],
+      "name": "pages/api/links",
+      "page": "/api/links",
+      "matchers": [
+        {
+          "regexp": "^/api/links$",
+          "originalSource": "/api/links"
+        }
+      ],
+      "wasm": [],
+      "assets": []
+    },
+    "/api/skills": {
+      "files": [
+        "server/edge-runtime-webpack.js",
+        "server/pages/api/skills.js"
+      ],
+      "name": "pages/api/skills",
+      "page": "/api/skills",
+      "matchers": [
+        {
+          "regexp": "^/api/skills$",
+          "originalSource": "/api/skills"
+        }
+      ],
+      "wasm": [],
+      "assets": []
+    },
+    "/api/projects": {
+      "files": [
+        "server/edge-runtime-webpack.js",
+        "server/pages/api/projects.js"
+      ],
+      "name": "pages/api/projects",
+      "page": "/api/projects",
+      "matchers": [
+        {
+          "regexp": "^/api/projects$",
+          "originalSource": "/api/projects"
+        }
+      ],
+      "wasm": [],
+      "assets": []
+    }
+  },
+  "version": 2
+}
