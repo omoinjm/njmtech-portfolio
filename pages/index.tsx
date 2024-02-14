@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from 'react';
 import { Contact, Hero, Projects, Skills } from '../components';
-import { ISkills, ITabProjects } from '../interfaces';
+import { ISkills, ITabProjects } from '../db/models';
 
 const Home: NextPage = () => {
   const [skills, setSkillData] = useState<ISkills[]>([]);

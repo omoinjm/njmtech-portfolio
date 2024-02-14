@@ -1,6 +1,12 @@
-MIT License
+You can create your own website for free without notifying me by forking this project under the following condition:
+ - Attribution: You must give appropriate credit, provide a link to my homepage (https://njmtech.vercel.app/).
+ - For example: This website is built based on the <a href='https://njmtech.vercel.app/' target='_blank'>NJMTECH's website</a>.
 
-Copyright (c) 2023 Nhlanhla Malaza
+Otherwise, the following license is applied to the source code:
+------
+The MIT License (MIT)
+
+Copyright (c) 2024 Nhlanhla Malaza
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

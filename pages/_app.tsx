@@ -1,13 +1,12 @@
-
-import { Analytics } from '@vercel/analytics/react';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import { Analytics } from "@vercel/analytics/react";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import type { AppProps } from "next/app";
-import { useEffect, useState } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import { useEffect, useState } from "react";
+import { createGlobalStyle } from "styled-components";
 import Layout from "../components/layout";
-import { ILinks } from '../interfaces';
+import { ILinks } from "../db/models";
 import "../styles/globals.css";
 
 const GlobalStyle = createGlobalStyle`
@@ -29,11 +28,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [data, setData] = useState<ILinks>({});
 
   useEffect(() => {
-    fetch('/api/links')
-      .then(response => response.json())
-      .then(json => {
+    fetch("/api/links")
+      .then((response) => response.json())
+      .then((json) => {
         setData(json);
-      })
+      });
   }, []);
 
   return (

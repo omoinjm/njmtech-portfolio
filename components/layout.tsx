@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ILinks } from '../interfaces';
+import { ILinks } from '../db/models';
 import { Footer } from './footer/footer';
 import GoToTop from "./GoToTop";
 import { NavBar } from './navbar/navbar';
