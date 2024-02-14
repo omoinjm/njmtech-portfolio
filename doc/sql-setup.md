@@ -24,6 +24,40 @@ values
 select * from nav_menu;
 ```
 
+**MENU ITEM**
+
+```sql
+drop table nav_menu_item
+
+
+
+CREATE TABLE nav_menu_item (
+
+    id SERIAL PRIMARY KEY,
+
+      parent_id INT,
+
+      name VARCHAR(255) NOT NULL,
+
+      icon VARCHAR(255),
+
+      route_url VARCHAR(255) NOT NULL,
+
+      is_active BOOLEAN NOT NULL,
+
+      sort_order int not null
+
+)
+
+
+
+  insert into nav_menu_item
+(parent_id, name, icon, route_url, is_active, sort_order)
+values
+()
+)
+```
+
 ## Footer
 
 ```sql
