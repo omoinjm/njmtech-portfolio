@@ -4,6 +4,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE $PORT
 
+ENV ASPNETCORE_URLS=http://+:$POST:80
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
@@ -21,7 +23,7 @@ RUN dotnet publish "./NTech.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-# ENTRYPOINT ["dotnet", "NTech.Api.dll"]
+ENTRYPOINT ["dotnet", "NTech.Api.dll"]
 
 # Set the entry point to start the application and bind to the dynamic port provided by Heroku
-CMD ASPNETCORE_URLS=http://0.0.0.0:${PORT:-80} dotnet NTech.Api.dll
+# CMD ASPNETCORE_URLS=http://0.0.0.0:${PORT:-80} dotnet NTech.Api.dll
