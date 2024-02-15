@@ -7,7 +7,7 @@ EXPOSE $PORT
 
 ENV ASPNETCORE_URLS=http://+:$PORT
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NTech.Api/NTech.Api.csproj", "NTech.Api/"]
