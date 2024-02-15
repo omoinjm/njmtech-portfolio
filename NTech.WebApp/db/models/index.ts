@@ -6,7 +6,7 @@ export interface ILinks {
 export interface NavMenu {
   id: number;
   name: string;
-  icon?: string | null;
+  icon: string;
   route_url: string;
   is_active: boolean;
 }
@@ -14,7 +14,7 @@ export interface NavMenu {
 export interface NavFooter {
   id: number;
   name: string;
-  icon?: string | null;
+  icon: string;
   route_url: string;
   is_active: boolean;
 }
@@ -61,4 +61,3 @@ export type IProjects = {
 type IStack = {
   stack: string[];
 };
-
