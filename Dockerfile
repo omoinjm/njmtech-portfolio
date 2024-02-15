@@ -1,26 +1,29 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/azure-functions/dotnet-isolated:4-dotnet-isolated8.0 AS base
-WORKDIR /home/site/wwwroot
-EXPOSE 8080
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 5000
 EXPOSE $PORT
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ENV ASPNETCORE_URLS=http://+:$PORT
+
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["NTech.Functions/NTech.Functions.csproj", "NTech.Functions/"]
+COPY ["NTech.Api/NTech.Api.csproj", "NTech.Api/"]
 COPY ["NTech.Shared/NTech.Shared.csproj", "NTech.Shared/"]
-RUN dotnet restore "./NTech.Functions/NTech.Functions.csproj"
+RUN dotnet restore "./NTech.Api/NTech.Api.csproj"
 COPY . .
-WORKDIR "/src/NTech.Functions"
-RUN dotnet build "./NTech.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/NTech.Api"
+RUN dotnet build "./NTech.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./NTech.Functions.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./NTech.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /home/site/wwwroot
+WORKDIR /app
 COPY --from=publish /app/publish .
-ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
-    AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+ENTRYPOINT ["dotnet", "NTech.Api.dll"]
+
+

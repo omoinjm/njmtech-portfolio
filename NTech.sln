@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTech.Functions", "NTech.Fu
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "NTech.WebApp", "NTech.WebApp\NTech.WebApp.esproj", "{EDED9D8D-FA97-423F-BEAA-E0954AA56DBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTech.Shared", "NTech.Shared\NTech.Shared.csproj", "{D38249E6-49D6-4D08-BDF1-8FA641EDF535}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTech.Shared", "NTech.Shared\NTech.Shared.csproj", "{D38249E6-49D6-4D08-BDF1-8FA641EDF535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTech.Api", "NTech.Api\NTech.Api.csproj", "{706C93AA-758B-4A6C-94BD-756075686C7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{D38249E6-49D6-4D08-BDF1-8FA641EDF535}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D38249E6-49D6-4D08-BDF1-8FA641EDF535}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D38249E6-49D6-4D08-BDF1-8FA641EDF535}.Release|Any CPU.Build.0 = Release|Any CPU
+		{706C93AA-758B-4A6C-94BD-756075686C7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{706C93AA-758B-4A6C-94BD-756075686C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{706C93AA-758B-4A6C-94BD-756075686C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{706C93AA-758B-4A6C-94BD-756075686C7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
