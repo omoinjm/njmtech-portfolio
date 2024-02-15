@@ -3,13 +3,12 @@
 FROM mcr.microsoft.com/azure-functions/dotnet-isolated:4-dotnet-isolated8.0 AS base
 WORKDIR /home/site/wwwroot
 EXPOSE 8080
-EXPOSE $PORT
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["/NTech.Functions/NTech.Functions.csproj", "NTech.Functions/"]
-COPY ["/NTech.Shared/NTech.Shared.csproj", "NTech.Shared/"]
+COPY ["NTech.Functions/NTech.Functions.csproj", "NTech.Functions/"]
+COPY ["NTech.Shared/NTech.Shared.csproj", "NTech.Shared/"]
 RUN dotnet restore "./NTech.Functions/NTech.Functions.csproj"
 COPY . .
 WORKDIR "/src/NTech.Functions"
