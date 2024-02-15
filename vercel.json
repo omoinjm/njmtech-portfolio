@@ -3,5 +3,6 @@
     "silent": true
   },
   "version": 2,
-  "builds": [{ "src": "./NTech.WebApp/", "use": "@vercel/static-build" }]
+  "builds": [{ "src": "./NTech.WebApp/", "use": "@vercel/static-build" }],
+  "routes": [{ "src": "/(.*)", "dest": "/" }]
 }
