@@ -22,11 +22,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("PORT");
-
-app.Run(async (context) =>
-{
-    await context.Response.WriteAsync($"Server is running on port {port}");
-});
-
 app.Run();
