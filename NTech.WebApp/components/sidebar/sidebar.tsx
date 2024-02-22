@@ -19,7 +19,7 @@ export const Sidebar = ({ isOpen, toggle, data }: any) => {
         <SidebarMenu>
           {data?.map((option: any, index: number) => {
             return (
-              <SidebarLink key={index} to={option.route_url} onClick={toggle}>
+              <SidebarLink key={index} href={option.route_url} onClick={toggle}>
                 {option.name}
               </SidebarLink>
             );
