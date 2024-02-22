@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { AiOutlineBars } from "react-icons/ai";
-import { Link } from "react-scroll";
+import Link from "next/link";
 import { MobileIcon } from "./navbar.styles";
 
 export const NavBar = ({ toggle, data }: any) => {
@@ -26,7 +26,7 @@ export const NavBar = ({ toggle, data }: any) => {
     <Navbar expand="md" className={scrolled ? "scrolled" : ""}>
       <Container>
         <Navbar.Brand>
-          <Link to="banner" duration={500} spy={true} offset={-120}>
+          <Link href="/">
             <span className="logo-name">
               NJM<span>TECH</span>
             </span>
@@ -41,16 +41,13 @@ export const NavBar = ({ toggle, data }: any) => {
               return (
                 <div key={index}>
                   <Link
-                    to={option.link}
-                    duration={500}
-                    spy={true}
-                    offset={-100}
+                    href={option.route_url}
                     className={
-                      activeLink === `${option.link}`
+                      activeLink === `${option.route_url}`
                         ? "active navbar-link"
                         : "navbar-link"
                     }
-                    onClick={() => onUpdateActiveLink(`${option.link}`)}
+                    onClick={() => onUpdateActiveLink(`${option.route_url}`)}
                   >
                     {option.name}
                   </Link>

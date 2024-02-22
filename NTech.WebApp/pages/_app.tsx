@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   const [data, setData] = useState<ILinks>({});
 
   useEffect(() => {

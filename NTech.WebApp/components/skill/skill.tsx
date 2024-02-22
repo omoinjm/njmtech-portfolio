@@ -5,7 +5,6 @@ import getAge from "../utils";
 import { About } from "./skill.styles";
 
 export const Skills = ({ data }: any) => {
-
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
