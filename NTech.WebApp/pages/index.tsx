@@ -1,12 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { Hero, Projects, Skills } from "../components";
-import { ISkills, ITabProjects } from "../db/models";
+import { Hero, Skills } from "../components";
+import { ISkills } from "../db/models";
 
 const Home: NextPage = () => {
   const [skills, setSkillData] = useState<ISkills[]>([]);
-  const [projects, setProjectData] = useState<ITabProjects[]>([]);
 
   useEffect(() => {
     fetch("/api/skills")

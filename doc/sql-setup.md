@@ -2,6 +2,8 @@
 
 ## Menu
 
+**MENU MODULE**
+
 ```sql
 drop table nav_menu;
 
@@ -29,33 +31,23 @@ select * from nav_menu;
 ```sql
 drop table nav_menu_item
 
-
-
-CREATE TABLE nav_menu_item (
-
+create table nav_menu_item (
     id SERIAL PRIMARY KEY,
+    parent_id INT,
+    name VARCHAR(255) NOT NULL,
+    icon VARCHAR(255),
+    route_url VARCHAR(255) NOT NULL,
+    is_active BOOLEAN NOT NULL,
+    sort_order int not null,
 
-      parent_id INT,
-
-      name VARCHAR(255) NOT NULL,
-
-      icon VARCHAR(255),
-
-      route_url VARCHAR(255) NOT NULL,
-
-      is_active BOOLEAN NOT NULL,
-
-      sort_order int not null
-
+    -- Foreign key constraint
+    CONSTRAINT fk_parent_id FOREIGN KEY (parent_id) REFERENCES nav_menu(id)
 )
 
-
-
-  insert into nav_menu_item
+insert into nav_menu_item
 (parent_id, name, icon, route_url, is_active, sort_order)
 values
 ()
-)
 ```
 
 ## Footer
@@ -63,7 +55,7 @@ values
 ```sql
 drop table nav_footer;
 
-CREATE TABLE nav_footer (
+create table nav_footer (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     icon VARCHAR(255),
@@ -80,4 +72,26 @@ values
 ('Instagram', 'https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064213/public/logo/nav-icon3_k4zon2.svg', 'https://www.instagram.com/nhlanhlamalaza_', true, 3);
 
 select * from nav_footer;
+```
+
+## Email
+
+**TEMPLATE**
+
+```sql
+
+drop table mail_template
+
+create table mail_template (
+    template_id SERIAL PRIMARY KEY,
+    code VARCHAR(10) NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    html_file_name VARCHAR(200) NOT NULL,
+    send_to_email VARCHAR(200)
+);
+
+insert into mail_template
+(code, name, html_file_name, send_to_email)
+values
+('GEN', 'General', '', 'njmcloud@gmail.com')
 ```
