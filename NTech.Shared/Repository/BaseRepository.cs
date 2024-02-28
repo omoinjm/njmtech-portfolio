@@ -10,7 +10,6 @@ namespace NTech.Shared.Repository
         protected IPgSelector? Selector { get; set; }
         protected string? TemplateURI;
 
-
         public object? model { get; set; }
 
         public void SetupConnectors(IConfig config) { 

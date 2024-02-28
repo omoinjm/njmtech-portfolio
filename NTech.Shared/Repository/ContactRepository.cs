@@ -5,22 +5,19 @@ namespace NTech.Shared.Repository
 {
     public class ContactRepository : BaseRepository
     {
-        public async Task Initialize()
+        public async Task Initialize(MessageLogModel item)
         {
             var message = new MessageLogModel
             {
-                HtmlTemplate = "template?name=thank_you",
-                Subject = "Contact form submission - Portfolio",
-                ToField = "njmcloud@gmail.com",
-                FromName = $"NJMTECH NoReply"
+                html_template = item.html_template,
+                subject = item.subject,
+                to_field = item.to_field,
+                from_name = item.from_name
             };
 
-            message.Body = await EmailTemplateService.GetTemplate(message, TemplateURI!);
+            message.body = await EmailTemplateService.GetTemplate(message, TemplateURI!);
 
-            model = new
-            {
-                action_result = message.Body,
-            };
+            model = message;
         }
     }
 }

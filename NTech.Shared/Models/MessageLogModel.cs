@@ -2,12 +2,12 @@
 {
     public class MessageLogModel
     {
-        public string? Subject { get; set; }
-        public string? Body { get; set; }
-        public string? ToField { get; set; }
-        public string? CcField { get; set; }
-        public string? BccField { get; set; }
-        public string? FromName { get; set; }
-        public string? HtmlTemplate { get; set; }
+        public required string subject { get; set; }
+        public string? body { get; set; }
+        public required string to_field { get; set; }
+        public string? cc_field { get; set; }
+        public string? bcc_field { get; set; }
+        public required string from_name { get; set; }
+        public required string html_template { get; set; }
     }
 }
