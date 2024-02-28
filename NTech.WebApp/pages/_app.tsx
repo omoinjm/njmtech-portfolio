@@ -6,7 +6,7 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import Layout from "../components/layout";
-import { ILinks } from "../db/models";
+import { LinkModel } from "../framework/models/link_model";
 import "../styles/globals.css";
 
 const GlobalStyle = createGlobalStyle`
@@ -25,7 +25,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [data, setData] = useState<ILinks>({});
+  const [data, setData] = useState<LinkModel>({});
 
   useEffect(() => {
     fetch("/api/links")

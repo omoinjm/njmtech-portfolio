@@ -1,27 +1,27 @@
-import { ResponseModel } from "../db/models/response_model";
+import ResponseModel from "../models/response_model";
 import ConfigService from "./config.service";
 
-export class DataService {
-  private API_URL: string | undefined;
+export default class DataService {
+  private static API_URL: string | undefined =
+    ConfigService.getApiEndpoint + "api/";
 
-  private return_response: ResponseModel = new ResponseModel();
+  private static return_response: ResponseModel = new ResponseModel();
 
-  private HTTP_OPTIONS: any = {
+  private static HTTP_OPTIONS: any = {
     "Content-Type": "application/json;charset=utf-8",
   };
 
-  constructor(public config: ConfigService) {
-    this.API_URL = this.config.getApiEndpoint;
-  }
-
   //Syncronous get call to which we wait for the call to complete and return a response.
-  public async get_sync(action: string, parameters?: URLSearchParams) {
+  public static async get_sync(
+    action: string,
+    parameters?: URLSearchParams | null,
+  ) {
     try {
       this.return_response = Object.assign(
         this.return_response,
         await this.get_call(action, parameters),
       );
-    } catch (exception) {
+    } catch (exception: any) {
       this.return_response = await this.handle_exception(
         exception,
         this.return_response,
@@ -32,7 +32,7 @@ export class DataService {
   }
 
   //Syncronous post call to which we wait for the call to complete and return a response
-  public async post_sync(action: string, payload?: object) {
+  public static async post_sync(action: string, payload?: object) {
     try {
       this.return_response = Object.assign(
         this.return_response,
@@ -50,7 +50,7 @@ export class DataService {
 
   //Handle the exceptions received from the http calls.
   //Add more exception types to this function and it will automatically filter up.
-  private async handle_exception(
+  private static async handle_exception(
     exception: any,
     return_response: ResponseModel,
   ) {
@@ -83,7 +83,7 @@ export class DataService {
   }
 
   //Check if the API is up with a healthcheck.
-  private async ping_api_message() {
+  private static async ping_api_message() {
     try {
       await this.get_call("HealthCheck/Ping");
       return "The API is functioning correctly";
@@ -93,11 +93,11 @@ export class DataService {
   }
 
   //This just builds up the full API path so we don't have to constantly use the base url in everything.
-  private get_full_api_path(action: string) {
+  private static get_full_api_path(action: string) {
     return this.API_URL + action;
   }
 
-  private async post_call(action: string, payload?: object) {
+  private static async post_call(action: string, payload?: object) {
     return await fetch(this.get_full_api_path(action), {
       method: "POST",
       headers: this.HTTP_OPTIONS,
@@ -105,13 +105,17 @@ export class DataService {
     });
   }
 
-  private async get_call(action: string, parameters?: URLSearchParams) {
-    return await fetch(
-      this.get_full_api_path(action) + parameters?.toString(),
-      {
-        method: "GET",
-        headers: this.HTTP_OPTIONS,
-      },
-    );
+  private static async get_call(
+    action: string,
+    parameters?: URLSearchParams | null,
+  ) {
+    const url = parameters
+      ? this.get_full_api_path(action) + "?" + parameters.toString()
+      : this.get_full_api_path(action);
+
+    return await fetch(url, {
+      method: "GET",
+      headers: this.HTTP_OPTIONS,
+    }).then((response) => response.json());
   }
 }

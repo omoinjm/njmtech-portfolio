@@ -1,42 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ILinks } from "../../db/models";
-import NavFooterRepo from "../../db/repository/nav_footer_repo";
-import NavMenuRepo from "../../db/repository/nav_menu_repo";
-import _BaseApi from "./_base_api";
+import { LinkModel } from "../../framework/models/link_model";
 import { unstable_cache } from "next/cache";
+import { BaseComponent } from "../../framework/base/base.component";
 
-const getLinks = async (): Promise<ILinks> => {
-  const api = new _BaseApi();
-
-  const menu = api.InitialiseViewModel<NavMenuRepo>(NavMenuRepo);
-  const footer = api.InitialiseViewModel<NavFooterRepo>(NavFooterRepo);
-
-  await menu.Initialise();
-  await footer.Initialise();
-
-  const data: ILinks = {
-    page_links: menu.items,
-    footer_links: footer.items,
+class LinkService extends BaseComponent {
+  public handler = async (req: NextRequest) => {
+    const data = await this.getCachedLinks();
+    return NextResponse.json(data);
   };
 
-  return data;
-};
+  private getLinks = async (): Promise<LinkModel | null> => {
+    this.response_model = await this.get_sync_call(
+      "Navigation/GetNavigation",
+      null,
+    );
 
-const getCachedLinks = unstable_cache(
-  async () => {
-    return getLinks();
-  },
-  ["app-links"],
-  { tags: ["links-next-js"], revalidate: 3600 },
-);
+    return {
+      page_links: this.response_model.model.menu_list,
+      footer_links: this.response_model.model.footer_list,
+    };
+  };
 
-const handler = async (req: NextRequest) => {
-  const data = await getCachedLinks();
-  return NextResponse.json(data);
-};
+  private getCachedLinks = unstable_cache(
+    async () => {
+      return this.getLinks();
+    },
+    ["app-links"],
+    { tags: ["links-next-js"], revalidate: 3600 },
+  );
+}
 
 export const config = {
   runtime: "experimental-edge",
 };
 
-export default handler;
+export default new LinkService().handler;

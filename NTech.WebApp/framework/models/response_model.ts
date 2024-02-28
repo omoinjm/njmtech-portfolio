@@ -1,4 +1,4 @@
-export class ResponseModel {
+export default class ResponseModel {
   public model: any = Object.assign(new Object());
   public error_list: Array<string> = new Array<string>();
   public show_error: boolean | null = true;

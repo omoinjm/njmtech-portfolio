@@ -28,17 +28,21 @@ export const Contact = () => {
     e.preventDefault();
 
     setButtonText("Sending...");
-    let response = await fetch("/api/contact", {
+
+    const response = await fetch("/api/contact", {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       },
       body: JSON.stringify(formDetails),
     });
+
     setButtonText("Send");
-    let result = await response.json();
-    if (result.code === 200) {
-      toast.success("Message sent successfully");
+
+    const result = await response.json();
+
+    if (response.status === 200) {
+      toast.success(result.message);
       setFormDetails(formInitialDetails);
     } else {
       toast.error("Something went wrong, please try again later");

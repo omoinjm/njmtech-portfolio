@@ -1,36 +1,7 @@
-export interface ILinks {
-  page_links?: NavMenu[];
-  footer_links?: NavFooter[];
-}
-
-export interface NavMenu {
-  id: number;
-  name: string;
-  icon: string;
-  route_url: string;
-  is_active: boolean;
-}
-
-export interface NavFooter {
-  id: number;
-  name: string;
-  icon: string;
-  route_url: string;
-  is_active: boolean;
-}
-
 export type IAge = {
   age: number;
   today: Date;
   birthDate: Date;
-};
-
-export type IForm = {
-  name: string;
-  sent: boolean;
-  email: string;
-  subject: string;
-  message: string;
 };
 
 export type ISkills = {
