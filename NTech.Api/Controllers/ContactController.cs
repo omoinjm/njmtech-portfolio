@@ -1,19 +1,19 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NTech.Shared.Repository;
 
 namespace NTech.Api.Controllers
 {
-    public class NavigationController : BaseController
+    public class ContactController : BaseController
     {
         [HttpGet]
-        [Route("GetNavigation")]
-        public IActionResult Get()
+        [Route("GetContactTemplate")]
+        public async Task<IActionResult> Get()
         {
-            var vm = this.InitialiseViewModel<NavigationRepository>();
-            
+            var vm = this.InitialiseViewModel<ContactRepository>();
+
             try
             {
-                vm.Initialize();
+                await vm.Initialize();
 
                 return new OkObjectResult(vm.ReturnSuccessModel());
             }

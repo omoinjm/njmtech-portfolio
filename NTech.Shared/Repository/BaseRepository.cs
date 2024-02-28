@@ -8,11 +8,14 @@ namespace NTech.Shared.Repository
     public class BaseRepository
     {
         protected IPgSelector? Selector { get; set; }
+        protected string? TemplateURI;
+
 
         public object? model { get; set; }
 
         public void SetupConnectors(IConfig config) { 
             Selector = new PgSelector(config.PgConnectionString());
+            TemplateURI = config.EmailTemplateUri();
         }
 
         // <summary>

@@ -314,3 +314,4 @@ paket-files/
 __pycache__/
 *.pyc
 
+launchSettings.json

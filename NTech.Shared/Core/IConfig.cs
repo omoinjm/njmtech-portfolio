@@ -8,7 +8,9 @@ namespace NTech.Shared.Core
 {
     public interface IConfig
     {
+        string EmailTemplateUri();
         string PgConnectionString();
         string MongoConnectionString();
+
     }
 }
