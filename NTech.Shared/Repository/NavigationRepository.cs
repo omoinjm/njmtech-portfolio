@@ -1,4 +1,4 @@
-﻿using NTech.Shared.Models;
+﻿using NTech.Shared.Models.Response;
 using NTech.Shared.Queries;
 
 namespace NTech.Shared.Repository
@@ -9,8 +9,8 @@ namespace NTech.Shared.Repository
         {
             model = new
             {
-                menu_list = Selector?.Select<NavigationModel>(new NavigationQuery().NavigationMenuQuery()),
-                footer_list = Selector?.Select<NavigationModel>(new NavigationQuery().NavigationFooterQuery())
+                menu_list = Selector?.Select<NavigationResponse>(new NavigationQuery().NavigationMenuQuery()),
+                footer_list = Selector?.Select<NavigationResponse>(new NavigationQuery().NavigationFooterQuery())
             };
         }
     }

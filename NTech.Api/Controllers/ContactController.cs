@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NTech.Shared.Models;
+using NTech.Shared.Models.Request;
 using NTech.Shared.Repository;
 
 namespace NTech.Api.Controllers
@@ -8,13 +8,13 @@ namespace NTech.Api.Controllers
     {
         [HttpGet]
         [Route("GetContactTemplate")]
-        public async Task<IActionResult> Get([FromQuery] MessageLogModel item)
+        public async Task<IActionResult> Get([FromQuery] ContactRequest request)
         {
             var vm = this.InitialiseViewModel<ContactRepository>();
 
             try
             {
-                await vm.Initialize(item);
+                await vm.Initialize(request);
 
                 return new OkObjectResult(vm.ReturnSuccessModel());
             }

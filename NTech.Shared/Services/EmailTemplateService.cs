@@ -1,11 +1,11 @@
-﻿using NTech.Shared.Models;
+﻿using NTech.Shared.Models.Response;
 using System.Net.Http.Headers;
 
 namespace NTech.Shared.Services
 {
     public class EmailTemplateService
     {
-        public static async Task<string?> GetTemplate(MessageLogModel item, string templateURI)
+        public static async Task<string?> GetTemplate(MessageLogResponse item, string templateURI)
         {
             using (var client = new HttpClient())
             {
@@ -14,6 +14,7 @@ namespace NTech.Shared.Services
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var response = await client.GetAsync(item.html_template);
+
                 response.EnsureSuccessStatusCode();
 
                 return await response.Content.ReadAsStringAsync();
