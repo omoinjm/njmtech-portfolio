@@ -1,4 +1,4 @@
-import { IAge } from '../../db/models';
+import { IAge } from '../../framework/models';
 
 const me: IAge = {
 	birthDate: new Date('1999-04-06T00:00:00'),

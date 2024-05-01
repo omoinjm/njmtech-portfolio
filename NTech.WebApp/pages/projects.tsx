@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Projects } from "../components";
-import { ITabProjects } from "../db/models";
+import { ITabProjects } from "../framework/models";
 
 const Home: NextPage = () => {
   const [projects, setProjectData] = useState<ITabProjects[]>([]);

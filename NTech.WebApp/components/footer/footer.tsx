@@ -1,4 +1,4 @@
-// import { NavFooter } from "../../db/models"
+import { NavFooterModel } from "../../framework/models/link_model"
 import { Col, Container, Row } from "react-bootstrap";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,7 +38,7 @@ export const Footer = ({ data }: any) => {
           </Col>
           <Col size={12} sm={6} className="text-center text-sm-end">
             <div className="social-icon">
-              {data?.map((item: any, index: number) => {
+              {data?.map((item: NavFooterModel, index: number) => {
                 return (
                   <div key={index}>
                     <Link
