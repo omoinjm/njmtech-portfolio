@@ -4,7 +4,7 @@ import { BaseComponent } from "../../framework/base/base.component";
 
 class LinkService extends BaseComponent {
   public handler = async (req: NextRequest) => {
-    return NextResponse.json(data);
+    return NextResponse.json("{}");
   };
 }
 
