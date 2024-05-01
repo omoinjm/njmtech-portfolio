@@ -1,15 +1,24 @@
 import ResponseModel from "../models/response_model";
 import ConfigService from "./config.service";
+// import eventEmitter from "../hooks/event_emitter";
+import IConfig from "../core/config";
 
 export default class DataService {
-  private static API_URL: string | undefined =
-    ConfigService.getApiEndpoint + "api/";
+  private static config: IConfig = new ConfigService();
+
+  private static API_URL: string = this.config.getApiEndpoint() + "api/";
 
   private static return_response: ResponseModel = new ResponseModel();
 
   private static HTTP_OPTIONS: any = {
     "Content-Type": "application/json;charset=utf-8",
   };
+
+  // public static ResponseEmitter: any = eventEmitter;
+
+  constructor() {
+    console.log(DataService.API_URL);
+  }
 
   //Syncronous get call to which we wait for the call to complete and return a response.
   public static async get_sync(
@@ -27,6 +36,9 @@ export default class DataService {
         this.return_response,
       );
     }
+
+    //emit an event to be listened to perform a background task
+    // this.ResponseEmitter.emit("PING", this.return_response);
 
     return this.return_response;
   }

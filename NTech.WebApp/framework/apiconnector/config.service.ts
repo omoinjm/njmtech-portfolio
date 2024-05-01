@@ -1,25 +1,27 @@
-export default class ConfigService {
-  static get getSubscriptionUrl(): string | undefined {
+import IConfig from "../core/config";
+
+export default class ConfigService implements IConfig {
+  getSubscriptionUrl(): string | undefined {
     return process.env.NEXT_PUBLIC_MAILCHIMP_URL;
   }
 
-  static get getEmailUser(): string | undefined {
+  getEmailUser(): string | undefined {
     return process.env.NEXT_PUBLIC_EMAIL_USER;
   }
 
-  static get getSecret(): string | undefined {
+  getSecret(): string | undefined {
     return process.env.NEXT_PUBLIC_EMAIL_APP_PASS;
   }
 
-  static get getSendAddress(): string | undefined {
+  getSendAddress(): string | undefined {
     return process.env.NEXT_PUBLIC_EMAIL_MAIL;
   }
 
-  static get getSiteUrl(): string | undefined {
+  getSiteUrl(): string | undefined {
     return process.env.NEXT_PUBLIC_SITE_URL;
   }
 
-  static get getApiEndpoint(): string | undefined {
+  getApiEndpoint(): string | undefined {
     return process.env.ASP_DOTNET_API_EMDPOINT;
   }
 }

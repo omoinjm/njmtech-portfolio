@@ -1,10 +1,6 @@
-export interface ContactFormModel {
-  body?: string;
-  subject?: string;
-  to_field?: string;
-  cc_field?: string;
-  bcc_field?: string;
-  from_name?: string;
-  html_template?: string;
+export interface ContactFormRequest {
+    email_address: string;
+    first_name: string;
+    last_name: string;
 }
 
