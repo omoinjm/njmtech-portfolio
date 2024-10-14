@@ -1,27 +1,43 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Build Stage
+FROM node:lts as build-stage
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE $PORT
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["NTech.Api/NTech.Api.csproj", "NTech.Api/"]
-COPY ["NTech.Shared/NTech.Shared.csproj", "NTech.Shared/"]
-RUN dotnet restore "./NTech.Api/NTech.Api.csproj"
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application files to the working directory
 COPY . .
-WORKDIR "/src/NTech.Api"
-RUN dotnet build "./NTech.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./NTech.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Build the React application
+RUN npm run build
 
-FROM base AS final
+# Production Stage
+FROM nginx:latest
+
+# Copy the NGINX configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy the build artifacts from the build stage to NGINX web server
+COPY --from=build-stage /app/build/ /usr/share/nginx/html
+
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "NTech.Api.dll"]
+RUN chown -R nginx:nginx /app && chmod -R 755 /app && \
+        chown -R nginx:nginx /var/cache/nginx && \
+        chown -R nginx:nginx /var/log/nginx && \
+        chown -R nginx:nginx /etc/nginx/conf.d
+RUN touch /var/run/nginx.pid && \
+        chown -R nginx:nginx /var/run/nginx.pid
 
-# Set the entry point to start the application and bind to the dynamic port provided by Heroku
-# CMD ASPNETCORE_URLS=http://0.0.0.0:$PORT:80 dotnet NTech.Api.dll
+USER nginx
+
+# Expose port 80 for the NGINX server
+EXPOSE 80
+EXPOSE 3000
+
+
+# Command to start NGINX when the container is run
+CMD ["nginx", "-g", "daemon off;"]
