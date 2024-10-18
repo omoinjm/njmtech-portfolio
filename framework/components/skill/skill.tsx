@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import getAge from "../utils";
 import { About } from "./skill.styles";
 
 export const Skills = ({ data }: any) => {
