@@ -1,17 +1,15 @@
-import getData from "@/services/sql.service";
+import { getList } from "@/services/sql.service";
 import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 const handler = async (req: NextRequest) => {
   const getCachedLinks = unstable_cache(
-    async () => await getData("nav_menu"),
+    async () => await getList("nav_menu"),
     ["menu-links"],
     { tags: ["menu-links-next-js"], revalidate: 3600 }
   );
 
-  let data = await getCachedLinks();
-
-  return NextResponse.json(data);
+  return NextResponse.json(await getCachedLinks());
 };
 
 

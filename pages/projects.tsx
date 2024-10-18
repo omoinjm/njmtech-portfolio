@@ -1,18 +1,23 @@
+import { Projects } from "@/components";
+import { TabProjectModel } from "@/models";
+import DataService from "@/services/data.service";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { Projects } from "../framework/components";
-import { ITabProjects } from "../framework/models";
+
+const fetchProjects = async (): Promise<TabProjectModel> => {
+  return await DataService.get_call("projects", null);
+};
 
 const Home: NextPage = () => {
-  const [projects, setProjectData] = useState<ITabProjects[]>([]);
+  const [projects, setProjectData] = useState<TabProjectModel[]>([]);
 
   useEffect(() => {
-    fetch("/api/projects")
-      .then((response) => response.json())
-      .then((json) => {
-        setProjectData(json);
-      });
+    const fetchData = async () => {
+      const result: any = await fetchProjects();
+      setProjectData(result?.all_project_groups?.project_groups);
+    }
+    fetchData();
   }, []);
 
   return (

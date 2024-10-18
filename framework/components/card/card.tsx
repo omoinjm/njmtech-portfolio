@@ -1,26 +1,26 @@
-import Link from 'next/link'
+import Link from 'next/link';
 import { Col } from 'react-bootstrap';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { VscGithub } from 'react-icons/vsc';
 import { Icons, Img, Stack } from './card.styles';
-import { BsBoxArrowUpRight } from 'react-icons/bs';
 
 export const ProjectCard = ({
-   live,
-   title,
-   stack,
+   live_url,
+   project_title,
+   stack_json,
    img_url,
    code_url,
-   description,
-   code_visibility,
+   project_description,
+   is_code,
    is_current_domian
 }: any) => {
    return (
       <Col size={12} sm={6} md={4}>
          <div className="proj-imgbx">
-            <Img src={img_url} alt={title} />
+            <Img src={img_url} alt={project_title} />
             <Stack className="proj-txtx">
                <Icons>
-                  {code_visibility ? (
+                  {is_code ? (
                      <a
                         href={code_url}
                         target="_blank"
@@ -35,30 +35,30 @@ export const ProjectCard = ({
 
                   {is_current_domian ? (
                      <Link
-                        href={live}
-                        
+                        href={live_url}
+
                      >
                         {<BsBoxArrowUpRight />}
                      </Link>
                   ) : (
                      <a
-                        href={live}
+                        href={live_url}
                         target="_blank"
                         rel="noreferrer"
                         aria-label="Live site"
                      >
-                     {<BsBoxArrowUpRight />}
+                        {<BsBoxArrowUpRight />}
                      </a>
                   )}
-                  
+
                </Icons>
-               <h4>{title}</h4>
-               <span>{description}</span>
+               <h4>{project_title}</h4>
+               <span>{project_description}</span>
                <ul>
-                  {stack.map((option: any, index: any) => {
+                  {stack_json.map((item: any, index: any) => {
                      return (
                         <div key={index}>
-                           <li>{option}</li>
+                           <li>{item}</li>
                         </div>
                      );
                   })}

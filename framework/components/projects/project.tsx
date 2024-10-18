@@ -1,5 +1,5 @@
+import { TabProjectModel } from '@/models';
 import 'animate.css';
-import Image from 'next/image';
 import { Col, Container, Nav, Row, SSRProvider, Tab } from 'react-bootstrap';
 import TrackVisibility from 'react-on-screen';
 import { ProjectCard } from '../card/card';
@@ -32,12 +32,12 @@ export const Projects = ({ data }: any) => {
                                     className="nav-pills mb-5 justify-content-center align-items-center"
                                     id="pills-tab"
                                  >
-                                    {data?.map((item: any, index: number) => {
+                                    {data?.map((item: TabProjectModel, index: number) => {
                                        return (
                                           <Wrapper className="wrapper" key={index}>
                                              <Nav.Item>
-                                                <Nav.Link title={item.tab_name} eventKey={item.tab_key}>
-                                                   <i className={`${item.icon} icons`}></i>
+                                                <Nav.Link title={item.project_group_name} eventKey={item.project_group_key}>
+                                                   <i className={`${item.project_group_icon} icons`}></i>
                                                 </Nav.Link>
                                              </Nav.Item>
                                           </Wrapper>
@@ -52,9 +52,9 @@ export const Projects = ({ data }: any) => {
                                  >
                                     {data?.map((item: any, index: number) => {
                                        return (
-                                          <Tab.Pane eventKey={item.tab_key} key={index}>
+                                          <Tab.Pane eventKey={item.project_group_key} key={index}>
                                              <Row>
-                                                {item.project.map((project: any, index: number) => {
+                                                {item.projects.map((project: any, index: number) => {
                                                    return <ProjectCard key={index} {...project} />;
                                                 })}
                                              </Row>

@@ -29,7 +29,29 @@ export default class DataService {
          return await response.json();
       } catch (error) {
          console.error("Fetch error: ", error);
-         throw error; // Rethrow the error to be handled by the caller
+         throw error;
+      }
+   }
+
+   public static async post_call(
+      action: string,
+      parameters: object | null,
+   ) {
+      try {
+         const response = await fetch(this.get_full_api_path(action), {
+            method: "POST",
+            headers: this.HTTP_OPTIONS,
+            body: JSON.stringify(parameters)
+         });
+
+         if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+         }
+
+         return await response.json();
+      } catch (error) {
+         console.error("Fetch error: ", error);
+         throw error;
       }
    }
 

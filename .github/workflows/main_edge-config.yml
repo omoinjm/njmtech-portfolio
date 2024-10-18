@@ -20,7 +20,7 @@ env:
   # set this to the node version to use (supports 8.x, 10.x, 12.x)
   NODE_VERSION: '16.x'
   AWS_APP_NAME: 'new-site-nextjs'
-  DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+  # DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
   DEPLOY_HOST: 54.90.76.40
   ENV_NAME: production
 
@@ -39,14 +39,14 @@ jobs:
 
       # - name: 'Show me my variables'
       #   shell: bash
-      #   run: | 
+      #   run: |
       #     echo "$DEPLOY_HOST"
       #     echo $ENV_NAME
       #     echo $NODE_VERSION
       #     echo $DEPLOY_KEY
       #     echo $AWS_APP_NAME
       #     echo "$DEPLOY_KEY" > ssh-private-key
-          
+
       #     npm ci
       #     npm run build
 
@@ -61,6 +61,6 @@ jobs:
 
       # - name: 'Deploy to AWS server'
       #  shell: bash
-      #  run: | 
+      #  run: |
       #    scp -o StrictHostKeyChecking=no -r -i $PUBLIC_KEY $GITHUB_WORKSPACE/.next ubuntu@$DEPLOY_HOST:/var/www/54.90.76.40/.next
       #    echo "Finished and done!"

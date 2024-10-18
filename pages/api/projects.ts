@@ -1,9 +1,15 @@
-import { get } from "@vercel/edge-config";
+import { getRecord } from "@/services/sql.service";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
+const getCachedLinks = unstable_cache(
+  async () => await getRecord("projects"),
+  ["projects-links"],
+  { tags: ["projects-links-next-js"], revalidate: 3600 }
+);
+
 const handler = async (req: NextRequest) => {
-  const data = await get("tab_projects");
-  return NextResponse.json(data);
+  return NextResponse.json(await getCachedLinks());
 };
 
 export const config = {

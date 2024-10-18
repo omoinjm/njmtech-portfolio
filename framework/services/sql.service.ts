@@ -1,29 +1,41 @@
 import { seed } from "@/lib/seed";
 import { sql } from "@vercel/postgres";
 
-export default async function getNavigation(tableName: string) {
-
+export async function getList(tblName: string) {
    try {
-      const query = `SELECT * FROM ${tableName}`;
-      const data = await sql.query(query);
+      const data = await sql.query(`SELECT * FROM ${tblName}`);
 
       return data.rows;
 
-   } catch (e: any) {
-      if (e.message.includes(`relation "${tableName}" does not exist`)) {
-         console.log(
-            'Table does not exist, creating and seeding it with dummy data now...'
-         )
+   } catch (err: any) {
+      handleError(err, tblName)
+   }
+}
 
-         // Table is not created yet
-         await seed();
+export async function getRecord(tblName: string) {
+   try {
+      const data = await sql.query(`SELECT * FROM ${tblName}`);
 
-         const query = `SELECT * FROM ${tableName}`;
-         const data = await sql.query(query);
+      return data.rows[0];
 
-         return data.rows
-      } else {
-         throw e
-      }
+   } catch (err: any) {
+      handleError(err, tblName)
+   }
+}
+
+
+async function handleError(err: any, tblName: string) {
+   if (err.message.includes(`relation "${tblName}" does not exist`)) {
+
+      console.log('Table does not exist, creating and seeding it with dummy data now...');
+
+      // Table is not created yet
+      await seed();
+
+      const data = await sql.query(`SELECT * FROM ${tblName}`);
+
+      return data.rows
+   } else {
+      throw err
    }
 }
