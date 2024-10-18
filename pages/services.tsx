@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -57,10 +58,34 @@ const Services = () => {
    const size = useWindowSize();
 
    return (
-      <Error height={size.height} className="jumbotron">
-         <h1 className="display-4">Coming soon...</h1>
-         <Link href="/">Go back to site</Link>
-      </Error>
+      <>
+         <Head>
+            <title>Services</title>
+            <meta
+               name="google-site-verification"
+               content="uhCz2o1FOPTi4BlD_3yZ1Nw_ER4VAybFWURc5vBaIVo"
+            />
+            <link rel="canonical" href="https://njmtech.vercel.app/services" />
+            <meta property="og:site_name" content="Nhlanhla Junior Malaza" />
+            <meta property="og:title" content="Services" />
+            <meta
+               name="description"
+               content="Nhlanhla Junior Malaza services page"
+            />
+            <meta property="og:url" content="https://njmtech.vercel.app/services" />
+            <meta itemProp="name" content="Services" />
+            <meta itemProp="url" content="https://njm.vercel.app/services" />
+            <meta property="og:type" content="website" />
+            <link
+               rel="icon"
+               href="https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064193/public/favicon_zqeo1n.ico"
+            />
+         </Head>
+         <Error height={size.height} className="jumbotron">
+            <h1 className="display-4">Coming soon...</h1>
+            <Link href="/">Go back to site</Link>
+         </Error>
+      </>
    );
 };
 
