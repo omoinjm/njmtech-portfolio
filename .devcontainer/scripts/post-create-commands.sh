@@ -3,9 +3,13 @@
 : "${GIT_USER_NAME:?Need to set GIT_USER_NAME}"
 
 # Git config
-chmod 600 /root/.ssh/id_rsa_bb
+chmod 600 /root/.ssh/id_rsa
 eval $(ssh-agent -s)
-ssh-add /root/.ssh/id_rsa_bb
+ssh-add /root/.ssh/id_rsa
+
+echo "chmod 600 /root/.ssh/id_rsa" >> ~/.bashrc
+echo "eval \$(ssh-agent -s)" >> ~/.bashrc
+echo "ssh-add /root/.ssh/id_rsa" >> ~/.bashrc
 
 git config --global --add safe.directory /workspaces
 
