@@ -1,6 +1,6 @@
 export default class DataService {
 
-   private static API_URL: string = "http://localhost:3000/api/";
+   private static API_URL: string = `${process.env.NEXT_PUBLIC_SITE_URL}/api/`;
 
    private static HTTP_OPTIONS: any = {
       "Content-Type": "application/json;charset=utf-8",

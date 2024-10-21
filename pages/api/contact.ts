@@ -1,8 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { ContactFormModel, MessageLogModel } from "@/models";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  //const response_template: MessageLogModel = this.handleRequest(req);
+  const response_template: Promise<MessageLogModel | null> = handleRequest(req);
+
+  console.log(response_template);
+
   //console.log(response_template)
   //const mailOptions = {
   //    from: `${response_template?.from_name} <${response_template?.to_field}>`,
@@ -38,23 +42,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   //});
   // };
 
-  //   private handleRequest = async (
-  //   req: NextApiRequest,
-  // ): Promise<MessageLogModel | null> => {
-  //   const { first_name, last_name, email_address, message, phone } = req.body;
 
-  //   const reqItem: ContactFormRequest = {
-  //     email_address: email_address,
-  //     first_name: first_name,
-  //     last_name: last_name,
-  //   };
+}
 
-  //   return await this.getContactTemplate(reqItem);
-  // };
+const handleRequest = async (
+  req: NextApiRequest,
+): Promise<MessageLogModel | null> => {
+  const { first_name, last_name, email_address, message, phone } = req.body;
 
-  //   private getContactTemplate = async (
-  //   req: ContactFormRequest,
-  // ): Promise<MessageLogModel | null> => {
+  const reqItem: ContactFormModel = {
+    email_address: email_address,
+    first_name: first_name,
+    last_name: last_name,
+  };
+
+  return await getContactTemplate(reqItem);
+};
+
+const getContactTemplate = async (
+  req: ContactFormModel,
+): Promise<MessageLogModel | null> => {
   //   const parameters = new URLSearchParams([
   //     [
   //       "html_template",
@@ -73,7 +80,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   //   return !this.response_model.is_error ? this.response_model.model : null;
   // };
-  // }
+  return null;
 }
 
 export default handler;
