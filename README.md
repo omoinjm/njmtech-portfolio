@@ -1,42 +1,25 @@
-# NJMTECH Homepage
+# Next.js + Turbopack
 
-[https://njmtech.vercel.app/](https://njmtech.vercel.app/)
+This example allows you to get started with `next dev --turbo` quicky.
 
-## Tutorial
+## Deploy your own
 
-Watch how I built this website on YouTube:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-turbopack&project-name=with-turbopack&repository-name=with-turbopack)
 
-[![YouTube thumbnail](./doc/thumb.png)](https://www.youtube.com/watch?v=hYv6BM2fWd8)
+## How to use
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
 
-## Stack
-
-- [Next.js](https://nextjs.org/) - A React framework with hybrid static & server rendering, and route pre-fetching, etc.
-- [Bootstrap](https://getbootstrap.com/) - CSS framework directed at responsive, mobile-first front-end web development.
-- [Postgres](https://www.postgresql.org/) - A free and open-source relational database management system emphasizing extensibility and SQL compliance.
-
-```
-$PROJECT_ROOT
-│   # Page files
-├── pages
-│   # React component files
-├── components
-│   # Database connection and queries
-├── db
-│   # Static files for images and other files
-└── public
+```bash
+npx create-next-app --example with-turbopack with-turbopack-app
 ```
 
-## License
+```bash
+yarn create next-app --example with-turbopack with-turbopack-app
+```
 
-MIT License.
+```bash
+pnpm create next-app --example with-turbopack with-turbopack-app
+```
 
-You can create your own homepage for free without notifying me by forking this project under the following conditions:
-
-- Add a link to [my homepage](https://njmtech.vercel.app/)
-- Do not use the 3d voxel dog
-
-Check out [LICENSE](./LICENSE) for more detail.
-
----
+Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
