@@ -90,7 +90,7 @@ export const Hero = () => {
                               </p>
                               <button onClick={() => console.log('connect')}>
                                  <a
-                                    href="https://resume.io/r/xIyIsoKTH"
+                                    href="https://fxw7x7luycssvogx.public.blob.vercel-storage.com/pdf/Nhlanhla_Malaza-3rRvFmCaJpCxqNOVreVWHK57y7HSzj.pdf"
                                     target="_blank"
                                     aria-label="Resume"
                                     rel="noreferrer"

@@ -7,7 +7,6 @@ export default class DataService {
       "Accept": "application/json"
    };
 
-
    public static async get_call(
       action: string,
       parameters?: URLSearchParams | null,
