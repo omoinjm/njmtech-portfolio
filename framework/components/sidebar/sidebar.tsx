@@ -4,14 +4,13 @@ import {
   SidebarContainer,
   SidebarLink,
   SidebarMenu,
-  SidebarRoute,
   SidebarWrapper,
   SideBtnWrap,
 } from "./sidebar.styles";
 
 export const Sidebar = ({ isOpen, toggle, data }: any) => {
   return (
-    <SidebarContainer isOpen={isOpen} onClick={toggle}>
+    <SidebarContainer isOpen={isOpen}>
       <Icon onClick={toggle}>
         <CloseIcon />
       </Icon>

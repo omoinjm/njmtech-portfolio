@@ -18,52 +18,46 @@ export const ProjectCard = ({
       <Col size={12} sm={6} md={4}>
          <div className="proj-imgbx">
             <Img src={img_url} alt={project_title} />
-            <Stack className="proj-txtx">
-               <Icons>
-                  {is_code ? (
-                     <a
-                        href={code_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="GitHub"
-                     >
-                        {<VscGithub />}
-                     </a>
-                  ) : (
-                     ''
-                  )}
+ 
 
-                  {is_current_domian ? (
-                     <Link
-                        href={live_url}
 
-                     >
-                        {<BsBoxArrowUpRight />}
-                     </Link>
-                  ) : (
-                     <a
-                        href={live_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="Live site"
-                     >
-                        {<BsBoxArrowUpRight />}
-                     </a>
-                  )}
+<Stack className="proj-txtx">
+   {/* Row 1 — Icons */}
+   <div className="icons-row">
+      {is_code && (
+         <a href={code_url} target="_blank" rel="noreferrer">
+            <VscGithub />
+         </a>
+      )}
 
-               </Icons>
-               <h4>{project_title}</h4>
-               <span>{project_description}</span>
-               <ul>
-                  {stack_json.map((item: any, index: any) => {
-                     return (
-                        <div key={index}>
-                           <li>{item}</li>
-                        </div>
-                     );
-                  })}
-               </ul>
-            </Stack>
+      {is_current_domian ? (
+         <Link href={live_url}>
+            <BsBoxArrowUpRight />
+         </Link>
+      ) : (
+         <a href={live_url} target="_blank" rel="noreferrer">
+            <BsBoxArrowUpRight />
+         </a>
+      )}
+   </div>
+
+   {/* Row 2 — Title */}
+   <h4 className="title-row">{project_title}</h4>
+
+   {/* Row 3 — Description + tags */}
+   <div className="desc-tags-row">
+      <span className="description">{project_description}</span>
+
+      <ul className="tags">
+         {stack_json.map((item: any, index: any) => (
+            <li key={index}>{item}</li>
+         ))}
+      </ul>
+   </div>
+</Stack>
+
+
+
          </div>
       </Col>
    );
