@@ -40,9 +40,10 @@ export const ProjectCard = ({
          </a>
       )}
    </div>
-
+    
+  <div className="content sm:m-1 md:m-1 lg:m-5">
    {/* Row 2 — Title */}
-   <h4 className="title-row">{project_title}</h4>
+   <h4 className="title-row mt-5">{project_title}</h4>
 
    {/* Row 3 — Description + tags */}
    <div className="desc-tags-row">
@@ -54,6 +55,7 @@ export const ProjectCard = ({
          ))}
       </ul>
    </div>
+</div>
 </Stack>
 
 
