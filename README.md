@@ -58,18 +58,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ```
 $PROJECT_ROOT
-├── pages/                    # Next.js page routes
-│   ├── api/                 # API endpoints
-│   └── *.tsx                # Page components
-├── framework/
-│   ├── components/          # Reusable React components
-│   ├── services/            # Business logic services
-│   ├── utils/               # Utility functions
-│   ├── models/              # TypeScript interfaces
-│   └── lib/                 # Library code
-├── public/                  # Static assets
-├── tests/                   # Playwright E2E tests
-└── node_modules/            # Dependencies
+├── src/
+│   ├── pages/                   # Next.js page routes
+│   │   ├── api/                # API endpoints
+│   │   └── *.tsx               # Page components
+│   ├── framework/
+│   │   ├── components/         # Reusable React components
+│   │   ├── services/           # Business logic services
+│   │   ├── utils/              # Utility functions
+│   │   ├── models/             # TypeScript interfaces
+│   │   ├── styles/             # Global styles
+│   │   └── lib/                # Library code
+│   └── tests/                  # Playwright E2E tests
+├── public/                     # Static assets
+├── node_modules/               # Dependencies
+├── .husky/                     # Git hooks
+├── .env.example               # Environment template
+├── docker-compose.yml         # Local development setup
+└── Dockerfile                 # Production Docker image
 ```
 
 ## Tech Stack
