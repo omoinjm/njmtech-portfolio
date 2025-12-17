@@ -201,6 +201,6 @@ MIT License - See [LICENSE](./LICENSE) for details.
 
 Watch how I built this website on YouTube:
 
-[![YouTube thumbnail](./doc/thumb.png)](https://www.youtube.com/watch?v=hYv6BM2fWd8)
+[![YouTube thumbnail](./docs/images/thumb.png)](https://www.youtube.com/watch?v=hYv6BM2fWd8)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
