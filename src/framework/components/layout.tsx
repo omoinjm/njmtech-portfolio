@@ -1,10 +1,10 @@
-import { LinkModel } from "@/framework/models/link_model";
-import DataService from "@/framework/services/data.service";
-import React, { useEffect, useState } from "react";
-import { Footer } from "./footer/footer";
-import GoToTop from "./GoToTop";
-import { NavBar } from "./navbar/navbar";
-import { Sidebar } from "./sidebar/sidebar";
+import { LinkModel } from '@/framework/models/link_model';
+import DataService from '@/framework/services/data.service';
+import React, { useEffect, useState } from 'react';
+import { Footer } from './footer/footer';
+import GoToTop from './GoToTop';
+import { NavBar } from './navbar/navbar';
+import { Sidebar } from './sidebar/sidebar';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -12,8 +12,8 @@ type LayoutProps = {
 
 const fetchLinks = async (): Promise<LinkModel> => {
   const [menu, footer] = await Promise.all([
-    DataService.get_call("menu", null),
-    DataService.get_call("footer", null),
+    DataService.get_call('menu', null),
+    DataService.get_call('footer', null),
   ]);
 
   return {
