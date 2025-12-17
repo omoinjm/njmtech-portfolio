@@ -15,7 +15,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       setSkillData(await fetchSkills());
-    }
+    };
     fetchData();
   }, []);
 
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Nhlanhla Junior Malaza home page" />
         <meta property="og:url" content="https://njmtech.vercel.app/" />
         <meta itemProp="name" content="Home" />
-        <meta itemProp="url" content="https://njm.vercel.app/" />
+        <meta itemProp="url" content="https://njmtech.vercel.app/" />
         <meta property="og:type" content="website" />
         <link
           rel="icon"

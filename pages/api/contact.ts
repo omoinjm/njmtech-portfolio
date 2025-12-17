@@ -1,86 +1,88 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { ContactFormModel, MessageLogModel } from "@/models";
+import { logger } from "@/utils/logger";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const response_template: Promise<MessageLogModel | null> = handleRequest(req);
-
-  console.log(response_template);
-
-  //console.log(response_template)
-  //const mailOptions = {
-  //    from: `${response_template?.from_name} <${response_template?.to_field}>`,
-  //    to: this.config_service.getSendAddress,
-  //    subject: response_template?.subject,
-  //    html: response_template?.body,
-  //};
-  //const transporter = nodemailer.createTransport({
-  //    service: "gmail",
-  //    auth: {
-  //        user: this.config_service.getEmailUser,
-  //        pass: this.config_service.getSecret,
-  //    },
-  //});
-  //transporter.verify((error) => {
-  //    if (error) {
-  //        console.log(error);
-  //        res.status(500).json({ error: "Error connecting to email service" });
-  //    } else {
-  //        console.log("Ready to Send");
-  //    }
-  //});
-  //transporter.sendMail(mailOptions, (error, info) => {
-  //    if (error) {
-  //        console.log(error);
-  //        return res.status(500).json({ error: "Error sending email" });
-  //    } else {
-  //        console.log("Email sent: " + info.response);
-  //        return res
-  //            .status(200)
-  //            .json({ status: 200, message: "Email sent successfully" });
-  //    }
-  //});
-  // };
-
-
+interface ContactRequest {
+  first_name: string;
+  last_name: string;
+  email_address: string;
+  phone?: string;
+  message: string;
 }
 
-const handleRequest = async (
-  req: NextApiRequest,
-): Promise<MessageLogModel | null> => {
-  const { first_name, last_name, email_address, message, phone } = req.body;
+interface ContactResponse {
+  status: number;
+  message: string;
+  error?: string;
+}
 
-  const reqItem: ContactFormModel = {
-    email_address: email_address,
-    first_name: first_name,
-    last_name: last_name,
-  };
-
-  return await getContactTemplate(reqItem);
+const validateContactForm = (data: unknown): data is ContactRequest => {
+  if (typeof data !== "object" || data === null) return false;
+  const obj = data as Record<string, unknown>;
+  return (
+    typeof obj.first_name === "string" &&
+    typeof obj.last_name === "string" &&
+    typeof obj.email_address === "string" &&
+    typeof obj.message === "string" &&
+    obj.first_name.length > 0 &&
+    obj.last_name.length > 0 &&
+    obj.email_address.length > 0 &&
+    obj.message.length > 0
+  );
 };
 
-const getContactTemplate = async (
-  req: ContactFormModel,
-): Promise<MessageLogModel | null> => {
-  //   const parameters = new URLSearchParams([
-  //     [
-  //       "html_template",
-  //       `template_name=thank_you&first_name=${req.first_name}&last_name=${req.last_name}`,
-  //     ],
-  //     ["subject", "Contact form submission - Portfolio"],
-  //     ["email_address", req.email_address],
-  //     ["first_name", req.first_name],
-  //     ["last_name", req.last_name],
-  //   ]);
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<ContactResponse>,
+) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      status: 405,
+      message: "Method not allowed",
+      error: "Only POST requests are accepted",
+    });
+  }
 
-  //   this.response_model = await this.get_sync_call(
-  //     "Contact/GetContactTemplate",
-  //     parameters,
-  //   );
+  try {
+    if (!validateContactForm(req.body)) {
+      logger.warn("Invalid contact form submission", req.body);
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid request",
+        error:
+          "Missing required fields: first_name, last_name, email_address, message",
+      });
+    }
 
-  //   return !this.response_model.is_error ? this.response_model.model : null;
-  // };
-  return null;
-}
+    const { first_name, last_name, email_address, message, phone } = req.body;
+
+    // TODO: Implement email sending
+    // You can use services like:
+    // - SendGrid (npm install @sendgrid/mail)
+    // - Mailgun
+    // - AWS SES
+    // - Your own email service
+
+    logger.info("Contact form submission received", {
+      first_name,
+      last_name,
+      email_address,
+      phone,
+      timestamp: new Date().toISOString(),
+    });
+
+    return res.status(200).json({
+      status: 200,
+      message: "Contact form submitted successfully. We will be in touch soon!",
+    });
+  } catch (error) {
+    logger.error("Contact API error", error);
+    return res.status(500).json({
+      status: 500,
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
 
 export default handler;
