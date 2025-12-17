@@ -1,0 +1,44 @@
+import {
+  CloseIcon,
+  Icon,
+  SidebarContainer,
+  SidebarLink,
+  SidebarMenu,
+  SidebarWrapper,
+  SideBtnWrap,
+} from "./sidebar.styles";
+
+export const Sidebar = ({ isOpen, toggle, data }: any) => {
+  return (
+    <SidebarContainer isOpen={isOpen}>
+      <Icon onClick={toggle}>
+        <CloseIcon />
+      </Icon>
+      <SidebarWrapper>
+        <SidebarMenu>
+          {data?.map((option: any, index: number) => {
+            return (
+              <SidebarLink key={index} href={option.route_url} onClick={toggle}>
+                {option.name}
+              </SidebarLink>
+            );
+          })}
+        </SidebarMenu>
+        <SideBtnWrap>
+          <span className="navbar-text">
+            <a
+              href="https://njmbio.vercel.app/"
+              target="_blank"
+              aria-label="Links"
+              rel="noreferrer"
+            >
+              <button className="vvd">
+                <span>Links</span>
+              </button>
+            </a>
+          </span>
+        </SideBtnWrap>
+      </SidebarWrapper>
+    </SidebarContainer>
+  );
+};
