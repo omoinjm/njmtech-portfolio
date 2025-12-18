@@ -14,11 +14,7 @@ export const Footer = ({ data }: any) => {
 
   useEffect(() => {
     // Check if the current pathname matches any of the specified routes
-    if (
-      router.pathname.includes('/contact') ||
-      router.pathname.includes('/projects') ||
-      router.pathname.includes('/services')
-    ) {
+    if (['/contact', '/projects', '/services'].some((path) => router.pathname.includes(path))) {
       // Set the state to true if the condition is met
       setSub(false);
     } else {

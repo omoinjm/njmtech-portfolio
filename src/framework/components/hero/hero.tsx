@@ -1,10 +1,10 @@
-import "animate.css";
-import { createContext, useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import { ArrowRightCircle } from "react-bootstrap-icons";
-import TrackVisibility from "react-on-screen";
-import { Cursor } from "react-simple-typewriter";
-import { Img } from "./hero.styles";
+import 'animate.css';
+import { createContext, useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import { ArrowRightCircle } from 'react-bootstrap-icons';
+import TrackVisibility from 'react-on-screen';
+import { Cursor } from 'react-simple-typewriter';
+import { Img } from './hero.styles';
 
 interface ThemeContextType {
   theme: string;
@@ -14,18 +14,18 @@ interface ThemeContextType {
 export const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export const Hero = () => {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState('dark');
   const [loopNum, setLoopNum] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [delta, setDelta] = useState(300 - Math.random() * 100);
   const [index, setIndex] = useState(1);
 
   const toggleTheme = () => {
-    setTheme((curr) => (curr === "dark" ? "light" : "dark"));
+    setTheme((curr) => (curr === 'dark' ? 'light' : 'dark'));
   };
 
-  const toRotate = ["Software Developer", "DevOps Engineer", "UI/UX Designer"];
+  const toRotate = ['Software Developer', 'DevOps Engineer', 'UI/UX Designer'];
   const period = 500;
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const Hero = () => {
       setIsDeleting(true);
       setIndex((prevIndex) => prevIndex - 1);
       setDelta(period);
-    } else if (isDeleting && updatedText === "") {
+    } else if (isDeleting && updatedText === '') {
       setIsDeleting(false);
       setLoopNum(loopNum + 1);
       setIndex(1);
@@ -73,25 +73,20 @@ export const Hero = () => {
             <Col xs={12} md={6} xl={7}>
               <TrackVisibility>
                 {({ isVisible }) => (
-                  <div
-                    className={
-                      isVisible ? "animate__animated animate__fadeIn" : ""
-                    }
-                  >
+                  <div className={isVisible ? 'animate__animated animate__fadeIn' : ''}>
                     <span className="tagline">Nhlanhla Junior Malaza</span>
                     <h1>
                       I&apos;m a <span>{text}</span>
                       <Cursor />.
                     </h1>
                     <p>
-                      A passionate software developer, willing to learn and
-                      adapt to any software environment. I am always striving to
-                      improve myself and my skills. I enjoy working with others
-                      and within a team.
+                      A passionate software developer, willing to learn and adapt to any software
+                      environment. I am always striving to improve myself and my skills. I enjoy
+                      working with others and within a team.
                     </p>
                     <button>
                       <a
-                        href="https://fxw7x7luycssvogx.public.blob.vercel-storage.com/pdf/Nhlanhla_Malaza-3rRvFmCaJpCxqNOVreVWHK57y7HSzj.pdf"
+                        href="https://fxw7x7luycssvogx.public.blob.vercel-storage.com/pdf/Nhlanhla_Junior_Malaza%20CV.pdf"
                         target="_blank"
                         aria-label="Resume"
                         rel="noreferrer"
@@ -106,11 +101,7 @@ export const Hero = () => {
             <Col xs={12} md={6} xl={5}>
               <TrackVisibility>
                 {({ isVisible }) => (
-                  <div
-                    className={
-                      isVisible ? "animate__animated animate__zoomIn" : ""
-                    }
-                  >
+                  <div className={isVisible ? 'animate__animated animate__zoomIn' : ''}>
                     <Img
                       width={20}
                       height={20}
