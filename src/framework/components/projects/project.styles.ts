@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Project = styled.section`
-  background-image: url("https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064195/public/assets/color-sharp_u65iaw.png");
+  background-image: url('https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064195/public/assets/color-sharp_u65iaw.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -9,7 +9,7 @@ export const Project = styled.section`
 
 export const Wrapper = styled.div`
   ${
-    "" /* .icon {
+    '' /* .icon {
 		position: relative;
 		cursor: pointer;
 		z-index: 3;

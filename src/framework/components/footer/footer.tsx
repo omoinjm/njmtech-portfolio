@@ -1,10 +1,10 @@
-import { FooterModel } from "@/framework/models/link_model";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import { MailchimpForm } from "../mailchimp/mailchimpForm";
+import { FooterModel } from '@/framework/models/link_model';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import { MailchimpForm } from '../mailchimp/mailchimpForm';
 
 export const Footer = ({ data }: any) => {
   const router = useRouter();
@@ -15,8 +15,9 @@ export const Footer = ({ data }: any) => {
   useEffect(() => {
     // Check if the current pathname matches any of the specified routes
     if (
-      router.pathname.includes("/contact") ||
-      router.pathname.includes("/projects")
+      router.pathname.includes('/contact') ||
+      router.pathname.includes('/projects') ||
+      router.pathname.includes('/services')
     ) {
       // Set the state to true if the condition is met
       setSub(false);
@@ -40,17 +41,8 @@ export const Footer = ({ data }: any) => {
               {data?.map((item: FooterModel, index: number) => {
                 return (
                   <div key={index}>
-                    <Link
-                      href={item.route_url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Image
-                        width={20}
-                        height={20}
-                        src={item.icon}
-                        alt={item.name}
-                      />
+                    <Link href={item.route_url} target="_blank" rel="noreferrer">
+                      <Image width={20} height={20} src={item.icon} alt={item.name} />
                     </Link>
                   </div>
                 );
