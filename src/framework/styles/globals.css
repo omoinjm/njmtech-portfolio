@@ -166,7 +166,7 @@ nav.navbar.scrolled {
   background-color: #121212;
 }
 nav.navbar .navbar-brand {
-  width: 9%;
+  width: 25%;
 }
 nav.navbar .navbar-nav .navbar-link {
   font-weight: 400;
@@ -840,7 +840,7 @@ nav.navbar .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
 }
 
 .footer img {
-  width: 26%;
+  width: 40%;
 }
 .footer .social-icon {
   display: flex;

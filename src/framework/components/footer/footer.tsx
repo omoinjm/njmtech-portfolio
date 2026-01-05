@@ -28,9 +28,7 @@ export const Footer = ({ data }: any) => {
         <Row className="align-items-center">
           {showSub ? <MailchimpForm /> : <div className="mt-5"></div>}
           <Col size={12} sm={6}>
-            <span className="logo-name">
-              NJM<span>TECH</span>
-            </span>
+            <Image src="/logo.svg" alt="NJMTECH Logo" width={300} height={150} priority />
           </Col>
           <Col size={12} sm={6} className="text-center text-sm-end">
             <div className="social-icon">

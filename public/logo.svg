@@ -1,0 +1,14 @@
+<svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <!-- Import Nunito Sans font -->
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700&amp;display=swap');
+    </style>
+  </defs>
+  
+  <!-- NJM in white -->
+  <text x="35" y="33" font-family="'Nunito Sans', sans-serif" font-size="22" font-weight="700" fill="#ffffff" letter-spacing="5">NJM</text>
+  
+  <!-- TECH in pink with opacity -->
+  <text x="100" y="33" font-family="'Nunito Sans', sans-serif" font-size="22" font-weight="700" fill="rgba(170, 54, 124, 0.5)" letter-spacing="5">TECH</text>
+</svg>
