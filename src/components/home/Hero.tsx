@@ -1,6 +1,9 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { ArrowRight, Code, Sparkles, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { publicConfig } from "@/lib/config.client";
 
 export const Hero = () => {
   return (
@@ -68,12 +71,12 @@ export const Hero = () => {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
-            <Link to="/contact" className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
+            <Link href="/contact" className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
               Get In Touch
             </Link>
             <a
-              href="https://fxw7x7luycssvogx.public.blob.vercel-storage.com/pdf/Nhlanhla_Junior_Malaza%20CV.pdf"
+              href={publicConfig.RESUME_URL}
               target="_blank"
               className="px-8 py-4 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-all hover:scale-105 flex items-center justify-center gap-2"
             >

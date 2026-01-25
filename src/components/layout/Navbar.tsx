@@ -1,11 +1,14 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { Github, Linkedin, Menu, Twitter, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { name: "Projects", href: "/projects", isRoute: true },
-  { name: "Contact", href: "/contact", isRoute: true },
+  { name: "Projects", href: "/projects" },
+  { name: "Contact", href: "/contact" },
 ];
 
 const socialLinks = [
@@ -17,7 +20,7 @@ const socialLinks = [
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,12 +31,7 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isActive = (link: typeof navLinks[0]) => {
-    if (link.isRoute) {
-      return location.pathname === link.href;
-    }
-    return location.pathname === "/" && location.hash === link.href.replace("/", "");
-  };
+  const isActive = (href: string) => pathname === href;
 
   return (
     <motion.nav
@@ -47,30 +45,20 @@ export const Navbar = () => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold gradient-text">
+        <Link href="/" className="text-2xl font-bold gradient-text">
           NJM<span className="text-foreground">TECH</span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            link.isRoute ? (
-              <Link
-                key={link.name}
-                to={link.href}
-                className={`nav-link ${isActive(link) ? "active" : ""}`}
-              >
-                {link.name}
-              </Link>
-            ) : (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`nav-link ${isActive(link) ? "active" : ""}`}
-              >
-                {link.name}
-              </a>
-            )
+            <Link
+              key={link.name}
+              href={link.href}
+              className={`nav-link ${isActive(link.href) ? "active" : ""}`}
+            >
+              {link.name}
+            </Link>
           ))}
         </div>
 
@@ -89,7 +77,7 @@ export const Navbar = () => {
             </a>
           ))}
           <Link
-            to="/contact"
+            href="/contact"
             className="ml-4 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
           >
             Let's Connect
@@ -116,25 +104,14 @@ export const Navbar = () => {
         >
           <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
             {navLinks.map((link) => (
-              link.isRoute ? (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ) : (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </a>
-              )
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-muted-foreground hover:text-foreground transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
             ))}
             <div className="flex items-center gap-4 pt-4 border-t border-border">
               {socialLinks.map((social) => (

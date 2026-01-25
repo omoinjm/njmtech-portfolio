@@ -1,3 +1,5 @@
+"use client";
+
 import { useToast } from "@/hooks/use-toast";
 import { motion, useInView } from "framer-motion";
 import { Github, Linkedin, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
