@@ -22,7 +22,7 @@ export const siteConfig = {
   description:
     "Professional portfolio of Nhlanhla Junior Malaza - Software Developer, DevOps Engineer, and UI/UX Designer",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://njmtech.vercel.app",
-  email: "njmcloud@gmail.com",
+  email: "njmalaza@outlook.com",
   social: {
     linkedin: "https://www.linkedin.com/in/njmalaza",
     github: "https://github.com/njmalaza",

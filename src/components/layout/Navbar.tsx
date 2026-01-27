@@ -5,6 +5,7 @@ import { Github, Linkedin, Menu, Twitter, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const navLinks = [
   { name: "Projects", href: "/projects" },
@@ -14,7 +15,11 @@ const navLinks = [
 const socialLinks = [
   { icon: Github, href: "https://github.com/omoinjm", label: "GitHub" },
   { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com/nhlanhlamalaza_", label: "Email" },
+  {
+    icon: Twitter,
+    href: "https://twitter.com/nhlanhlamalaza_",
+    label: "Email",
+  },
 ];
 
 export const Navbar = () => {
@@ -38,15 +43,25 @@ export const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-background/95 backdrop-blur-md shadow-lg py-3"
-        : "bg-transparent py-5"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-background/95 backdrop-blur-md shadow-lg py-3"
+          : "bg-transparent py-5"
+      }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold gradient-text">
-          NJM<span className="text-foreground">TECH</span>
+        <Link
+          href="/"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+        >
+          <Image
+            src="/logo.svg"
+            alt="NJMTECH Logo"
+            width={190}
+            height={90}
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -77,10 +92,11 @@ export const Navbar = () => {
             </a>
           ))}
           <Link
-            href="/contact"
+            href="https://njmbio.vercel.app/"
+            target="_blank"
             className="ml-4 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
           >
-            Let's Connect
+            Links
           </Link>
         </div>
 

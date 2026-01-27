@@ -1,9 +1,18 @@
 import { Github, Linkedin, Twitter } from "lucide-react";
+import Image from "next/image";
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/omoinjm", label: "GitHub" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/njmalaza", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com/nhlanhlamalaza_", label: "Twitter" },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/in/njmalaza",
+    label: "LinkedIn",
+  },
+  {
+    icon: Twitter,
+    href: "https://twitter.com/nhlanhlamalaza_",
+    label: "Twitter",
+  },
 ];
 
 export const Footer = () => {
@@ -15,8 +24,16 @@ export const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           {/* Logo & Copyright */}
           <div className="text-center md:text-left">
-            <a href="#home" className="text-2xl font-bold gradient-text">
-              NJM<span className="text-foreground">TECH</span>
+            <a
+              href="#home"
+              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <Image
+                src="/logo.svg"
+                alt="NJMTECH Logo"
+                width={190}
+                height={90}
+              />
             </a>
             <p className="text-muted-foreground text-sm mt-1">
               © {currentYear} All rights reserved.
