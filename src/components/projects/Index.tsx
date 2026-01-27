@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ExternalLink, Github, Folder } from "lucide-react";
 
 const projects = [
@@ -12,6 +12,7 @@ const projects = [
     tags: ["Next.js", "TypeScript", "Stripe", "PostgreSQL"],
     github: "https://github.com/omoinjm",
     live: "#",
+    category: "website",
     featured: true,
   },
   {
@@ -20,6 +21,7 @@ const projects = [
     tags: ["React", "Python", "OpenAI", "FastAPI"],
     github: "https://github.com/omoinjm",
     live: "#",
+    category: "tools",
     featured: true,
   },
   {
@@ -28,6 +30,7 @@ const projects = [
     tags: ["React", "D3.js", "WebSocket", "Node.js"],
     github: "https://github.com/omoinjm",
     live: "#",
+    category: "dashboards",
     featured: true,
   },
   {
@@ -36,6 +39,7 @@ const projects = [
     tags: ["React", "Redux", "Firebase", "Material UI"],
     github: "https://github.com/omoinjm",
     live: "#",
+    category: "tools",
   },
   {
     title: "Portfolio Website",
@@ -43,6 +47,7 @@ const projects = [
     tags: ["Next.js", "Framer Motion", "Tailwind"],
     github: "https://github.com/omoinjm/njmtech-portfolio",
     live: "#",
+    category: "website",
   },
   {
     title: "Weather Application",
@@ -50,15 +55,25 @@ const projects = [
     tags: ["React", "OpenWeather API", "Mapbox"],
     github: "https://github.com/omoinjm",
     live: "#",
+    category: "website",
   },
+];
+
+const categories = [
+  { id: "website", label: "Websites" },
+  { id: "tools", label: "Tools" },
+  { id: "dashboards", label: "Dashboards" },
 ];
 
 export const Projects = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [activeCategory, setActiveCategory] = useState("website");
 
-  const featuredProjects = projects.filter((p) => p.featured);
-  const otherProjects = projects.filter((p) => !p.featured);
+  const filteredProjects = projects.filter((p) => p.category === activeCategory);
+
+  const featuredProjects = filteredProjects.filter((p) => p.featured);
+  const otherProjects = filteredProjects.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-24 bg-card/30" ref={ref}>
@@ -82,8 +97,30 @@ export const Projects = () => {
           </p>
         </motion.div>
 
+        {/* Category Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-3 mb-12"
+        >
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+                activeCategory === category.id
+                  ? "gradient-bg text-foreground"
+                  : "bg-card border border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+              }`}
+            >
+              {category.label}
+            </button>
+          ))}
+        </motion.div>
+
         {/* Featured Projects */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredProjects.map((project, index) => (
             <motion.div
               key={project.title}
@@ -143,66 +180,6 @@ export const Projects = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* Other Projects */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <h3 className="text-2xl font-bold text-center mb-8">
-            Other Noteworthy Projects
-          </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {otherProjects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                className="p-6 rounded-xl bg-card border border-border hover:border-accent/30 transition-all group"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <Folder className="w-10 h-10 text-accent" />
-                  <div className="flex gap-3">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Github className="w-5 h-5" />
-                    </a>
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <ExternalLink className="w-5 h-5" />
-                    </a>
-                  </div>
-                </div>
-                <h4 className="font-semibold mb-2 group-hover:gradient-text transition-all">
-                  {project.title}
-                </h4>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs text-muted-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );
