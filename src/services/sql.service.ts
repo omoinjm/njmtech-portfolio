@@ -7,8 +7,18 @@ const pool = new Pool({
 	ssl: { rejectUnauthorized: false },
 });
 
+// Allowlist of valid table names to prevent SQL injection
+const VALID_TABLES = ['skills', 'projects', 'menu', 'socials'] as const;
+
+function validateTableName(tblName: string): asserts tblName is typeof VALID_TABLES[number] {
+	if (!VALID_TABLES.includes(tblName as typeof VALID_TABLES[number])) {
+		throw new Error(`Invalid table name: ${tblName}`);
+	}
+}
+
 export async function getList(tblName: string) {
 	try {
+		validateTableName(tblName);
 		const { rows } = await pool.query(`SELECT * FROM ${tblName}`);
 
 		return rows;
@@ -19,6 +29,7 @@ export async function getList(tblName: string) {
 
 export async function getRecord(tblName: string) {
 	try {
+		validateTableName(tblName);
 		const { rows } = await pool.query(`SELECT * FROM ${tblName}`);
 
 		return rows[0];
