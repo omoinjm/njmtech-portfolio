@@ -35,7 +35,7 @@ export const siteConfig = {
 
 export const pageConfig: Record<string, SEOProps> = {
   home: {
-    title: "Nhlanhla Junior Malaza | Full Stack Developer",
+    title: "Nhlanhla Junior Malaza",
     description:
       "Portfolio of Nhlanhla Junior Malaza - Software Developer, DevOps Engineer, and UI/UX Designer with expertise in modern web technologies",
     canonical: `${siteConfig.url}/`,
