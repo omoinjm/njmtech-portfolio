@@ -30,12 +30,12 @@ const Layout = ({ children }: LayoutProps) => {
     setIsOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setData(await fetchLinks());
-    };
-    fetchData();
-  }, []);
+  //useEffect(() => {
+  //  const fetchData = async () => {
+  //    setData(await fetchLinks());
+  //  };
+  //  fetchData();
+  //}, []);
 
   return (
     <main>

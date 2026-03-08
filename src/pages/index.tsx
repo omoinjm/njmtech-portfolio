@@ -13,12 +13,12 @@ const fetchSkills = async (): Promise<SkillModel[]> => {
 const Home: NextPage = () => {
   const [skills, setSkillData] = useState<SkillModel[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setSkillData(await fetchSkills());
-    };
-    fetchData();
-  }, []);
+  //useEffect(() => {
+  //  const fetchData = async () => {
+  //    setSkillData(await fetchSkills());
+  //  };
+  //  fetchData();
+  //}, []);
 
   const seoConfig = pageConfig.home;
 
