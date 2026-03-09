@@ -56,10 +56,10 @@ export const Navbar = () => {
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="NJMTECH Logo"
-            width={190}
-            height={90}
+            width={50}
+            height={50}
             priority
           />
         </Link>

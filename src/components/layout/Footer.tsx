@@ -29,10 +29,10 @@ export const Footer = () => {
               className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
               <Image
-                src="/logo.svg"
+                src="/logo.png"
                 alt="NJMTECH Logo"
-                width={190}
-                height={90}
+                width={60}
+                height={60}
               />
             </a>
             <p className="text-muted-foreground text-sm mt-1">

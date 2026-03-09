@@ -3,9 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   compress: true,
 
-  // Turbopack configuration (Next.js 16+)
-  turbopack: {},
-
   // Image optimization
   images: {
     remotePatterns: [

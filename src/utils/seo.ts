@@ -28,7 +28,7 @@ export const siteConfig = {
     github: "https://github.com/njmalaza",
     twitter: "@njmalaza",
   },
-  logo: "https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064193/public/favicon_zqeo1n.ico",
+  logo: "/logo.png",
   locales: ["en_US"],
   locale: "en_US",
 };

@@ -1,5 +1,5 @@
 import { getRecord } from '@/services/sql.service';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import { unstable_cache } from 'next/cache';
 
 const getCachedLinks = unstable_cache(
@@ -11,19 +11,13 @@ const getCachedLinks = unstable_cache(
 	},
 );
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-	if (req.method !== 'GET') {
-		return res.status(405).json({ error: 'Method not allowed' });
-	}
-
+export async function GET() {
 	try {
 		const data = await getCachedLinks();
-		return res.status(200).json(data);
+		return NextResponse.json(data);
 	} catch (error) {
-		return res.status(500).json({
+		return NextResponse.json({
 			error: error instanceof Error ? error.message : 'Internal server error',
-		});
+		}, { status: 500 });
 	}
-};
-
-export default handler;
+}
