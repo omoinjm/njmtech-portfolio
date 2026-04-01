@@ -1,21 +1,22 @@
-import { getRecord, getList } from "@/services/sql.service";
+import { getRecord } from "@/services/sql.service";
 import { NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
 
 const getCachedLinks = unstable_cache(
   async () => await getRecord("links"),
-  ["menu-nav_menu"],
+  ["menu-links"],
   {
-    tags: ["menu-nav_menu"],
+    tags: ["menu-links"],
     revalidate: 3600,
   },
 );
 
 export async function GET() {
   try {
-    // const data = await getCachedLinks();
+    const data = await getCachedLinks();
+
     // For local development test
-    const data = await getRecord("links");
+    // const data = await getRecord("links");
 
     return NextResponse.json(data?.navigation_data);
   } catch (error) {

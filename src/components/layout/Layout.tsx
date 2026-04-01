@@ -11,7 +11,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [nLinks, setNLinks] = useState<MenuModel[]>([]);
+  const [nLinks, setNLinks] = useState<LinkModel>({});
   const [fLinks, setFLinks] = useState<FooterModel[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         )) as LinkModel;
 
         if (response) {
-          setNLinks(response.nav_menu || []);
+          setNLinks(response || {});
           setFLinks(response.nav_footer || []);
         }
       } catch (error) {
