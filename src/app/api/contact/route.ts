@@ -136,14 +136,16 @@ body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
 <body style="background:#f4f4f8;padding:40px 16px;">
   <div style="max-width:600px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
     <!-- Header -->
-    <div style="background:#0f0c29;padding:32px 36px;display:flex;align-items:center;gap:16px;">
-      <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#818cf8);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <span style="color:#fff;font-size:24px;font-weight:700;line-height:1;">N</span>
+    <div style="background:#0f0c29;padding:52px 40px 44px;text-align:center;">
+      <div style="display:block;width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#818cf8);margin:0 auto 20px;line-height:52px;font-size:22px;font-weight:700;color:#ffffff;text-align:center;">
+        N
       </div>
-      <div>
-        <h1 style="color:#f8f8ff;font-size:20px;font-weight:600;margin-bottom:4px;">Got your message!</h1>
-        <p style="color:#a5b4fc;font-size:14px;">I'll be in touch within 24 hours</p>
-      </div>
+      <h1 style="font-size:26px;font-weight:600;color:#f8f8ff;margin:0 0 8px;letter-spacing:-0.5px;font-family:'DM Sans',sans-serif;">
+        Got your message!
+      </h1>
+      <p style="font-size:15px;color:#a5b4fc;margin:0;font-family:'DM Sans',sans-serif;">
+        I'll be in touch within 24 hours
+      </p>
     </div>
     <!-- Body -->
     <div style="background:#ffffff;padding:32px 36px;">
