@@ -7,7 +7,6 @@ import { Toaster } from "@/components/ui/toaster";
 import Layout from "@/components/layout/Layout";
 import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

@@ -3,7 +3,7 @@ import { logger } from "@/utils/logger";
 import { Pool } from "pg";
 
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL_NON_POOLING,
+  connectionString: process.env.POSTGRES_URL,
   ssl: { rejectUnauthorized: false },
   connectionTimeoutMillis: 10000, // 10 seconds
   idleTimeoutMillis: 30000, // 30 seconds
@@ -11,7 +11,7 @@ const pool = new Pool({
 });
 
 // Allowlist of valid table names to prevent SQL injection
-const VALID_TABLES = ["skills", "projects", "nav_menu", "socials"] as const;
+const VALID_TABLES = ["skills", "projects", "links", "socials"] as const;
 
 function validateTableName(
   tblName: string,
@@ -31,16 +31,19 @@ export async function getList(tblName: string) {
     return rows;
   } catch (err: unknown) {
     logger.error(`getList error for ${tblName}`, err);
-    
+
     // Extract error code from pg error or AggregateError
-    const errorWithCode = err as Error & { code?: string; errors?: Array<{ code?: string }> };
+    const errorWithCode = err as Error & {
+      code?: string;
+      errors?: Array<{ code?: string }>;
+    };
     if (errorWithCode?.code) {
       (err as any).code = errorWithCode.code;
     } else if (errorWithCode?.errors?.[0]?.code) {
       // Handle AggregateError from pg-pool
       (err as any).code = errorWithCode.errors[0].code;
     }
-    
+
     return await handleError(err, tblName);
   }
 }
@@ -66,7 +69,10 @@ function hasMessage(err: unknown): err is { message: string } {
   );
 }
 
-async function handleError(err: unknown, tblName: string): Promise<any[] | undefined> {
+async function handleError(
+  err: unknown,
+  tblName: string,
+): Promise<any[] | undefined> {
   if (
     hasMessage(err) &&
     err.message.includes(`relation "${tblName}" does not exist`)
@@ -79,13 +85,15 @@ async function handleError(err: unknown, tblName: string): Promise<any[] | undef
       await seed(pool);
       logger.info(`Seed completed for ${tblName}`);
     } catch (seedError) {
-      logger.error('Seed failed', seedError);
+      logger.error("Seed failed", seedError);
       throw seedError;
     }
 
     try {
       const result = await pool.query(`SELECT * FROM ${tblName}`);
-      logger.info(`Successfully queried ${tblName}, got ${result.rows.length} rows`);
+      logger.info(
+        `Successfully queried ${tblName}, got ${result.rows.length} rows`,
+      );
       return result.rows;
     } catch (queryError) {
       logger.error(`Failed to query ${tblName} after seed`, queryError);
@@ -93,6 +101,6 @@ async function handleError(err: unknown, tblName: string): Promise<any[] | undef
     }
   }
 
-  logger.error('Database error', { error: err, table: tblName });
+  logger.error("Database error", { error: err, table: tblName });
   throw err; // ✅ ensures no unhandled rejections
 }

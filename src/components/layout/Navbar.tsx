@@ -1,37 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Linkedin, Menu, Twitter, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MenuModel } from "@/types";
-import DataService from "@/services/data.service";
+import * as LucideIcons from "lucide-react";
 
 const socialLinks = [
-  { icon: Github, href: "https://github.com/omoinjm", label: "GitHub" },
-  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+  { icon: "Github", href: "https://github.com/omoinjm", label: "GitHub" },
+  { icon: "Linkedin", href: "https://linkedin.com", label: "LinkedIn" },
   {
-    icon: Twitter,
+    icon: "Twitter",
     href: "https://twitter.com/nhlanhlamalaza_",
-    label: "Email",
+    label: "Twitter",
   },
 ];
 
-const fetchMenuLinks = async (): Promise<MenuModel[]> => {
-  const result: any = await DataService.get_call("menu", null);
-  return result?.page_links || [];
-};
-
-export const Navbar = () => {
+export const Navbar = ({ data }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [navLinks, setNavLinks] = useState<MenuModel[]>([]);
   const pathname = usePathname();
-
-  useEffect(() => {
-    fetchMenuLinks().then(setNavLinks);
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,8 +32,6 @@ export const Navbar = () => {
   }, []);
 
   const isActive = (href: string) => pathname === href;
-
-  console.log(navLinks);
 
   return (
     <motion.nav
@@ -79,33 +66,40 @@ export const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
+          {data.map((link: MenuModel) => (
             <Link
               key={link.id}
-              href={link.route_url}
-              className={`nav-link ${isActive(link.route_url) ? "active" : ""}`}
+              href={link.url}
+              className={`nav-link ${isActive(link.url) ? "active" : ""}`}
             >
-              {link.name}
+              {link.label}
             </Link>
           ))}
         </div>
 
         {/* Social Links & Connect Button */}
         <div className="hidden md:flex items-center gap-4">
-          {socialLinks.map((social) => (
-            <a
-              key={social.label}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label={social.label}
-            >
-              <social.icon size={20} />
-            </a>
-          ))}
+          {socialLinks.map((social) => {
+            // 1. Must be inside curly braces to declare variables
+            // 2. Use 'social' (the parameter name) instead of 'link'
+            const Icon = LucideIcons[social.icon];
+
+            return (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={social.label}
+              >
+                {/* Render the icon if found, otherwise fallback to label text */}
+                {Icon ? <Icon size={20} /> : <span>{social.label}</span>}
+              </a>
+            );
+          })}
           <Link
-            href="https://njmbio.vercel.app/"
+            href="https://bio.njmtech.co.za/"
             target="_blank"
             className="ml-4 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
           >
@@ -119,7 +113,11 @@ export const Navbar = () => {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMobileMenuOpen ? (
+            <LucideIcons.X size={24} />
+          ) : (
+            <LucideIcons.Menu size={24} />
+          )}
         </button>
       </div>
 
@@ -132,18 +130,44 @@ export const Navbar = () => {
           className="md:hidden bg-background/95 backdrop-blur-md border-t border-border"
         >
           <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
-            {navLinks.map((link) => (
+            {data.map((link: MenuModel) => (
               <Link
                 key={link.id}
-                href={link.route_url}
+                href={link.url}
                 className="text-muted-foreground hover:text-foreground transition-colors py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {link.name}
+                {link.label}
               </Link>
             ))}
             <div className="flex items-center gap-4 pt-4 border-t border-border">
-              {socialLinks.map((social) => (
+              {socialLinks.map((social) => {
+                // 1. Must be inside curly braces to declare variables
+                // 2. Use 'social' (the parameter name) instead of 'link'
+                const Icon = LucideIcons[social.icon];
+
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label={social.label}
+                  >
+                    {/* Render the icon if found, otherwise fallback to label text */}
+                    {Icon ? <Icon size={20} /> : <span>{social.label}</span>}
+                  </a>
+                );
+              })}
+              <Link
+                href="https://bio.njmtech.co.za/"
+                target="_blank"
+                className="ml-4 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
+              >
+                Links
+              </Link>
+              {/*{socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
@@ -154,7 +178,7 @@ export const Navbar = () => {
                 >
                   <social.icon size={20} />
                 </a>
-              ))}
+              ))}*/}
             </div>
           </div>
         </motion.div>

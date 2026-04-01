@@ -1,31 +1,29 @@
-import { getList } from "@/services/sql.service";
+import { getRecord } from "@/services/sql.service";
 import { NextResponse } from "next/server";
-import { logger } from "@/utils/logger";
+import { unstable_cache } from "next/cache";
+
+const getCachedLinks = unstable_cache(
+  async () => await getRecord("links"),
+  ["menu-links"],
+  {
+    tags: ["menu-links-next-js"],
+    revalidate: 3600,
+  },
+);
 
 export async function GET() {
   try {
-    logger.info("Fetching menu data...");
-    const data = await getList("nav_menu");
-    logger.info("Menu API response", data);
+    // const data = await getCachedLinks();
 
-    return NextResponse.json({ page_links: data || [] });
+    // For local development test
+    const data = await getRecord("links");
+
+    return NextResponse.json(data);
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    const errorCode = error instanceof Error && 'code' in error ? error.code : 'UNKNOWN';
-    
-    // Log full error for debugging
-    logger.error("Menu API error", { error, message: errorMessage, code: errorCode });
-    
-    // Return empty menu instead of 500 for connection issues
-    if (errorCode === 'ETIMEDOUT' || errorMessage.includes('timeout')) {
-      logger.warn("Database connection timeout, returning empty menu");
-      return NextResponse.json({ page_links: [], error: "Database temporarily unavailable" });
-    }
-    
+    console.log(error);
     return NextResponse.json(
       {
-        error: errorMessage,
-        page_links: [],
+        error: error instanceof Error ? error.message : "Internal server error",
       },
       { status: 500 },
     );
