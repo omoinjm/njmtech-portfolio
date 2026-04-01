@@ -58,17 +58,63 @@ export async function POST(request: Request) {
 			to: ownerEmail,
 			replyTo: email,
 			subject: `[Portfolio] ${subject}`,
-			html: `
-				<div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-					<h2 style="color:#6366f1">New Contact Form Submission</h2>
-					<table style="width:100%;border-collapse:collapse">
-						<tr><td style="padding:8px 0;color:#888;width:80px">Name</td><td style="padding:8px 0;font-weight:600">${name}</td></tr>
-						<tr><td style="padding:8px 0;color:#888">Email</td><td style="padding:8px 0"><a href="mailto:${email}">${email}</a></td></tr>
-						<tr><td style="padding:8px 0;color:#888">Subject</td><td style="padding:8px 0">${subject}</td></tr>
-					</table>
-					<hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0"/>
-					<p style="color:#374151;white-space:pre-wrap">${message}</p>
-				</div>`,
+			html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
+</style>
+</head>
+<body style="background:#f4f4f8;padding:40px 16px;">
+  <div style="max-width:600px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+    <!-- Header -->
+    <div style="background:#0f0c29;padding:32px 36px;display:flex;align-items:center;gap:16px;">
+      <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#818cf8);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="color:#fff;font-size:24px;font-weight:700;line-height:1;">N</span>
+      </div>
+      <div>
+        <h1 style="color:#f8f8ff;font-size:20px;font-weight:600;margin-bottom:4px;">New message incoming</h1>
+        <p style="color:#a5b4fc;font-size:14px;">Someone reached out via your portfolio</p>
+      </div>
+    </div>
+    <!-- Body -->
+    <div style="background:#ffffff;padding:32px 36px;">
+      <span style="display:inline-block;background:#ede9fe;color:#4f46e5;font-size:11px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:24px;">Portfolio Contact</span>
+      <!-- Sender details -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid #f0f0f5;">
+          <span style="min-width:70px;color:#9ca3af;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;font-weight:500;">Name</span>
+          <span style="color:#111827;font-size:15px;font-weight:500;">${name}</span>
+        </div>
+        <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid #f0f0f5;">
+          <span style="min-width:70px;color:#9ca3af;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;font-weight:500;">Email</span>
+          <span style="color:#111827;font-size:15px;"><a href="mailto:${email}" style="color:#6366f1;text-decoration:none;">${email}</a></span>
+        </div>
+        <div style="display:flex;align-items:baseline;padding:12px 0;border-bottom:1px solid #f0f0f5;">
+          <span style="min-width:70px;color:#9ca3af;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;font-weight:500;">Subject</span>
+          <span style="color:#111827;font-size:15px;font-weight:500;">${subject}</span>
+        </div>
+      </div>
+      <!-- Message -->
+      <div style="background:#f9fafb;border-radius:10px;border:1px solid #f0f0f5;padding:20px 24px;margin-bottom:28px;">
+        <p style="color:#374151;font-size:15px;line-height:1.7;white-space:pre-wrap;">${message}</p>
+      </div>
+      <!-- CTA -->
+      <a href="mailto:${email}?subject=Re: ${subject}" style="display:block;text-align:center;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:14px;border-radius:10px;">
+        Reply to ${name.split(' ')[0]} →
+      </a>
+    </div>
+    <!-- Footer -->
+    <div style="background:#f9fafb;padding:20px 36px;text-align:center;border-top:1px solid #f0f0f5;">
+      <p style="color:#9ca3af;font-size:12px;">Sent via your portfolio contact form · Hit Reply to respond directly</p>
+    </div>
+  </div>
+</body>
+</html>`,
 		});
 
 		// Confirmation email to the sender
@@ -76,16 +122,65 @@ export async function POST(request: Request) {
 			from: `"Nhlanhla Malaza" <${senderEmail}>`,
 			to: email,
 			subject: `Thanks for reaching out, ${name.split(' ')[0]}!`,
-			html: `
-				<div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-					<h2 style="color:#6366f1">Got your message!</h2>
-					<p>Hi ${name.split(' ')[0]},</p>
-					<p>Thanks for reaching out. I've received your message and will get back to you within 24 hours.</p>
-					<blockquote style="border-left:3px solid #6366f1;margin:16px 0;padding:8px 16px;color:#6b7280;background:#f9fafb">
-						${message}
-					</blockquote>
-					<p>Talk soon,<br/><strong>Nhlanhla</strong></p>
-				</div>`,
+			html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
+</style>
+</head>
+<body style="background:#f4f4f8;padding:40px 16px;">
+  <div style="max-width:600px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+    <!-- Header -->
+    <div style="background:#0f0c29;padding:32px 36px;display:flex;align-items:center;gap:16px;">
+      <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#818cf8);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="color:#fff;font-size:24px;font-weight:700;line-height:1;">N</span>
+      </div>
+      <div>
+        <h1 style="color:#f8f8ff;font-size:20px;font-weight:600;margin-bottom:4px;">Got your message!</h1>
+        <p style="color:#a5b4fc;font-size:14px;">I'll be in touch within 24 hours</p>
+      </div>
+    </div>
+    <!-- Body -->
+    <div style="background:#ffffff;padding:32px 36px;">
+      <!-- Badge -->
+      <div style="margin-bottom:24px;">
+        <span style="display:inline-block;background:#d1fae520;border:1px solid #10b98140;color:#10b981;font-size:13px;font-weight:500;padding:5px 14px;border-radius:20px;">
+          ✓ Message received
+        </span>
+      </div>
+      <!-- Greeting -->
+      <p style="color:#111827;font-size:16px;font-weight:500;margin-bottom:12px;">Hi ${name.split(' ')[0]},</p>
+      <p style="color:#6b7280;font-size:15px;line-height:1.7;margin-bottom:20px;">
+        Thanks for reaching out — I've received your message and will get back to you as soon as possible.
+      </p>
+      <!-- Quote block -->
+      <div style="border-left:3px solid #6366f1;background:#f9fafb;padding:16px 20px;border-radius:0 8px 8px 0;margin-bottom:24px;">
+        <p style="color:#6b7280;font-size:14px;line-height:1.7;font-style:italic;white-space:pre-wrap;">${message}</p>
+      </div>
+      <!-- Chip -->
+      <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:28px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#6366f1;display:inline-block;"></span>
+        <span style="color:#6366f1;font-size:13px;font-weight:500;">Response within 24 hours</span>
+      </div>
+      <hr style="border:none;border-top:1px solid #f0f0f5;margin-bottom:24px;"/>
+      <!-- Sign-off -->
+      <p style="color:#6b7280;font-size:15px;line-height:1.7;">
+        Talk soon,<br/>
+        <strong style="color:#6366f1;font-size:16px;">Nhlanhla Malaza</strong>
+      </p>
+    </div>
+    <!-- Footer -->
+    <div style="background:#f9fafb;padding:20px 36px;text-align:center;border-top:1px solid #f0f0f5;">
+      <p style="color:#9ca3af;font-size:12px;">You're receiving this because you submitted a message via njmtech.vercel.app</p>
+    </div>
+  </div>
+</body>
+</html>`,
 		});
 
 		logger.info('Contact emails sent', { name, email, subject });
