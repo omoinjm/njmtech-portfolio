@@ -1,6 +1,6 @@
 export interface LinkModel {
-  page_links?: MenuModel[];
-  footer_links?: FooterModel[];
+  nav_menu?: MenuModel[];
+  nav_footer?: FooterModel[];
 }
 
 export interface MenuModel {

@@ -13,10 +13,10 @@ const getCachedLinks = unstable_cache(
 
 export async function GET() {
   try {
-    // const data = await getCachedLinks();
+    const data = await getCachedLinks();
 
     // For local development test
-    const data = await getRecord("projects");
+    // const data = await getRecord("projects");
 
     return NextResponse.json(data);
   } catch (error) {

@@ -12,8 +12,12 @@ export default class DataService {
 	 * Get the base API URL, with fallback to window location for client-side
 	 */
 	private static getApiUrl(): string {
-		// During server-side rendering, use environment variable
+		// During server-side rendering, use internal URL to avoid hitting production
 		if (typeof window === 'undefined') {
+			if (process.env.NODE_ENV === 'development') {
+				const port = process.env.PORT || '3000';
+				return `http://localhost:${port}/api/`;
+			}
 			const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 			if (!siteUrl) {
 				logger.warn('NEXT_PUBLIC_SITE_URL not set, using default');

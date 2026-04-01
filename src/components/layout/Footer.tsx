@@ -18,7 +18,7 @@ const socialLinks = [
   },
 ];
 
-export const Footer = () => {
+export const Footer = ({ data }) => {
   const currentYear = new Date().getFullYear();
 
   return (
