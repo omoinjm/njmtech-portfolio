@@ -44,6 +44,15 @@ export async function seed() {
 			)`,
 			tx`INSERT INTO mail_template (code, name, html_file_name, send_to_email) VALUES ('GEN', 'General', '', 'njmcloud@gmail.com') ON CONFLICT (code) DO NOTHING`,
 			//#endregion
+
+			//#region Subscribers
+			tx`CREATE TABLE IF NOT EXISTS subscribers (
+				id SERIAL PRIMARY KEY,
+				email VARCHAR(255) UNIQUE NOT NULL,
+				subscribed_at TIMESTAMPTZ DEFAULT NOW(),
+				last_attempt_at TIMESTAMPTZ DEFAULT NOW()
+			)`,
+			//#endregion
 		]);
 
 		logger.info('Seed completed successfully');

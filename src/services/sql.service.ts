@@ -11,6 +11,7 @@ const VALID_TABLES = [
   "nav_menu",
   "nav_footer",
   "mail_template",
+  "subscribers",
 ] as const;
 
 function validateTableName(

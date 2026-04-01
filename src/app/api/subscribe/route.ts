@@ -1,39 +1,40 @@
+import { sql } from "@/lib/neon-client";
+import { logger } from "@/utils/logger";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const RATE_LIMIT_HOURS = 48;
 
-export async function POST(req: NextRequest) {
-  const { email } = (await req.json()) as { email?: string };
+interface SubscriberRow {
+  id: number;
+  email: string;
+  subscribed_at: string;
+  last_attempt_at: string;
+}
 
-  if (!email || !EMAIL_REGEX.test(email)) {
-    return NextResponse.json(
-      { error: "A valid email address is required." },
-      { status: 400 },
-    );
-  }
+async function ensureTable() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS subscribers (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      subscribed_at TIMESTAMPTZ DEFAULT NOW(),
+      last_attempt_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
+}
 
-  const senderEmail = process.env.NEXT_PUBLIC_EMAIL_USER;
-  const appPass = process.env.NEXT_PUBLIC_EMAIL_APP_PASS;
+function sendWelcomeEmail(to: string, senderEmail: string, appPass: string) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user: senderEmail, pass: appPass },
+  });
 
-  if (!senderEmail || !appPass) {
-    return NextResponse.json(
-      { error: "Newsletter is not configured." },
-      { status: 500 },
-    );
-  }
-
-  try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: senderEmail, pass: appPass },
-    });
-
-    await transporter.sendMail({
-      from: `"Nhlanhla Malaza" <${senderEmail}>`,
-      to: email,
-      subject: "You're on the list! \uD83C\uDF89",
-      html: `<!DOCTYPE html>
+  return transporter.sendMail({
+    from: `"Nhlanhla Malaza" <${senderEmail}>`,
+    to,
+    subject: "You're on the list! \uD83C\uDF89",
+    html: `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -72,12 +73,78 @@ body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
   </div>
 </body>
 </html>`,
-    });
+  });
+}
+
+export async function POST(req: NextRequest) {
+  const { email } = (await req.json()) as { email?: string };
+
+  if (!email || !EMAIL_REGEX.test(email)) {
+    return NextResponse.json(
+      { error: "A valid email address is required." },
+      { status: 400 },
+    );
+  }
+
+  const senderEmail = process.env.NEXT_PUBLIC_EMAIL_USER;
+  const appPass = process.env.NEXT_PUBLIC_EMAIL_APP_PASS;
+
+  if (!senderEmail || !appPass) {
+    return NextResponse.json(
+      { error: "Newsletter is not configured." },
+      { status: 500 },
+    );
+  }
+
+  try {
+    await ensureTable();
+
+    // Check for existing subscriber
+    const rows = await sql<SubscriberRow[]>`
+      SELECT id, email, subscribed_at, last_attempt_at
+      FROM subscribers
+      WHERE email = ${email}
+    `;
+
+    if (rows.length > 0) {
+      const existing = rows[0];
+      const hoursSinceLastAttempt =
+        (Date.now() - new Date(existing.last_attempt_at).getTime()) / 36e5;
+
+      // Update last_attempt_at on every attempt (even if already subscribed)
+      await sql`
+        UPDATE subscribers SET last_attempt_at = NOW() WHERE email = ${email}
+      `;
+
+      if (hoursSinceLastAttempt < RATE_LIMIT_HOURS) {
+        const hoursLeft = Math.ceil(RATE_LIMIT_HOURS - hoursSinceLastAttempt);
+        return NextResponse.json(
+          { error: `You've already submitted recently. Please try again in ${hoursLeft} hour${hoursLeft === 1 ? "" : "s"}.` },
+          { status: 429 },
+        );
+      }
+
+      // Already subscribed and outside rate limit window
+      return NextResponse.json(
+        { error: "This email is already subscribed." },
+        { status: 409 },
+      );
+    }
+
+    // New subscriber — insert and send welcome email
+    await sql`
+      INSERT INTO subscribers (email) VALUES (${email})
+    `;
+
+    await sendWelcomeEmail(email, senderEmail, appPass);
+
+    logger.info("New subscriber added", { email });
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error) {
+    logger.error("Subscribe error", error);
     return NextResponse.json(
-      { error: "Could not send confirmation. Please try again." },
+      { error: "Could not complete subscription. Please try again." },
       { status: 502 },
     );
   }
