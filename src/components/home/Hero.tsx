@@ -3,9 +3,12 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Code, Sparkles, Zap } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { publicConfig } from "@/lib/config.client";
+import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
 
 export const Hero = () => {
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
   return (
     <section
       id="home"
@@ -75,14 +78,13 @@ export const Hero = () => {
             >
               Get In Touch
             </Link>
-            <a
-              href={publicConfig.RESUME_URL}
-              target="_blank"
+            <button
+              onClick={() => setIsResumeOpen(true)}
               className="px-8 py-4 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
               Resume
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
 
           </motion.div>
 
@@ -173,6 +175,13 @@ export const Hero = () => {
           <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
         </motion.div>
       </motion.div>
+
+      {/* PDF Preview Dialog */}
+      <PdfPreviewDialog
+        open={isResumeOpen}
+        onOpenChange={setIsResumeOpen}
+        pdfUrl={publicConfig.RESUME_URL}
+      />
     </section>
   );
 };

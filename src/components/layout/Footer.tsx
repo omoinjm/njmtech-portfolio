@@ -1,5 +1,8 @@
+"use client";
+
 import { Github, Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/omoinjm", label: "GitHub" },
@@ -24,7 +27,11 @@ export const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           {/* Logo & Copyright */}
           <div className="text-center md:text-left">
-            <a
+            <Link href="/" className="text-2xl font-bold gradient-text">
+              NJM<span className="text-foreground">TECH</span>
+            </Link>
+            {/*
+          <a
               href="#home"
               className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
@@ -35,6 +42,7 @@ export const Footer = () => {
                 height={60}
               />
             </a>
+            */}
             <p className="text-muted-foreground text-sm mt-1">
               © {currentYear} All rights reserved.
             </p>

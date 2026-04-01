@@ -5,12 +5,8 @@ import { Github, Linkedin, Menu, Twitter, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-
-const navLinks = [
-  { name: "Projects", href: "/projects" },
-  { name: "Contact", href: "/contact" },
-];
+import { MenuModel } from "@/types";
+import DataService from "@/services/data.service";
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/omoinjm", label: "GitHub" },
@@ -22,10 +18,20 @@ const socialLinks = [
   },
 ];
 
+const fetchMenuLinks = async (): Promise<MenuModel[]> => {
+  const result: any = await DataService.get_call("menu", null);
+  return result?.page_links || [];
+};
+
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [navLinks, setNavLinks] = useState<MenuModel[]>([]);
   const pathname = usePathname();
+
+  useEffect(() => {
+    fetchMenuLinks().then(setNavLinks);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +43,8 @@ export const Navbar = () => {
   }, []);
 
   const isActive = (href: string) => pathname === href;
+
+  console.log(navLinks);
 
   return (
     <motion.nav
@@ -51,6 +59,10 @@ export const Navbar = () => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
+        <Link href="/" className="text-2xl font-bold gradient-text">
+          NJM<span className="text-foreground">TECH</span>
+        </Link>
+        {/*
         <Link
           href="/"
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
@@ -63,14 +75,15 @@ export const Navbar = () => {
             priority
           />
         </Link>
+        */}
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
-              key={link.name}
-              href={link.href}
-              className={`nav-link ${isActive(link.href) ? "active" : ""}`}
+              key={link.id}
+              href={link.route_url}
+              className={`nav-link ${isActive(link.route_url) ? "active" : ""}`}
             >
               {link.name}
             </Link>
@@ -121,8 +134,8 @@ export const Navbar = () => {
           <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
             {navLinks.map((link) => (
               <Link
-                key={link.name}
-                href={link.href}
+                key={link.id}
+                href={link.route_url}
                 className="text-muted-foreground hover:text-foreground transition-colors py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
