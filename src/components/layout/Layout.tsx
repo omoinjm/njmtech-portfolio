@@ -5,6 +5,8 @@ import { Footer } from "./Footer";
 import { Navbar } from "./Navbar";
 import { MenuModel, FooterModel, LinkModel } from "@/types";
 import DataService from "@/services/data.service";
+import { PageLoader } from "@/components/ui/page-loader";
+import { AnimatePresence } from "framer-motion";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -40,11 +42,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Pass the actual state to your components */}
       <Navbar data={nLinks} />
 
       <main className="flex-grow">
-        {loading ? <div>Loading...</div> : children}
+        <AnimatePresence mode="wait">
+          {loading ? <PageLoader key="loader" /> : children}
+        </AnimatePresence>
       </main>
 
       <Footer data={fLinks} />
