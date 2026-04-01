@@ -18,7 +18,8 @@ export async function GET() {
     // For local development test
     // const data = await getRecord("links");
 
-    return NextResponse.json(data?.navigation_data);
+    const row = data as Record<string, unknown> | undefined;
+    return NextResponse.json(row?.navigation_data);
   } catch (error) {
     console.log(error);
     return NextResponse.json(

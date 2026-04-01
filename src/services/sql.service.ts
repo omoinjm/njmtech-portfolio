@@ -60,7 +60,7 @@ function hasMessage(err: unknown): err is { message: string } {
 async function handleError(
   err: unknown,
   tblName: string,
-): Promise<any[] | undefined> {
+): Promise<unknown[] | undefined> {
   if (
     hasMessage(err) &&
     err.message.includes(`relation "${tblName}" does not exist`)

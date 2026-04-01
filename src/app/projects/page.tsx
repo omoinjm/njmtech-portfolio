@@ -31,7 +31,8 @@ export const metadata: Metadata = {
 };
 
 const fetchProjects = async (): Promise<TabProjectModel[]> => {
-  const result: any = await DataService.get_call("projects", null);
+  const result: { all_project_groups?: { project_groups?: TabProjectModel[] } } =
+    await DataService.get_call("projects", null);
   return result?.all_project_groups?.project_groups || [];
 };
 
