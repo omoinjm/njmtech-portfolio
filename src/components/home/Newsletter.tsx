@@ -14,7 +14,7 @@ export const Newsletter = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
       toast({
         title: "Email required",
@@ -25,20 +25,38 @@ export const Newsletter = () => {
     }
 
     setIsLoading(true);
-    
-    // TODO: Replace with your Mailchimp form action URL
-    // You can get this from Mailchimp: Audience > Signup forms > Embedded forms
-    // Look for the action URL in the form code
-    
-    // For now, simulate a subscription
-    setTimeout(() => {
-      toast({
-        title: "Subscribed!",
-        description: "Thank you for subscribing to my newsletter.",
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       });
-      setEmail("");
+
+      const data = (await res.json()) as { success?: boolean; error?: string };
+
+      if (res.ok && data.success) {
+        toast({
+          title: "Subscribed! 🎉",
+          description: "Thank you for subscribing. Check your inbox to confirm.",
+        });
+        setEmail("");
+      } else {
+        toast({
+          title: "Subscription failed",
+          description: data.error ?? "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch {
+      toast({
+        title: "Network error",
+        description: "Could not connect. Please check your connection and try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
