@@ -1,12 +1,10 @@
-import { Github, Linkedin, Twitter } from "lucide-react";
+"use client";
 
-const socialLinks = [
-  { icon: Github, href: "https://github.com/omoinjm", label: "GitHub" },
-  { icon: Linkedin, href: "https://www.linkedin.com/in/njmalaza", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com/nhlanhlamalaza_", label: "Twitter" },
-];
+import Link from "next/link";
+import * as LucideIcons from "lucide-react";
+import { FooterModel } from "@/types";
 
-export const Footer = () => {
+export const Footer = ({ data }) => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -15,9 +13,22 @@ export const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           {/* Logo & Copyright */}
           <div className="text-center md:text-left">
-            <a href="#home" className="text-2xl font-bold gradient-text">
+            <Link href="/" className="text-2xl font-bold gradient-text">
               NJM<span className="text-foreground">TECH</span>
+            </Link>
+            {/*
+          <a
+              href="#home"
+              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <Image
+                src="/logo.png"
+                alt="NJMTECH Logo"
+                width={60}
+                height={60}
+              />
             </a>
+            */}
             <p className="text-muted-foreground text-sm mt-1">
               © {currentYear} All rights reserved.
             </p>
@@ -25,18 +36,21 @@ export const Footer = () => {
 
           {/* Social Links */}
           <div className="flex gap-4">
-            {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-lg bg-card border border-border flex items-center justify-center hover:border-accent/50 hover:scale-110 transition-all"
-                aria-label={social.label}
-              >
-                <social.icon className="w-4 h-4" />
-              </a>
-            ))}
+            {data.map((social: FooterModel) => {
+              const Icon = LucideIcons[social.label];
+              return (
+                <a
+                  key={social.label}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={social.label}
+                >
+                  {Icon ? <Icon size={20} /> : <span>{social.label}</span>}
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>

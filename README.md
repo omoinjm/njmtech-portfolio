@@ -1,14 +1,29 @@
-# NJMTECH Homepage
+# NJMTECH Portfolio
 
 [https://njmtech.vercel.app/](https://njmtech.vercel.app/)
+
+A modern portfolio website built with **Next.js 16**, **React 18**, **Turbo**, **Tailwind CSS**, and **shadcn/ui**.
+
+## Tech Stack
+
+- **Framework**: Next.js 16.1 (App Router)
+- **Runtime**: Node.js 22.x
+- **Package Manager**: pnpm
+- **Build Tool**: Turbo
+- **Styling**: Tailwind CSS 3
+- **UI Components**: shadcn/ui with Radix UI
+- **Animation**: Framer Motion
+- **Form Handling**: React Hook Form + Zod
+- **HTTP Client**: TanStack React Query
+- **Icons**: Lucide React
+- **Notifications**: Sonner
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 22.x or higher
-- npm or pnpm
-- PostgreSQL database (or Neon PostgreSQL)
+- pnpm
 
 ### Installation
 
@@ -22,8 +37,6 @@ cd njmtech-portfolio
 2. Install dependencies:
 
 ```bash
-npm install
-# or
 pnpm install
 ```
 
@@ -37,8 +50,6 @@ cp .env.example .env.local
 4. Run the development server:
 
 ```bash
-npm run dev
-# or
 pnpm dev
 ```
 
@@ -46,8 +57,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ### Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
+- `pnpm dev` - Start Next.js development server
+- `pnpm build` - Build for production with Turbo optimization
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm test` - Run tests with Vitest
+- `pnpm test:watch` - Run tests in watch mode
 - `npm start` - Run production server
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Fix ESLint errors

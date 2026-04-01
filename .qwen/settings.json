@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm run *)",
+      "Bash(npx *)",
+      "Bash(pnpm *)",
+      "Bash(curl *)",
+      "Bash(sleep *)",
+      "Bash(psql *)",
+      "Bash(node *)",
+      "Bash(rm *)"
+    ]
+  },
+  "$version": 3
+}

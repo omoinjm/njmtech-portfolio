@@ -1,8 +1,14 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { ArrowRight, Code, Sparkles, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { useState } from "react";
+import { publicConfig } from "@/lib/config.client";
+import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
 
 export const Hero = () => {
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
   return (
     <section
       id="home"
@@ -68,18 +74,17 @@ export const Hero = () => {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
-            <Link to="/contact" className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
+            <Link href="/contact" className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
               Get In Touch
             </Link>
-            <a
-              href="https://fxw7x7luycssvogx.public.blob.vercel-storage.com/pdf/Nhlanhla_Junior_Malaza%20CV.pdf"
-              target="_blank"
+            <button
+              onClick={() => setIsResumeOpen(true)}
               className="px-8 py-4 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
               Resume
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
 
           </motion.div>
 
@@ -170,6 +175,13 @@ export const Hero = () => {
           <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
         </motion.div>
       </motion.div>
+
+      {/* PDF Preview Dialog */}
+      <PdfPreviewDialog
+        open={isResumeOpen}
+        onOpenChange={setIsResumeOpen}
+        pdfUrl={publicConfig.RESUME_URL}
+      />
     </section>
   );
 };
