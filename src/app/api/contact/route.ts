@@ -165,9 +165,11 @@ body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
         <p style="color:#6b7280;font-size:14px;line-height:1.7;font-style:italic;white-space:pre-wrap;">${message}</p>
       </div>
       <!-- Chip -->
-      <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:28px;">
-        <span style="width:8px;height:8px;border-radius:50%;background:#6366f1;display:inline-block;"></span>
-        <span style="color:#6366f1;font-size:13px;font-weight:500;">Response within 24 hours</span>
+      <div style="display:block;margin:0 0 28px;">
+        <span style="display:inline-block;padding:10px 18px;border-radius:8px;background:#f3f4f6;font-size:13px;color:#6b7280;font-family:'DM Sans',sans-serif;">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6366f1;margin-right:8px;vertical-align:middle;"></span>
+          <span style="vertical-align:middle;">Response within 24 hours</span>
+        </span>
       </div>
       <hr style="border:none;border-top:1px solid #f0f0f5;margin-bottom:24px;"/>
       <!-- Sign-off -->
