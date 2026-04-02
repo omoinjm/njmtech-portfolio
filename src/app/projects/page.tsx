@@ -1,5 +1,10 @@
 import { Projects as ProjectsSection } from "@/components/projects/Index";
-import { generateBreadcrumbSchema, pageConfig, siteConfig } from "@/utils/seo";
+import {
+  generateBreadcrumbSchema,
+  generatePortfolioPageSchema,
+  pageConfig,
+  siteConfig,
+} from "@/utils/seo";
 import type { Metadata } from "next";
 import { TabProjectModel } from "@/types";
 import DataService from "@/services/data.service";
@@ -11,18 +16,28 @@ export const metadata: Metadata = {
   description: pageConfig.projects.description,
   keywords: pageConfig.projects.keywords,
   robots: pageConfig.projects.robots,
-  authors: [{ name: "Nhlanhla Junior Malaza" }],
+  authors: [{ name: "Nhlanhla Junior Malaza", url: siteConfig.url }],
   openGraph: {
-    title: pageConfig.projects.title,
+    title: `${pageConfig.projects.title} | Nhlanhla Junior Malaza`,
     description: pageConfig.projects.description,
     url: `${siteConfig.url}/projects`,
     siteName: siteConfig.name,
     type: "website",
+    locale: "en_ZA",
+    images: [
+      {
+        url: siteConfig.logo,
+        width: 1200,
+        height: 630,
+        alt: "Projects by Nhlanhla Junior Malaza",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: pageConfig.projects.title,
+    title: `${pageConfig.projects.title} | Nhlanhla Junior Malaza`,
     description: pageConfig.projects.description,
+    images: [siteConfig.logo],
     creator: siteConfig.social.twitter,
   },
   alternates: {
@@ -37,8 +52,8 @@ const fetchProjects = async (): Promise<TabProjectModel[]> => {
 };
 
 const breadcrumbs = [
-  { name: "Home", url: "/" },
-  { name: "Projects", url: "/projects" },
+  { name: "Home", url: siteConfig.url },
+  { name: "Projects", url: `${siteConfig.url}/projects` },
 ];
 
 export default async function Projects() {
@@ -50,6 +65,12 @@ export default async function Projects() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(generateBreadcrumbSchema(breadcrumbs)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generatePortfolioPageSchema()),
         }}
       />
 
