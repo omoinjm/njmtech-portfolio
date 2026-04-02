@@ -100,11 +100,11 @@ export async function POST(req: NextRequest) {
     await ensureTable();
 
     // Check for existing subscriber
-    const rows = await sql<SubscriberRow[]>`
+    const rows = (await sql`
       SELECT id, email, subscribed_at, last_attempt_at
       FROM subscribers
       WHERE email = ${email}
-    `;
+    `) as SubscriberRow[];
 
     if (rows.length > 0) {
       const existing = rows[0];

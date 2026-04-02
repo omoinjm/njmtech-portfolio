@@ -10,7 +10,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_EMAIL_MAIL: z.string().email(),
   NEXT_PUBLIC_EMAIL_USER: z.string().email(),
   NEXT_PUBLIC_EMAIL_APP_PASS: z.string(),
-  NEXT_PUBLIC_MAILCHIMP_URL: z.string().url(),
+  NEXT_PUBLIC_MAILCHIMP_URL: z.string().url().optional(),
   NEXT_PUBLIC_RESUME_URL: z.string().url().optional(),
 
   // Private variables (server-only)
