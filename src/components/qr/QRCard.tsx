@@ -43,7 +43,7 @@ export const QRCard = () => {
           transition={{ delay: 0.3 }}
           className="text-lg text-muted-foreground"
         >
-          Software Developer · DevOps Engineer · UI/UX Designer
+          Software Developer · DevOps Engineer · AI Integrations Specialist
         </motion.p>
 
         {/* QR Card */}

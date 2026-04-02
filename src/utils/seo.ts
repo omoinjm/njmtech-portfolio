@@ -20,7 +20,7 @@ export const siteConfig = {
   name: "NJMTECH Portfolio",
   shortName: "NJMTECH",
   description:
-    "Professional portfolio of Nhlanhla Junior Malaza — Software Developer, DevOps Engineer, and UI/UX Designer based in South Africa",
+    "Professional portfolio of Nhlanhla Junior Malaza — Software Developer, DevOps Engineer, and AI Integrations Specialist based in South Africa",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://njmtech.co.za",
   email: "njmalaza@outlook.com",
   social: {
@@ -35,9 +35,9 @@ export const siteConfig = {
 
 export const pageConfig: Record<string, SEOProps> = {
   home: {
-    title: "Nhlanhla Junior Malaza | Software Developer, DevOps Engineer & UI/UX Designer",
+    title: "Nhlanhla Junior Malaza | Software Developer, DevOps Engineer & AI Integrations Specialist",
     description:
-      "Portfolio of Nhlanhla Junior Malaza (Nhlanhla Junior) — Software Developer, DevOps Engineer, and UI/UX Designer from South Africa. Expert in Next.js, React, TypeScript, Node.js, and cloud infrastructure.",
+      "Portfolio of Nhlanhla Junior Malaza (Nhlanhla Junior) — Software Developer, DevOps Engineer, and AI Integrations Specialist from South Africa. Expert in Next.js, React, TypeScript, Node.js, cloud infrastructure, and AI integrations.",
     canonical: `${siteConfig.url}/`,
     keywords: [
       "Nhlanhla",
@@ -49,7 +49,7 @@ export const pageConfig: Record<string, SEOProps> = {
       "njmalaza",
       "software developer South Africa",
       "devops engineer South Africa",
-      "ui ux designer",
+      "AI integrations specialist",
       "next.js developer",
       "react developer",
       "typescript developer",
@@ -109,13 +109,13 @@ export const pageConfig: Record<string, SEOProps> = {
   services: {
     title: "Services",
     description:
-      "Professional services by Nhlanhla Junior Malaza — web development, DevOps engineering, and UI/UX design tailored for modern businesses.",
+      "Professional services by Nhlanhla Junior Malaza — web development, DevOps engineering, and AI integrations tailored for modern businesses.",
     canonical: `${siteConfig.url}/services`,
     keywords: [
       "services Nhlanhla Junior Malaza",
       "web development services",
       "devops services",
-      "ui ux design services",
+      "AI integration services",
       "consulting South Africa",
       "NJMTech services",
     ],
@@ -162,7 +162,7 @@ export function generatePersonSchema() {
       caption: "Nhlanhla Junior Malaza — Software Developer",
     },
     description:
-      "Nhlanhla Junior Malaza is a Software Developer, DevOps Engineer, and UI/UX Designer based in South Africa, specialising in modern web technologies and cloud infrastructure.",
+      "Nhlanhla Junior Malaza is a Software Developer, DevOps Engineer, and AI Integrations Specialist based in South Africa, specialising in modern web technologies, cloud infrastructure, and AI integrations.",
     knowsLanguage: ["en"],
     nationality: {
       "@type": "Country",
@@ -181,7 +181,7 @@ export function generatePersonSchema() {
     jobTitle: [
       "Software Developer",
       "DevOps Engineer",
-      "UI/UX Designer",
+      "AI Integrations Specialist",
       "Full Stack Developer",
     ],
     knowsAbout: [
@@ -196,7 +196,7 @@ export function generatePersonSchema() {
       "Kubernetes",
       "DevOps",
       "Web Design",
-      "UI/UX Design",
+      "AI Integrations",
       "Full Stack Development",
       "Cloud Infrastructure",
       "CI/CD",
@@ -275,7 +275,7 @@ export function generateProfilePageSchema() {
     name: "Nhlanhla Junior Malaza — Software Developer Portfolio",
     url: siteConfig.url,
     description:
-      "Professional portfolio and profile of Nhlanhla Junior Malaza, a Software Developer, DevOps Engineer, and UI/UX Designer based in South Africa.",
+      "Professional portfolio and profile of Nhlanhla Junior Malaza, a Software Developer, DevOps Engineer, and AI Integrations Specialist based in South Africa.",
     inLanguage: "en-ZA",
     isPartOf: { "@id": `${siteConfig.url}/#website` },
     mainEntity: { "@id": `${siteConfig.url}/#person` },

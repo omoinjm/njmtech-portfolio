@@ -2,10 +2,10 @@
 
 import { motion, useInView } from "framer-motion";
 import {
+  Bot,
   Cloud,
   Code2,
   Database,
-  Palette,
   Rocket,
   Smartphone
 } from "lucide-react";
@@ -28,9 +28,9 @@ const services = [
     description: "Designing and deploying scalable cloud infrastructure on AWS, GCP, and Azure.",
   },
   {
-    icon: Palette,
-    title: "UI/UX Design",
-    description: "Crafting intuitive user interfaces and seamless user experiences that delight users.",
+    icon: Bot,
+    title: "AI Integrations",
+    description: "Integrating AI and machine learning capabilities into applications to automate workflows and deliver intelligent user experiences.",
   },
   {
     icon: Database,
