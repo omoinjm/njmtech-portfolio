@@ -13,7 +13,10 @@ interface SubscriberRow {
   last_attempt_at: string;
 }
 
+let tableEnsured = false;
+
 async function ensureTable() {
+  if (tableEnsured) return;
   await sql`
     CREATE TABLE IF NOT EXISTS subscribers (
       id SERIAL PRIMARY KEY,
@@ -22,14 +25,18 @@ async function ensureTable() {
       last_attempt_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  tableEnsured = true;
 }
 
-function sendWelcomeEmail(to: string, senderEmail: string, appPass: string) {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: senderEmail, pass: appPass },
-  });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASS,
+  },
+});
 
+function sendWelcomeEmail(to: string, senderEmail: string) {
   return transporter.sendMail({
     from: `"Nhlanhla Malaza" <${senderEmail}>`,
     to,
@@ -86,8 +93,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const senderEmail = process.env.NEXT_PUBLIC_EMAIL_USER;
-  const appPass = process.env.NEXT_PUBLIC_EMAIL_APP_PASS;
+  const senderEmail = process.env.EMAIL_USER;
+  const appPass = process.env.EMAIL_APP_PASS;
 
   if (!senderEmail || !appPass) {
     return NextResponse.json(
@@ -99,7 +106,6 @@ export async function POST(req: NextRequest) {
   try {
     await ensureTable();
 
-    // Check for existing subscriber
     const rows = (await sql`
       SELECT id, email, subscribed_at, last_attempt_at
       FROM subscribers
@@ -111,7 +117,6 @@ export async function POST(req: NextRequest) {
       const hoursSinceLastAttempt =
         (Date.now() - new Date(existing.last_attempt_at).getTime()) / 36e5;
 
-      // Update last_attempt_at on every attempt (even if already subscribed)
       await sql`
         UPDATE subscribers SET last_attempt_at = NOW() WHERE email = ${email}
       `;
@@ -124,19 +129,17 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Already subscribed and outside rate limit window
       return NextResponse.json(
         { error: "This email is already subscribed." },
         { status: 409 },
       );
     }
 
-    // New subscriber — insert and send welcome email
     await sql`
       INSERT INTO subscribers (email) VALUES (${email})
     `;
 
-    await sendWelcomeEmail(email, senderEmail, appPass);
+    await sendWelcomeEmail(email, senderEmail);
 
     logger.info("New subscriber added", { email });
 

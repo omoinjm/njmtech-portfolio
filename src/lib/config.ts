@@ -7,13 +7,13 @@ import { z } from "zod";
 const envSchema = z.object({
   // Public variables (accessible on client)
   NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
-  NEXT_PUBLIC_EMAIL_MAIL: z.string().email(),
-  NEXT_PUBLIC_EMAIL_USER: z.string().email(),
-  NEXT_PUBLIC_EMAIL_APP_PASS: z.string(),
   NEXT_PUBLIC_MAILCHIMP_URL: z.string().url().optional(),
   NEXT_PUBLIC_RESUME_URL: z.string().url().optional(),
 
-  // Private variables (server-only)
+  // Private variables (server-only — never expose to client)
+  EMAIL_MAIL: z.string().email(),
+  EMAIL_USER: z.string().email(),
+  EMAIL_APP_PASS: z.string(),
   DATABASE_URL: z.string().optional(),
   POSTGRES_URL: z.string().optional(),
   POSTGRES_URL_NON_POOLING: z.string().optional(),

@@ -17,7 +17,9 @@
     "lint:fix": "next lint --fix",
     "prepare": "husky install",
     "pretty-quick": "pretty-quick --staged",
-    "reset": "rm -rf node_modules pnpm-lock.yaml .next"
+    "reset": "rm -rf node_modules pnpm-lock.yaml .next",
+    "test": "playwright test",
+    "test:email": "playwright test email"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -70,7 +72,6 @@
     "react-qr-code": "^2.0.18",
     "react-resizable-panels": "^2.1.9",
     "recharts": "^2.15.4",
-    "resend": "^6.10.0",
     "sonner": "^1.7.4",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
