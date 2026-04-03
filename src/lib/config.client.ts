@@ -9,7 +9,6 @@
 
 export const publicConfig = {
   SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  MAILCHIMP_URL: process.env.NEXT_PUBLIC_MAILCHIMP_URL ?? "",
   RESUME_URL:
     process.env.NEXT_PUBLIC_RESUME_URL ??
     "https://fxw7x7luycssvogx.public.blob.vercel-storage.com/pdf/Nhlanhla_Junior_Malaza_CV.pdf",
