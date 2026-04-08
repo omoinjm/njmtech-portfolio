@@ -8,6 +8,7 @@ import Layout from "@/components/layout/Layout";
 import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteConfig } from "@/utils/seo";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -88,6 +89,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <TooltipProvider>
+            <Analytics />
             <Toaster />
             <Sonner />
             <Layout>{children}</Layout>
