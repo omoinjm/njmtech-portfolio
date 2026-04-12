@@ -48,7 +48,7 @@ test.describe('Email API', () => {
 	});
 
 	/** Skip individual tests when the template server is not available. */
-	test.beforeEach(({}, testInfo) => {
+	test.beforeEach(({ request: _request }, testInfo) => {
 		if (!templateServerRunning) {
 			testInfo.skip(true, `Email template server not running at ${TEMPLATE_API_URL}`);
 		}
