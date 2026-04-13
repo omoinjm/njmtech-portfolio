@@ -2,15 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 
 type DieConfig = {
   color: string;
   glowColor: string;
   labelColor: string;
-  labels: [string, string, string, string, string, string];
+  faces: [DieFace, DieFace, DieFace, DieFace, DieFace, DieFace];
   position: [number, number, number];
   rotation: [number, number, number];
   floatSpeed: number;
+};
+
+type DieFace = {
+  iconSrc: string;
+  label: string;
 };
 
 type DieRuntime = {
@@ -18,16 +24,38 @@ type DieRuntime = {
   dispose: () => void;
   floatSpeed: number;
   group: THREE.Group;
-  mesh: THREE.Mesh<THREE.BoxGeometry, THREE.MeshStandardMaterial[]>;
+  mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial[]>;
   targetRotation: THREE.Vector3;
 };
+
+const DIE_SIZE = 1.14;
+const DIE_CORNER_RADIUS = 0.18;
+const DIE_BEVEL_SEGMENTS = 6;
+const FACE_TEXTURE_SIZE = 512;
+
+const loadFaceImage = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.decoding = "async";
+    image.onload = () => resolve(image);
+    image.onerror = () =>
+      reject(new Error(`Unable to load hero die icon texture: ${src}`));
+    image.src = src;
+  });
 
 const DICE: DieConfig[] = [
   {
     color: "#26c7d6",
     glowColor: "#7cecf2",
     labelColor: "#f0fdff",
-    labels: ["</>", "{}", "fn", "[]", "()", "=>"],
+    faces: [
+      { iconSrc: "/hero-tech/react.svg", label: "React" },
+      { iconSrc: "/hero-tech/angular.svg", label: "Angular" },
+      { iconSrc: "/hero-tech/typescript.svg", label: "TypeScript" },
+      { iconSrc: "/hero-tech/vscode.svg", label: "VS Code" },
+      { iconSrc: "/hero-tech/postman.svg", label: "Postman" },
+      { iconSrc: "/hero-tech/nodejs.svg", label: "Node.js" },
+    ],
     position: [-1.95, 1.05, 0.7],
     rotation: [0.45, -0.35, 0.15],
     floatSpeed: 1.2,
@@ -36,7 +64,14 @@ const DICE: DieConfig[] = [
     color: "#2fb2db",
     glowColor: "#7dd7ff",
     labelColor: "#eefaff",
-    labels: ["API", "WEB", "APP", "DX", "TS", "DB"],
+    faces: [
+      { iconSrc: "/hero-tech/nodejs.svg", label: "Node.js" },
+      { iconSrc: "/hero-tech/csharp.svg", label: "C#" },
+      { iconSrc: "/hero-tech/docker.svg", label: "Docker" },
+      { iconSrc: "/hero-tech/postman.svg", label: "Postman" },
+      { iconSrc: "/hero-tech/typescript.svg", label: "TypeScript" },
+      { iconSrc: "/hero-tech/react.svg", label: "React" },
+    ],
     position: [1.85, -0.9, -0.15],
     rotation: [-0.2, 0.6, -0.15],
     floatSpeed: 1,
@@ -45,15 +80,27 @@ const DICE: DieConfig[] = [
     color: "#3d8ff3",
     glowColor: "#8cbcff",
     labelColor: "#f5fbff",
-    labels: ["UI", "AI", "3D", "OSS", "SQL", "UX"],
+    faces: [
+      { iconSrc: "/hero-tech/docker.svg", label: "Docker" },
+      { iconSrc: "/hero-tech/react.svg", label: "React" },
+      { iconSrc: "/hero-tech/csharp.svg", label: "C#" },
+      { iconSrc: "/hero-tech/angular.svg", label: "Angular" },
+      { iconSrc: "/hero-tech/vscode.svg", label: "VS Code" },
+      { iconSrc: "/hero-tech/typescript.svg", label: "TypeScript" },
+    ],
     position: [2.1, 0.4, -1.05],
     rotation: [0.25, 0.95, 0.1],
     floatSpeed: 1.35,
   },
 ];
 
-const createFaceTexture = (label: string, faceColor: string, labelColor: string) => {
-  const size = 512;
+const createFaceTexture = async (
+  face: DieFace,
+  faceColor: string,
+  labelColor: string,
+) => {
+  const image = await loadFaceImage(face.iconSrc);
+  const size = FACE_TEXTURE_SIZE;
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
@@ -70,26 +117,33 @@ const createFaceTexture = (label: string, faceColor: string, labelColor: string)
   context.fillStyle = gradient;
   context.fillRect(0, 0, size, size);
 
-  context.fillStyle = "rgba(255,255,255,0.16)";
-  context.fillRect(36, 36, size - 72, 88);
+  context.strokeStyle = "rgba(255,255,255,0.22)";
+  context.lineWidth = 14;
+  context.strokeRect(42, 42, size - 84, size - 84);
 
-  context.strokeStyle = "rgba(255,255,255,0.28)";
-  context.lineWidth = 18;
-  context.strokeRect(36, 36, size - 72, size - 72);
+  const iconMaxWidth = 312;
+  const iconMaxHeight = 312;
+  const iconScale = Math.min(
+    iconMaxWidth / image.width,
+    iconMaxHeight / image.height,
+    1,
+  );
+  const iconWidth = image.width * iconScale;
+  const iconHeight = image.height * iconScale;
+  const iconX = (size - iconWidth) / 2;
+  const iconY = 84;
+  context.shadowColor = "rgba(15,23,42,0.32)";
+  context.shadowBlur = 18;
+  context.shadowOffsetY = 6;
+  context.drawImage(image, iconX, iconY, iconWidth, iconHeight);
+  context.shadowBlur = 0;
+  context.shadowOffsetY = 0;
 
-  context.shadowColor = "rgba(15,23,42,0.45)";
-  context.shadowBlur = 24;
-  context.shadowOffsetY = 8;
-  context.strokeStyle = "rgba(15,23,42,0.55)";
-  context.lineWidth = 12;
-  context.lineJoin = "round";
-
-  context.fillStyle = labelColor;
-  context.font = `700 ${label.length > 3 ? 108 : 132}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+  context.fillStyle = "rgba(240,249,255,0.88)";
+  context.font = `700 ${face.label.length > 8 ? 28 : 34}px "Nunito Sans", ui-sans-serif, system-ui, sans-serif`;
   context.textAlign = "center";
   context.textBaseline = "middle";
-  context.strokeText(label, size / 2, size / 2 + 12);
-  context.fillText(label, size / 2, size / 2);
+  context.fillText(face.label, size / 2, size - 64);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -101,9 +155,19 @@ const createFaceTexture = (label: string, faceColor: string, labelColor: string)
   return texture;
 };
 
-const createDie = (config: DieConfig): DieRuntime => {
-  const geometry = new THREE.BoxGeometry(1.14, 1.14, 1.14);
-  const textures = config.labels.map((label) => createFaceTexture(label, config.color, config.labelColor));
+const createDie = async (config: DieConfig): Promise<DieRuntime> => {
+  const geometry = new RoundedBoxGeometry(
+    DIE_SIZE,
+    DIE_SIZE,
+    DIE_SIZE,
+    DIE_BEVEL_SEGMENTS,
+    DIE_CORNER_RADIUS,
+  );
+  const textures = await Promise.all(
+    config.faces.map((face) =>
+      createFaceTexture(face, config.color, config.labelColor),
+    ),
+  );
   const materials = textures.map(
     (texture) =>
       new THREE.MeshStandardMaterial({
@@ -223,9 +287,8 @@ export const Hero3DScene = () => {
     shadowPlane.position.y = -2.25;
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
-
-    const dice = DICE.map((dieConfig) => createDie(dieConfig));
-    dice.forEach((die) => scene.add(die.group));
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -237,6 +300,8 @@ export const Hero3DScene = () => {
     let draggingDie: DieRuntime | null = null;
     let lastPointer: { x: number; y: number } | null = null;
     let dragDistance = 0;
+    let isDisposed = false;
+    let dice: DieRuntime[] = [];
 
     const setCursor = (value: string) => {
       container.style.cursor = value;
@@ -324,9 +389,6 @@ export const Hero3DScene = () => {
     renderer.domElement.addEventListener("pointerleave", handlePointerLeave);
     window.addEventListener("pointerup", handlePointerUp);
 
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(container);
-
     const animate = () => {
       animationFrame = window.requestAnimationFrame(animate);
       const now = performance.now() / 1000;
@@ -371,9 +433,24 @@ export const Hero3DScene = () => {
       renderer.render(scene, camera);
     };
 
+    void Promise.all(DICE.map((dieConfig) => createDie(dieConfig)))
+      .then((loadedDice) => {
+        if (isDisposed) {
+          loadedDice.forEach((die) => die.dispose());
+          return;
+        }
+
+        dice = loadedDice;
+        dice.forEach((die) => scene.add(die.group));
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to load hero die textures:", error);
+      });
+
     animate();
 
     return () => {
+      isDisposed = true;
       window.cancelAnimationFrame(animationFrame);
       resizeObserver.disconnect();
       window.removeEventListener("pointerup", handlePointerUp);
