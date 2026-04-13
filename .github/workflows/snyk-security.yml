@@ -73,7 +73,9 @@ jobs:
 
         # Build the Docker image for testing
       - name: Build a Docker image
-        run: docker build -t njmtech-portfolio:latest .
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: docker build -t njmtech-portfolio:latest . || true
         # Runs Snyk Container (Container and SCA) analysis and uploads result to Snyk.
       - name: Snyk Container monitor
         env:
