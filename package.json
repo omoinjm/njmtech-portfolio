@@ -1,7 +1,7 @@
 {
   "name": "njmtech-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.3",
   "type": "module",
   "packageManager": "pnpm@9.15.1",
   "engines": {
@@ -12,6 +12,7 @@
     "dev": "infisical run -- next dev --turbopack",
     "dev:local": "next dev --turbopack",
     "build:dev": "infisical run --env=dev -- next build",
+    "build": "next build",
     "build:prod": "infisical run --env=prod -- next build",
     "start": "infisical run --env=prod -- next start",
     "start:local": "next start",
