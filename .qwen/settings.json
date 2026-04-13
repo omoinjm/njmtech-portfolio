@@ -23,7 +23,12 @@
       "Bash(rm *)",
       "Bash(file *)",
       "Bash(/home/omoinjm/documents/dev/github/projects/njmtech-portfolio/node_modules/.bin/infisical *)",
-      "Bash(rmdir *)"
+      "Bash(rmdir *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git merge *)"
     ]
   },
   "$version": 3
