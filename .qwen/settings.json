@@ -1,14 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pnpm run *)",
-      "Bash(npx *)",
+      "Bash(pnpm audit)",
+      "Bash(pnpm why *)",
       "Bash(pnpm *)",
-      "Bash(curl *)",
-      "Bash(sleep *)",
-      "Bash(psql *)",
-      "Bash(node *)",
-      "Bash(rm *)"
+      "Bash(git checkout *)",
+      "WebSearch",
+      "WebFetch(github.com)"
     ]
   },
   "$version": 3
