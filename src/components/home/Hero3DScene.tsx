@@ -32,8 +32,8 @@ const DIE_SIZE = 1.14;
 const DIE_CORNER_RADIUS = 0.18;
 const DIE_BEVEL_SEGMENTS = 6;
 const FACE_TEXTURE_SIZE = 512;
-const DIE_FACE_OFFSET = DIE_SIZE / 2 + 0.03;
-const DIE_DECAL_SIZE = 0.7;
+const DIE_FACE_OFFSET = DIE_SIZE / 2 + 0.01;
+const DIE_DECAL_SIZE = 1.5;
 const DIE_DECAL_LABEL_Y = 388;
 
 const FACE_TRANSFORMS: Array<{
@@ -121,9 +121,15 @@ const createBaseFaceTexture = (faceColor: string) => {
   }
 
   const gradient = context.createLinearGradient(0, 0, size, size);
-  gradient.addColorStop(0, new THREE.Color(faceColor).offsetHSL(0, 0.04, 0.16).getStyle());
+  gradient.addColorStop(
+    0,
+    new THREE.Color(faceColor).offsetHSL(0, 0.04, 0.16).getStyle(),
+  );
   gradient.addColorStop(0.55, faceColor);
-  gradient.addColorStop(1, new THREE.Color(faceColor).offsetHSL(0, 0.02, -0.08).getStyle());
+  gradient.addColorStop(
+    1,
+    new THREE.Color(faceColor).offsetHSL(0, 0.02, -0.08).getStyle(),
+  );
   context.fillStyle = gradient;
   context.fillRect(0, 0, size, size);
 
@@ -160,8 +166,8 @@ const createDecalTexture = async (face: DieFace, labelColor: string) => {
     throw new Error("Unable to create hero die decal texture.");
   }
 
-  const iconMaxWidth = 312;
-  const iconMaxHeight = 312;
+  const iconMaxWidth = 400;
+  const iconMaxHeight = 400;
   const iconScale = Math.min(
     iconMaxWidth / image.width,
     iconMaxHeight / image.height,
@@ -170,19 +176,13 @@ const createDecalTexture = async (face: DieFace, labelColor: string) => {
   const iconWidth = image.width * iconScale;
   const iconHeight = image.height * iconScale;
   const iconX = (size - iconWidth) / 2;
-  const iconY = 72;
+  const iconY = (size - iconHeight) / 2;
   context.shadowColor = "rgba(15,23,42,0.32)";
   context.shadowBlur = 20;
   context.shadowOffsetY = 8;
   context.drawImage(image, iconX, iconY, iconWidth, iconHeight);
   context.shadowBlur = 0;
   context.shadowOffsetY = 0;
-
-  context.fillStyle = labelColor;
-  context.font = `700 ${face.label.length > 8 ? 28 : 34}px "Nunito Sans", ui-sans-serif, system-ui, sans-serif`;
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-  context.fillText(face.label, size / 2, DIE_DECAL_LABEL_Y);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -202,7 +202,9 @@ const createDie = async (config: DieConfig): Promise<DieRuntime> => {
     DIE_BEVEL_SEGMENTS,
     DIE_CORNER_RADIUS,
   );
-  const baseTextures = config.faces.map(() => createBaseFaceTexture(config.color));
+  const baseTextures = config.faces.map(() =>
+    createBaseFaceTexture(config.color),
+  );
   const decalTextures = await Promise.all(
     config.faces.map((face) => createDecalTexture(face, config.labelColor)),
   );
@@ -223,7 +225,11 @@ const createDie = async (config: DieConfig): Promise<DieRuntime> => {
 
   const edges = new THREE.LineSegments(
     new THREE.EdgesGeometry(geometry),
-    new THREE.LineBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0.35 }),
+    new THREE.LineBasicMaterial({
+      color: "#ffffff",
+      transparent: true,
+      opacity: 0.35,
+    }),
   );
 
   const group = new THREE.Group();
@@ -313,7 +319,11 @@ export const Hero3DScene = () => {
     resize();
 
     const ambientLight = new THREE.AmbientLight("#f0fdff", 1.35);
-    const hemisphereLight = new THREE.HemisphereLight("#cffafe", "#082028", 1.35);
+    const hemisphereLight = new THREE.HemisphereLight(
+      "#cffafe",
+      "#082028",
+      1.35,
+    );
     const directionalLight = new THREE.DirectionalLight("#ffffff", 2.4);
     directionalLight.position.set(4, 6, 4);
     directionalLight.castShadow = true;
@@ -327,17 +337,32 @@ export const Hero3DScene = () => {
     const pointLightC = new THREE.PointLight("#60a5fa", 1.65);
     pointLightC.position.set(0, 3, 4);
 
-    scene.add(ambientLight, hemisphereLight, directionalLight, pointLightA, pointLightB, pointLightC);
+    scene.add(
+      ambientLight,
+      hemisphereLight,
+      directionalLight,
+      pointLightA,
+      pointLightB,
+      pointLightC,
+    );
 
     const glowA = new THREE.Mesh(
       new THREE.SphereGeometry(1.05, 48, 48),
-      new THREE.MeshBasicMaterial({ color: "#26c7d6", transparent: true, opacity: 0.16 }),
+      new THREE.MeshBasicMaterial({
+        color: "#26c7d6",
+        transparent: true,
+        opacity: 0.16,
+      }),
     );
     glowA.position.set(0, 0, -2.8);
 
     const glowB = new THREE.Mesh(
       new THREE.SphereGeometry(1.55, 48, 48),
-      new THREE.MeshBasicMaterial({ color: "#3d8ff3", transparent: true, opacity: 0.09 }),
+      new THREE.MeshBasicMaterial({
+        color: "#3d8ff3",
+        transparent: true,
+        opacity: 0.09,
+      }),
     );
     glowB.position.set(0, 0, -3.1);
 
@@ -431,9 +456,12 @@ export const Hero3DScene = () => {
       }
 
       if (dragDistance <= 6) {
-        draggingDie.targetRotation.x += (Math.PI / 2) * (1 + Math.floor(Math.random() * 3));
-        draggingDie.targetRotation.y += (Math.PI / 2) * (1 + Math.floor(Math.random() * 4));
-        draggingDie.targetRotation.z += (Math.PI / 2) * Math.floor(Math.random() * 2);
+        draggingDie.targetRotation.x +=
+          (Math.PI / 2) * (1 + Math.floor(Math.random() * 3));
+        draggingDie.targetRotation.y +=
+          (Math.PI / 2) * (1 + Math.floor(Math.random() * 4));
+        draggingDie.targetRotation.z +=
+          (Math.PI / 2) * Math.floor(Math.random() * 2);
       }
 
       draggingDie = null;
@@ -462,10 +490,16 @@ export const Hero3DScene = () => {
 
       dice.forEach((die) => {
         const isDragging = draggingDie === die;
-        const bobX = Math.cos(elapsed * die.floatSpeed * 0.45 + die.basePosition.x) * 0.08;
-        const bobY = Math.sin(elapsed * die.floatSpeed + die.basePosition.y) * 0.16;
-        const idleX = isDragging ? 0 : Math.sin(elapsed * 0.75 + die.basePosition.x) * 0.1;
-        const idleY = isDragging ? 0 : Math.cos(elapsed * 0.5 + die.basePosition.z) * 0.12;
+        const bobX =
+          Math.cos(elapsed * die.floatSpeed * 0.45 + die.basePosition.x) * 0.08;
+        const bobY =
+          Math.sin(elapsed * die.floatSpeed + die.basePosition.y) * 0.16;
+        const idleX = isDragging
+          ? 0
+          : Math.sin(elapsed * 0.75 + die.basePosition.x) * 0.1;
+        const idleY = isDragging
+          ? 0
+          : Math.cos(elapsed * 0.5 + die.basePosition.z) * 0.12;
 
         nextPosition.set(
           die.basePosition.x + bobX,
@@ -520,7 +554,10 @@ export const Hero3DScene = () => {
       window.removeEventListener("pointerup", handlePointerUp);
       renderer.domElement.removeEventListener("pointerdown", handlePointerDown);
       renderer.domElement.removeEventListener("pointermove", handlePointerMove);
-      renderer.domElement.removeEventListener("pointerleave", handlePointerLeave);
+      renderer.domElement.removeEventListener(
+        "pointerleave",
+        handlePointerLeave,
+      );
 
       dice.forEach((die) => die.dispose());
       shadowPlane.geometry.dispose();
@@ -537,5 +574,7 @@ export const Hero3DScene = () => {
     };
   }, []);
 
-  return <div ref={containerRef} className="h-full w-full" aria-hidden="true" />;
+  return (
+    <div ref={containerRef} className="h-full w-full" aria-hidden="true" />
+  );
 };
