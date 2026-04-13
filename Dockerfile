@@ -16,7 +16,19 @@ RUN pnpm install --frozen-lockfile
 # Copy the rest of the application files
 COPY . .
 
-# Build the Next.js application
+# Build the Next.js application (dummy env vars for build)
+ENV NEXT_PUBLIC_SITE_URL="http://localhost:3000"
+ENV EMAIL_MAIL="build@example.com"
+ENV EMAIL_USER="build@example.com"
+ENV EMAIL_APP_PASS="dummy"
+ENV NEXT_PUBLIC_MAILCHIMP_URL=""
+ENV POSTGRES_DATABASE=""
+ENV POSTGRES_PASSWORD=""
+ENV POSTGRES_HOST=""
+ENV POSTGRES_USER=""
+ENV POSTGRES_URL_NON_POOLING=""
+ENV POSTGRES_URL=""
+
 RUN pnpm build
 
 # Production Stage
