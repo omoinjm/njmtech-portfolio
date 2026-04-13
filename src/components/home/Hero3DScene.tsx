@@ -32,6 +32,21 @@ const DIE_SIZE = 1.14;
 const DIE_CORNER_RADIUS = 0.18;
 const DIE_BEVEL_SEGMENTS = 6;
 const FACE_TEXTURE_SIZE = 512;
+const DIE_FACE_OFFSET = DIE_SIZE / 2 + 0.03;
+const DIE_DECAL_SIZE = 0.7;
+const DIE_DECAL_LABEL_Y = 388;
+
+const FACE_TRANSFORMS: Array<{
+  position: [number, number, number];
+  rotation: [number, number, number];
+}> = [
+  { position: [DIE_FACE_OFFSET, 0, 0], rotation: [0, Math.PI / 2, 0] },
+  { position: [-DIE_FACE_OFFSET, 0, 0], rotation: [0, -Math.PI / 2, 0] },
+  { position: [0, DIE_FACE_OFFSET, 0], rotation: [-Math.PI / 2, 0, 0] },
+  { position: [0, -DIE_FACE_OFFSET, 0], rotation: [Math.PI / 2, 0, 0] },
+  { position: [0, 0, DIE_FACE_OFFSET], rotation: [0, 0, 0] },
+  { position: [0, 0, -DIE_FACE_OFFSET], rotation: [0, Math.PI, 0] },
+];
 
 const loadFaceImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -94,12 +109,7 @@ const DICE: DieConfig[] = [
   },
 ];
 
-const createFaceTexture = async (
-  face: DieFace,
-  faceColor: string,
-  labelColor: string,
-) => {
-  const image = await loadFaceImage(face.iconSrc);
+const createBaseFaceTexture = (faceColor: string) => {
   const size = FACE_TEXTURE_SIZE;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -121,6 +131,35 @@ const createFaceTexture = async (
   context.lineWidth = 14;
   context.strokeRect(42, 42, size - 84, size - 84);
 
+  const sheenGradient = context.createLinearGradient(0, 0, size, size);
+  sheenGradient.addColorStop(0, "rgba(255,255,255,0.12)");
+  sheenGradient.addColorStop(0.45, "rgba(255,255,255,0.02)");
+  sheenGradient.addColorStop(1, "rgba(15,23,42,0.08)");
+  context.fillStyle = sheenGradient;
+  context.fillRect(42, 42, size - 84, size - 84);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 8;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.needsUpdate = true;
+
+  return texture;
+};
+
+const createDecalTexture = async (face: DieFace, labelColor: string) => {
+  const image = await loadFaceImage(face.iconSrc);
+  const size = FACE_TEXTURE_SIZE;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+
+  const context = canvas.getContext("2d");
+  if (!context) {
+    throw new Error("Unable to create hero die decal texture.");
+  }
+
   const iconMaxWidth = 312;
   const iconMaxHeight = 312;
   const iconScale = Math.min(
@@ -131,19 +170,19 @@ const createFaceTexture = async (
   const iconWidth = image.width * iconScale;
   const iconHeight = image.height * iconScale;
   const iconX = (size - iconWidth) / 2;
-  const iconY = 84;
+  const iconY = 72;
   context.shadowColor = "rgba(15,23,42,0.32)";
-  context.shadowBlur = 18;
-  context.shadowOffsetY = 6;
+  context.shadowBlur = 20;
+  context.shadowOffsetY = 8;
   context.drawImage(image, iconX, iconY, iconWidth, iconHeight);
   context.shadowBlur = 0;
   context.shadowOffsetY = 0;
 
-  context.fillStyle = "rgba(240,249,255,0.88)";
+  context.fillStyle = labelColor;
   context.font = `700 ${face.label.length > 8 ? 28 : 34}px "Nunito Sans", ui-sans-serif, system-ui, sans-serif`;
   context.textAlign = "center";
   context.textBaseline = "middle";
-  context.fillText(face.label, size / 2, size - 64);
+  context.fillText(face.label, size / 2, DIE_DECAL_LABEL_Y);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -163,12 +202,11 @@ const createDie = async (config: DieConfig): Promise<DieRuntime> => {
     DIE_BEVEL_SEGMENTS,
     DIE_CORNER_RADIUS,
   );
-  const textures = await Promise.all(
-    config.faces.map((face) =>
-      createFaceTexture(face, config.color, config.labelColor),
-    ),
+  const baseTextures = config.faces.map(() => createBaseFaceTexture(config.color));
+  const decalTextures = await Promise.all(
+    config.faces.map((face) => createDecalTexture(face, config.labelColor)),
   );
-  const materials = textures.map(
+  const materials = baseTextures.map(
     (texture) =>
       new THREE.MeshStandardMaterial({
         color: "#ffffff",
@@ -194,6 +232,26 @@ const createDie = async (config: DieConfig): Promise<DieRuntime> => {
   group.add(mesh);
   group.add(edges);
 
+  const decalPlanes = decalTextures.map((texture, index) => {
+    const faceTransform = FACE_TRANSFORMS[index];
+    const decal = new THREE.Mesh(
+      new THREE.PlaneGeometry(DIE_DECAL_SIZE, DIE_DECAL_SIZE),
+      new THREE.MeshBasicMaterial({
+        alphaTest: 0.02,
+        depthWrite: false,
+        map: texture,
+        toneMapped: false,
+        transparent: true,
+      }),
+    );
+
+    decal.position.set(...faceTransform.position);
+    decal.rotation.set(...faceTransform.rotation);
+    decal.renderOrder = 2;
+    group.add(decal);
+    return decal;
+  });
+
   return {
     basePosition: new THREE.Vector3(...config.position),
     dispose: () => {
@@ -201,6 +259,12 @@ const createDie = async (config: DieConfig): Promise<DieRuntime> => {
       edges.geometry.dispose();
       const edgeMaterial = edges.material;
       edgeMaterial.dispose();
+      decalPlanes.forEach((decal) => {
+        decal.geometry.dispose();
+        const decalMaterial = decal.material;
+        decalMaterial.map?.dispose();
+        decalMaterial.dispose();
+      });
       materials.forEach((material) => {
         material.map?.dispose();
         material.dispose();
