@@ -6,7 +6,24 @@
       "Bash(pnpm *)",
       "Bash(git checkout *)",
       "WebSearch",
-      "WebFetch(github.com)"
+      "WebFetch(github.com)",
+      "Bash(grep *)",
+      "Bash(ls *)",
+      "Bash(curl *)",
+      "Bash(npx *)",
+      "Bash(sleep *)",
+      "Bash(pkill *)",
+      "Bash(lsof *)",
+      "Bash(xargs *)",
+      "Bash(which *)",
+      "Bash(sudo *)",
+      "Bash(mkdir *)",
+      "Bash(tar *)",
+      "Bash(chmod *)",
+      "Bash(rm *)",
+      "Bash(file *)",
+      "Bash(/home/omoinjm/documents/dev/github/projects/njmtech-portfolio/node_modules/.bin/infisical *)",
+      "Bash(rmdir *)"
     ]
   },
   "$version": 3

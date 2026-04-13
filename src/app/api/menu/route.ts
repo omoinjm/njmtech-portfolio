@@ -15,11 +15,12 @@ export async function GET() {
   try {
     const data = await getCachedLinks();
 
-    // For local development test
-    // const data = await getRecord("links");
+    if (!data) {
+      return NextResponse.json({ navigation_data: null });
+    }
 
     const row = data as Record<string, unknown> | undefined;
-    return NextResponse.json(row?.navigation_data);
+    return NextResponse.json(row?.navigation_data ?? null);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
