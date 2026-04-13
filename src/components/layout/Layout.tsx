@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Footer } from "./Footer";
+import { FloatingAssistant } from "./FloatingAssistant";
 import { Navbar } from "./Navbar";
 import { MenuModel, FooterModel, LinkModel } from "@/types";
 import DataService from "@/services/data.service";
@@ -51,6 +52,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </main>
 
       <Footer data={fLinks} />
+      <FloatingAssistant />
     </div>
   );
 };

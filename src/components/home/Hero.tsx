@@ -1,24 +1,84 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Code, Sparkles, Zap } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { publicConfig } from "@/lib/config.client";
 import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
 
+const Hero3DScene = dynamic(
+  () => import("./Hero3DScene").then((module) => module.Hero3DScene),
+  {
+    ssr: false,
+    loading: () => <HeroVisualFallback />,
+  },
+);
+
+const HeroVisualFallback = () => {
+  return (
+    <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/55 to-background/70" />
+      <div className="absolute inset-y-0 left-[8%] w-72 rounded-full bg-accent/10 blur-3xl animate-pulse-slow" />
+      <div className="absolute inset-y-0 right-[10%] w-80 rounded-full bg-primary/10 blur-3xl animate-pulse-slow" />
+
+      <motion.div
+        animate={{ y: [-10, 10, -10] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[18%] right-[14%] p-4 rounded-xl bg-card/80 border border-border shadow-xl"
+      >
+        <Code className="w-8 h-8 text-accent" />
+      </motion.div>
+
+      <motion.div
+        animate={{ y: [10, -10, 10] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-[18%] left-[10%] p-4 rounded-xl bg-card/80 border border-border shadow-xl"
+      >
+        <Zap className="w-8 h-8 text-primary" />
+      </motion.div>
+
+      <motion.div
+        animate={{ y: [-5, 15, -5] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[44%] right-[30%] p-4 rounded-xl bg-card/80 border border-border shadow-xl"
+      >
+        <Sparkles className="w-8 h-8 text-accent" />
+      </motion.div>
+    </div>
+  );
+};
+
 export const Hero = () => {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [showInteractionPrompt, setShowInteractionPrompt] = useState(true);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setShowInteractionPrompt(false);
+    }, 10000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <section
       id="home"
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
     >
+      <div className="absolute inset-0 z-0">
+        <Hero3DScene />
+      </div>
+
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden z-[1]">
         <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-accent/20 blur-3xl animate-pulse-slow" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-primary/20 blur-3xl animate-pulse-slow" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-accent/5 to-primary/5 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/45 to-background/70" />
       </div>
 
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -117,45 +177,28 @@ export const Hero = () => {
           transition={{ duration: 0.8 }}
           className="relative flex items-center justify-center"
         >
-          <div className="relative w-80 h-80 md:w-96 md:h-96">
-            {/* Gradient Ring */}
-            <div className="absolute inset-0 rounded-full gradient-bg opacity-20 animate-pulse-slow" />
-            <div className="absolute inset-4 rounded-full bg-background" />
-
-            {/* Floating Elements */}
-            <motion.div
-              animate={{ y: [-10, 10, -10] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-8 right-8 p-4 rounded-xl bg-card border border-border shadow-xl"
-            >
-              <Code className="w-8 h-8 text-accent" />
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [10, -10, 10] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute bottom-12 left-4 p-4 rounded-xl bg-card border border-border shadow-xl"
-            >
-              <Zap className="w-8 h-8 text-primary" />
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [-5, 15, -5] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-1/2 -right-4 p-4 rounded-xl bg-card border border-border shadow-xl"
-            >
-              <Sparkles className="w-8 h-8 text-accent" />
-            </motion.div>
-
-            {/* Center Content */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-6xl md:text-8xl font-bold gradient-text mb-2">
-                  {"</>"}
-                </div>
-                <p className="text-muted-foreground">Building the Future</p>
-              </div>
-            </div>
+          <div className="relative w-full max-w-md mx-auto">
+            <AnimatePresence>
+              {showInteractionPrompt ? (
+                <motion.div
+                  key="hero-interaction-card"
+                  initial={{ opacity: 0, y: 24, scale: 0.96, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -28, scale: 0.92, filter: "blur(14px)" }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  className="px-8 py-10 rounded-[2rem] border border-border/60 bg-background/35 shadow-[0_24px_80px_rgba(16,24,40,0.28)] backdrop-blur-md"
+                >
+                  <div className="text-center">
+                    <div className="text-6xl md:text-8xl font-bold gradient-text mb-3 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+                      {"</>"}
+                    </div>
+                    <p className="text-muted-foreground text-base md:text-lg">
+                      Drag or tap the tech dice anywhere in the hero
+                    </p>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </div>
         </motion.div>
       </div>

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm audit)",
+      "Bash(pnpm why *)",
+      "Bash(pnpm *)",
+      "Bash(git checkout *)",
+      "WebSearch",
+      "WebFetch(github.com)"
+    ]
+  },
+  "$version": 3
+}
