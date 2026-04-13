@@ -6,7 +6,15 @@
       "Bash(pnpm *)",
       "Bash(git checkout *)",
       "WebSearch",
-      "WebFetch(github.com)"
+      "WebFetch(github.com)",
+      "Bash(grep *)",
+      "Bash(ls *)",
+      "Bash(curl *)",
+      "Bash(npx *)",
+      "Bash(sleep *)",
+      "Bash(pkill *)",
+      "Bash(lsof *)",
+      "Bash(xargs *)"
     ]
   },
   "$version": 3
