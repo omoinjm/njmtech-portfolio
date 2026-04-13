@@ -23,6 +23,11 @@ function validateTableName(
 }
 
 export async function getList(tblName: string) {
+  if (!sql) {
+    logger.warn("Database not configured, returning empty result");
+    return [];
+  }
+
   try {
     validateTableName(tblName);
     logger.info(`Querying table: ${tblName}`);
@@ -38,6 +43,11 @@ export async function getList(tblName: string) {
 }
 
 export async function getRecord(tblName: string) {
+  if (!sql) {
+    logger.warn("Database not configured, returning undefined");
+    return undefined;
+  }
+
   try {
     validateTableName(tblName);
     const rows = await sql`SELECT * FROM ${sql.unsafe(tblName)}`;
