@@ -3,10 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ExternalLink, Loader2, RotateCcw, Send, Sparkles, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {
+  Candy,
+  ExternalLink,
+  Loader2,
+  RotateCcw,
+  Send,
+  ShieldAlert,
+  Sparkles,
+  Volume2,
+  VolumeX,
+  X,
+  Zap,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { publicConfig } from "@/lib/config.client";
 import { cn } from "@/lib/utils";
+import { useChatWebSocket } from "@/hooks/useChatWebSocket";
 
 type AssistantCta = {
   href: string;
@@ -26,6 +39,8 @@ type PromptChip = {
   label: string;
   prompt: string;
 };
+
+type ChatMode = "gemini" | "websocket";
 
 const promptChips: PromptChip[] = [
   {
@@ -60,25 +75,229 @@ const promptChips: PromptChip[] = [
   },
 ];
 
+const omoiStatuses = [
+  "Kumogakure's finest... I suppose.",
+  "Munching on a grape lollipop...",
+  "Overthinking server stability...",
+  "Wondering what if the internet disappears...",
+  "Polishing my sword... just in case.",
+  "Calculating worst-case scenarios...",
+];
+
+const loadingMessages = [
+  "Overthinking every possibility...",
+  "Imagining worst-case scenarios...",
+  "Consulting the clouds...",
+  "Checking for cosmic ray interference...",
+  "Trying not to panic...",
+  "What if I give the wrong answer?",
+];
+
 const initialMessages: AssistantMessage[] = [
   {
     id: "welcome",
     role: "assistant",
     content:
-      "Hi — I'm your NJMTECH AI assistant. Ask me anything about Nhlanhla Junior Malaza, his services, skills, projects, resume, contact details, or where to find things on this site.",
+      "I-I'm Omoi. I've been assigned to protect Nhlanhla's portfolio... but what if I fail? What if a server explodes right now? *Munch*... This lollipop is the only thing keeping me sane. Ask me about his services, skills, or projects. I'll do my best to answer... if the world doesn't end first.",
   },
 ];
 
 const ctaBaseClassName =
   "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export const FloatingAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<AssistantMessage[]>(initialMessages);
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isWsTyping, setIsWsTyping] = useState(false);
+  const [conversationId, setConversationId] = useState<string | undefined>();
+  const [statusIndex, setStatusIndex] = useState(0);
+  const [loadingIndex, setLoadingIndex] = useState(0);
+  const [isMuted, setIsMuted] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem("chat-muted") === "true";
+  });
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesRef = useRef<HTMLDivElement>(null);
   const messageSequenceRef = useRef(0);
+  const lastAssistantContentRef = useRef("");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Cycle status messages
+  useEffect(() => {
+    if (!isOpen) return;
+    const interval = setInterval(() => {
+      setStatusIndex((prev) => (prev + 1) % omoiStatuses.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isOpen]);
+
+  // Cycle loading messages
+  useEffect(() => {
+    if (!isLoading && !isWsTyping) return;
+    const interval = setInterval(() => {
+      setLoadingIndex((prev) => (prev + 1) % loadingMessages.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [isLoading, isWsTyping]);
+
+  // Dev-only: chat mode toggle (persisted in sessionStorage)
+  const [chatMode, setChatMode] = useState<ChatMode>(() => {
+    if (!isDev) return "gemini";
+    return (
+      (typeof window !== "undefined" &&
+        (sessionStorage.getItem("chat-mode") as ChatMode)) ||
+      "gemini"
+    );
+  });
+
+  // Speech synthesis via Edge TTS (neural voices)
+  const speak = useCallback(
+    async (text: string) => {
+      if (isMuted || !text || typeof window === "undefined") return;
+
+      // Stop any currently playing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+
+      try {
+        setIsSpeaking(true);
+
+        const response = await fetch("/api/tts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
+        });
+
+        if (!response.ok) {
+          throw new Error("TTS API failed");
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        const audio = new Audio(url);
+        audioRef.current = audio;
+
+        audio.onended = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(url);
+          audioRef.current = null;
+        };
+
+        audio.onerror = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(url);
+          audioRef.current = null;
+        };
+
+        await audio.play();
+      } catch (error) {
+        // Fallback to browser SpeechSynthesis
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance(text);
+
+          // Try to find a nice voice
+          const voices = window.speechSynthesis.getVoices();
+          const preferredVoice = voices.find(
+            (v) =>
+              v.name.includes("Google US English") ||
+              v.name.includes("Male") ||
+              v.lang.startsWith("en-US"),
+          );
+
+          if (preferredVoice) {
+            utterance.voice = preferredVoice;
+          }
+
+          utterance.rate = 1.0;
+          utterance.pitch = 0.9; // Slightly lower pitch for Omoi's anxious/muttering vibe
+
+          utterance.onend = () => setIsSpeaking(false);
+          utterance.onerror = () => setIsSpeaking(false);
+
+          window.speechSynthesis.speak(utterance);
+        } else {
+          setIsSpeaking(false);
+        }
+      }
+    },
+    [isMuted],
+  );
+
+  // Stop speaking when panel closes
+  useEffect(() => {
+    if (!isOpen && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+      setIsSpeaking(false);
+    }
+  }, [isOpen]);
+
+  const toggleMute = useCallback(() => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      localStorage.setItem("chat-muted", String(next));
+      if (next && audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+        setIsSpeaking(false);
+      }
+      return next;
+    });
+  }, []);
+
+  const wsUrl = process.env.NEXT_PUBLIC_WS_CHAT_URL || "";
+  const useWebSocket = isDev && chatMode === "websocket" && !!wsUrl;
+
+  const handleWsMessage = useCallback(
+    (content: string, type: "response" | "error") => {
+      messageSequenceRef.current += 1;
+      const messageId = `message-${messageSequenceRef.current}`;
+
+      // Parse CTA from response if present
+      const ctaRegex = /\[CTA:(.+?)\|(.+?)(?:\|(external))?\]\s*$/;
+      const ctaMatch = content.match(ctaRegex);
+      let messageContent = content;
+      let cta: AssistantCta | undefined;
+
+      if (ctaMatch) {
+        messageContent = content.replace(ctaRegex, "").trim();
+        cta = {
+          label: ctaMatch[1],
+          href: ctaMatch[2],
+          external: ctaMatch[3] === "external",
+        };
+      }
+
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: `${messageId}-assistant`,
+          role: "assistant",
+          content: messageContent,
+          cta,
+        },
+      ]);
+      setIsLoading(false);
+      speak(messageContent);
+    },
+    [speak],
+  );
+
+  const { isConnected, sendMessage } = useChatWebSocket({
+    url: wsUrl,
+    onMessage: handleWsMessage,
+    onTyping: setIsWsTyping,
+    onConnectionChange: () => {},
+    conversationId,
+    onConversationIdChange: setConversationId,
+  });
 
   useEffect(() => {
     if (!messagesRef.current) {
@@ -89,7 +308,7 @@ export const FloatingAssistant = () => {
       top: messagesRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isWsTyping]);
 
   const appendConversation = async (userPrompt: string) => {
     const trimmedPrompt = userPrompt.trim();
@@ -113,9 +332,18 @@ export const FloatingAssistant = () => {
     setIsLoading(true);
     setIsOpen(true);
 
+    // WebSocket mode
+    if (useWebSocket) {
+      sendMessage(trimmedPrompt);
+      return;
+    }
+
+    // Gemini mode
     try {
-      // Build messages array for API (include conversation history)
-      const apiMessages = [...messages, { role: "user" as const, content: trimmedPrompt }];
+      const apiMessages = [
+        ...messages,
+        { role: "user" as const, content: trimmedPrompt },
+      ];
 
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -129,25 +357,28 @@ export const FloatingAssistant = () => {
 
       const data = await response.json();
 
-      // Add assistant response
+      const responseContent = data.fallback
+        ? `${data.content}\n\n_(AI is temporarily unavailable — using quick answers)_`
+        : data.content;
+
       setMessages((currentMessages) => [
         ...currentMessages,
         {
           id: `${messageId}-assistant`,
           role: "assistant",
-          content: data.fallback
-            ? `${data.content}\n\n_(AI is temporarily unavailable — using quick answers)_`
-            : data.content,
+          content: responseContent,
           cta: data.cta,
         },
       ]);
+      speak(responseContent);
     } catch {
       setMessages((currentMessages) => [
         ...currentMessages,
         {
           id: `${messageId}-assistant`,
           role: "assistant",
-          content: "Sorry, I'm having trouble connecting right now. Please try again or contact Nhlanhla directly.",
+          content:
+            "Sorry, I'm having trouble connecting right now. Please try again or contact Nhlanhla directly.",
           cta: {
             href: "/contact",
             label: "Contact Nhlanhla",
@@ -166,7 +397,33 @@ export const FloatingAssistant = () => {
   const resetConversation = () => {
     setMessages(initialMessages);
     setPrompt("");
+    setConversationId(undefined);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+      setIsSpeaking(false);
+    }
   };
+
+  const toggleChatMode = () => {
+    if (!isDev) return;
+    const nextMode = chatMode === "gemini" ? "websocket" : "gemini";
+    setChatMode(nextMode);
+    sessionStorage.setItem("chat-mode", nextMode);
+    resetConversation();
+  };
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  const activeLoading = isLoading || isWsTyping;
 
   return (
     <div className="fixed bottom-4 right-4 z-[45] sm:bottom-6 sm:right-6">
@@ -185,26 +442,63 @@ export const FloatingAssistant = () => {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.28),transparent_45%)]" />
               <div className="relative flex items-start gap-3">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-background/15 ring-1 ring-white/20">
-                  <Image
-                    src="/copilot-mascot.png"
-                    alt="AI assistant"
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 object-contain"
-                  />
+                  <motion.div
+                    animate={
+                      activeLoading
+                        ? {
+                            x: [0, -1, 1, -1, 1, 0],
+                            y: [0, 1, -1, 1, -1, 0],
+                          }
+                        : {}
+                    }
+                    transition={{ repeat: Infinity, duration: 0.2 }}
+                  >
+                    <Image
+                      src="/omoi-mascot-v2.png"
+                      alt="Omoi"
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 object-contain"
+                    />
+                  </motion.div>
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="font-semibold">AI Assistant</p>
-                    <Sparkles className="h-4 w-4" />
+                    <p className="font-semibold">Omoi</p>
+                    <Sparkles className="h-4 w-4 text-yellow-300" />
+                    <Candy className="h-3 w-3 text-pink-300/80" />
                   </div>
-                  <p className="text-sm text-primary-foreground/80">
-                    Powered by Gemini — ask about anything on this site.
-                  </p>
+                  <motion.p
+                    key={statusIndex}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-primary-foreground/80"
+                  >
+                    {useWebSocket
+                      ? `Llama 3.2${isConnected ? " — connected" : " — connecting..."}`
+                      : isSpeaking
+                        ? "Speaking..."
+                        : omoiStatuses[statusIndex]}
+                  </motion.p>
                 </div>
 
                 <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={toggleMute}
+                    className={cn(
+                      "rounded-full p-2 text-primary-foreground/80 transition-colors hover:bg-background/15 hover:text-primary-foreground",
+                      isSpeaking && "text-primary-foreground animate-pulse",
+                    )}
+                    aria-label={isMuted ? "Unmute assistant" : "Mute assistant"}
+                  >
+                    {isMuted ? (
+                      <VolumeX className="h-4 w-4" />
+                    ) : (
+                      <Volume2 className="h-4 w-4" />
+                    )}
+                  </button>
                   <button
                     type="button"
                     onClick={resetConversation}
@@ -277,12 +571,23 @@ export const FloatingAssistant = () => {
                 </div>
               ))}
 
-              {isLoading && (
+              {activeLoading && (
                 <div className="flex justify-start">
                   <div className="max-w-[88%] rounded-3xl border border-border bg-background px-4 py-3 text-sm shadow-sm">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Thinking...</span>
+                      <motion.span
+                        key={loadingIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        {useWebSocket
+                          ? "Llama is thinking..."
+                          : loadingMessages[loadingIndex]}
+                      </motion.span>
+                      {!useWebSocket && (
+                        <ShieldAlert className="h-3 w-3 text-amber-500 animate-pulse" />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -306,16 +611,16 @@ export const FloatingAssistant = () => {
                   value={prompt}
                   onChange={(event) => setPrompt(event.target.value)}
                   placeholder="Ask about skills, services, projects, contact..."
-                  disabled={isLoading}
+                  disabled={activeLoading}
                   className="h-11 flex-1 rounded-full border border-border bg-card px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent/50 disabled:opacity-50"
                 />
                 <button
                   type="submit"
-                  disabled={isLoading || !prompt.trim()}
+                  disabled={activeLoading || !prompt.trim()}
                   className="flex h-11 w-11 items-center justify-center rounded-full gradient-bg text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                   aria-label="Send assistant message"
                 >
-                  {isLoading ? (
+                  {activeLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Send className="h-4 w-4" />
@@ -329,7 +634,7 @@ export const FloatingAssistant = () => {
                     key={chip.id}
                     type="button"
                     onClick={() => handleQuickPrompt(chip.prompt)}
-                    disabled={isLoading}
+                    disabled={activeLoading}
                     className="rounded-full border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:border-accent/50 hover:text-accent disabled:opacity-50"
                   >
                     {chip.label}
@@ -337,6 +642,21 @@ export const FloatingAssistant = () => {
                 ))}
               </div>
             </div>
+
+            {/* Dev-only: mode toggle */}
+            {isDev && (
+              <button
+                type="button"
+                onClick={toggleChatMode}
+                className="absolute bottom-0 left-4 flex items-center gap-1 rounded-t-md bg-muted px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
+                title={`Switch to ${chatMode === "gemini" ? "WebSocket (Llama)" : "Gemini"}`}
+              >
+                <Zap
+                  className={cn("h-3 w-3", useWebSocket && "text-green-500")}
+                />
+                {chatMode === "gemini" ? "Gemini" : "Llama"}
+              </button>
+            )}
           </motion.section>
         ) : null}
       </AnimatePresence>
@@ -346,7 +666,7 @@ export const FloatingAssistant = () => {
         onClick={() => setIsOpen((open) => !open)}
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
-        className="group relative ml-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/15 bg-background/90 shadow-[0_20px_60px_rgba(15,23,42,0.45)] backdrop-blur-xl transition-transform"
+        className="group relative ml-auto flex h-24 w-24 items-center justify-center rounded-full border border-white/15 bg-background/90 shadow-[0_20px_60px_rgba(15,23,42,0.45)] backdrop-blur-xl transition-transform"
         aria-expanded={isOpen}
         aria-controls="copilot-assistant-panel"
         aria-label={isOpen ? "Hide AI assistant" : "Show AI assistant"}
@@ -354,11 +674,11 @@ export const FloatingAssistant = () => {
         <span className="gradient-bg absolute inset-0 rounded-full opacity-20 blur-md transition-opacity group-hover:opacity-30" />
         <span className="absolute inset-0 rounded-full border border-white/10" />
         <Image
-          src="/copilot-mascot.png"
+          src="/omoi-mascot-v2.png"
           alt="AI assistant"
-          width={52}
-          height={52}
-          className="relative h-12 w-12 object-contain"
+          width={80}
+          height={80}
+          className="relative h-20 w-20 object-contain"
           priority
         />
         {!isOpen ? (
