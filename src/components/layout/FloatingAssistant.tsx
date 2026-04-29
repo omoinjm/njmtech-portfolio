@@ -40,7 +40,7 @@ type PromptChip = {
   prompt: string;
 };
 
-type ChatMode = "gemini" | "websocket";
+type ChatMode = "copilot" | "websocket";
 
 const promptChips: PromptChip[] = [
   {
@@ -146,11 +146,11 @@ export const FloatingAssistant = () => {
 
   // Dev-only: chat mode toggle (persisted in sessionStorage)
   const [chatMode, setChatMode] = useState<ChatMode>(() => {
-    if (!isDev) return "gemini";
+    if (!isDev) return "copilot";
     return (
       (typeof window !== "undefined" &&
         (sessionStorage.getItem("chat-mode") as ChatMode)) ||
-      "gemini"
+      "copilot"
     );
   });
 
@@ -338,7 +338,7 @@ export const FloatingAssistant = () => {
       return;
     }
 
-    // Gemini mode
+    // Copilot mode (GitHub Models API)
     try {
       const apiMessages = [
         ...messages,
@@ -407,7 +407,7 @@ export const FloatingAssistant = () => {
 
   const toggleChatMode = () => {
     if (!isDev) return;
-    const nextMode = chatMode === "gemini" ? "websocket" : "gemini";
+    const nextMode = chatMode === "copilot" ? "websocket" : "copilot";
     setChatMode(nextMode);
     sessionStorage.setItem("chat-mode", nextMode);
     resetConversation();
@@ -649,12 +649,12 @@ export const FloatingAssistant = () => {
                 type="button"
                 onClick={toggleChatMode}
                 className="absolute bottom-0 left-4 flex items-center gap-1 rounded-t-md bg-muted px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
-                title={`Switch to ${chatMode === "gemini" ? "WebSocket (Llama)" : "Gemini"}`}
+                title={`Switch to ${chatMode === "copilot" ? "WebSocket (Llama)" : "Copilot"}`}
               >
                 <Zap
                   className={cn("h-3 w-3", useWebSocket && "text-green-500")}
                 />
-                {chatMode === "gemini" ? "Gemini" : "Llama"}
+                {chatMode === "copilot" ? "Copilot" : "Llama"}
               </button>
             )}
           </motion.section>

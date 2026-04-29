@@ -1,4 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
 const SYSTEM_PROMPT = `You are Omoi, an AI assistant inspired by the Naruto character from Kumogakure. You help visitors navigate NJMTECH, the portfolio website of Nhlanhla Junior Malaza.
@@ -70,7 +69,7 @@ RESPONSE FORMAT:
   [CTA:label|href|external]
 - Do NOT make up facts about Nhlanhla that aren't in this prompt`;
 
-// Fallback rule-based responses when Gemini API is unavailable
+// Fallback rule-based responses when API is unavailable
 const FALLBACK_KNOWLEDGE: Array<{
   patterns: string[];
   response: string;
@@ -227,14 +226,14 @@ const getFallbackReply = (
 };
 
 export async function POST(request: NextRequest) {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const githubToken = process.env.GITHUB_TOKEN;
 
-  // Parse body BEFORE try/catch so it's available in both blocks
+  // Parse body
   const { messages } = await request.json();
 
   try {
     // If no API key, use fallback
-    if (!apiKey) {
+    if (!githubToken) {
       const lastMessage = messages[messages.length - 1];
       const reply = getFallbackReply(lastMessage.content);
       return NextResponse.json({
@@ -244,70 +243,39 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash-latest",
-      systemInstruction: SYSTEM_PROMPT,
-    });
-
-    // Build conversation history for Gemini
-    const historyMessages = messages.slice(0, -1);
-
-    const chatHistory: Array<{
-      role: "user" | "model";
-      parts: Array<{ text: string }>;
-    }> = [];
-    for (const msg of historyMessages) {
-      if (msg.role === "assistant") {
-        if (chatHistory.length > 0) {
-          chatHistory.push({ role: "model", parts: [{ text: msg.content }] });
-        }
-      } else {
-        chatHistory.push({ role: "user", parts: [{ text: msg.content }] });
-      }
-    }
-
-    while (chatHistory.length > 0 && chatHistory[0].role === "model") {
-      chatHistory.shift();
-    }
-
-    const chat = model.startChat({
-      history: chatHistory,
-      generationConfig: {
-        maxOutputTokens: 500,
-        temperature: 0.7,
+    // Call GitHub Models API (Copilot)
+    const response = await fetch("https://models.inference.ai.azure.com/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${githubToken}`,
       },
+      body: JSON.stringify({
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...messages.map((m: any) => ({
+            role: m.role === "assistant" ? "assistant" : "user",
+            content: m.content,
+          })),
+        ],
+        model: "gpt-5-mini", // Leveraging the "Unlimited agent mode and chats with GPT-5 mini" from Copilot Pro plan
+        max_completion_tokens: 2000,
+      }),
     });
 
-    const lastMessage = messages[messages.length - 1];
-
-    // Retry logic for 503 (high demand) errors
-    let result;
-    let retries = 0;
-    const maxRetries = 3;
-
-    while (retries < maxRetries) {
-      try {
-        result = await chat.sendMessage(lastMessage.content);
-        break;
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : "";
-        if (
-          errorMessage.includes("high demand") ||
-          errorMessage.includes("503")
-        ) {
-          retries++;
-          if (retries >= maxRetries) throw error;
-          await new Promise((resolve) => setTimeout(resolve, 1000 * retries));
-        } else {
-          throw error;
-        }
-      }
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("GitHub Models API error:", errorData);
+      throw new Error(`GitHub Models API failed with status ${response.status}`);
     }
 
-    if (!result) throw new Error("Failed to get response after retries");
-    const response = await result.response;
-    const text = response.text();
+    const data = await response.json();
+    console.log("GitHub Models API raw response:", JSON.stringify(data, null, 2));
+    const text = data.choices?.[0]?.message?.content || "";
+
+    if (!text) {
+      console.warn("GitHub Models API returned empty content. Full response:", data);
+    }
 
     // Parse CTA from response if present
     const ctaRegex = /\[CTA:(.+?)\|(.+?)(?:\|(external))?\]\s*$/;
@@ -326,7 +294,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ content, cta });
   } catch (error) {
-    console.error("Gemini API error:", error);
+    console.error("Chat API error:", error);
 
     // Fallback to rule-based responses
     const lastMessage = messages[messages.length - 1];

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "init": "infisical init",
-    "dev": "infisical run -- next dev --turbopack",
+   "dev": "infisical run --env=dev --path=/ -- next dev --turbopack",
     "dev:local": "next dev --turbopack",
     "build:dev": "infisical run --env=dev -- next build",
     "build": "next build",
@@ -27,7 +27,6 @@
     "test:email": "playwright test email"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^5.2.2",
     "@infisical/sdk": "^5.0.0",
     "@neondatabase/serverless": "^1.0.2",
