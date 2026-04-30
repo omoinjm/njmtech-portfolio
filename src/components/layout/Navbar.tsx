@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FooterModel, MenuModel } from "@/types";
 import * as LucideIcons from "lucide-react";
 
@@ -21,6 +21,42 @@ export const Navbar = ({ data }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Keyboard navigation shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Only trigger if no input/textarea is focused
+      const target = event.target as HTMLElement;
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
+      // Alt + 1: Home
+      if (event.altKey && event.key === "1") {
+        router.push("/");
+      }
+      // Alt + 2: Projects
+      if (event.altKey && event.key === "2") {
+        router.push("/projects");
+      }
+      // Alt + 3: Contact
+      if (event.altKey && event.key === "3") {
+        router.push("/contact");
+      }
+      // Esc: Close mobile menu
+      if (event.key === "Escape" && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen, router]);
 
   const pages = data?.nav_menu ?? [];
   const links = data?.nav_footer ?? [];

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   Candy,
   ExternalLink,
+  Keyboard,
   Loader2,
   RotateCcw,
   Send,
@@ -121,10 +122,34 @@ export const FloatingAssistant = () => {
     return localStorage.getItem("chat-muted") === "true";
   });
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [visibleChips, setVisibleChips] = useState<PromptChip[]>(promptChips);
   const messagesRef = useRef<HTMLDivElement>(null);
   const messageSequenceRef = useRef(0);
   const lastAssistantContentRef = useRef("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Toggle assistant with Cmd/Ctrl + K
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault();
+        setIsOpen((prev) => !prev);
+      }
+      // Close with Escape
+      if (event.key === "Escape" && isOpen) {
+        setIsOpen(false);
+      }
+      // Reset conversation with Cmd/Ctrl + L (only when open)
+      if ((event.metaKey || event.ctrlKey) && event.key === "l" && isOpen) {
+        event.preventDefault();
+        resetConversation();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
 
   // Cycle status messages
   useEffect(() => {
@@ -390,7 +415,8 @@ export const FloatingAssistant = () => {
     }
   };
 
-  const handleQuickPrompt = (nextPrompt: string) => {
+  const handleQuickPrompt = (nextPrompt: string, chipId: string) => {
+    setVisibleChips((prev) => prev.filter((c) => c.id !== chipId));
     appendConversation(nextPrompt);
   };
 
@@ -398,6 +424,7 @@ export const FloatingAssistant = () => {
     setMessages(initialMessages);
     setPrompt("");
     setConversationId(undefined);
+    setVisibleChips(promptChips);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
@@ -484,6 +511,15 @@ export const FloatingAssistant = () => {
                 </div>
 
                 <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent("open-shortcuts"))}
+                    className="hidden md:flex rounded-full p-2 text-primary-foreground/80 transition-colors hover:bg-background/15 hover:text-primary-foreground"
+                    aria-label="View keyboard shortcuts"
+                    title="Keyboard shortcuts (?)"
+                  >
+                    <Keyboard className="h-4 w-4" />
+                  </button>
                   <button
                     type="button"
                     onClick={toggleMute}
@@ -629,11 +665,11 @@ export const FloatingAssistant = () => {
               </form>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {promptChips.map((chip) => (
+                {visibleChips.map((chip) => (
                   <button
                     key={chip.id}
                     type="button"
-                    onClick={() => handleQuickPrompt(chip.prompt)}
+                    onClick={() => handleQuickPrompt(chip.prompt, chip.id)}
                     disabled={activeLoading}
                     className="rounded-full border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:border-accent/50 hover:text-accent disabled:opacity-50"
                   >

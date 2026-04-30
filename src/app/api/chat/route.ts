@@ -225,25 +225,13 @@ const getFallbackReply = (
   };
 };
 
-export async function POST(request: NextRequest) {
-  const githubToken = process.env.GITHUB_TOKEN;
+// Available GitHub models to try in order of preference (Optimized for Copilot Pro Multipliers)
+const MODELS_FALLBACK_CHAIN = ["gpt-5-mini", "gpt-4o", "gpt-5.4-mini", "claude-3-5-sonnet"];
 
-  // Parse body
-  const { messages } = await request.json();
-
+async function callGitHubModels(messages: any[], githubToken: string, modelIndex = 0): Promise<NextResponse> {
+  const currentModel = MODELS_FALLBACK_CHAIN[modelIndex];
+  
   try {
-    // If no API key, use fallback
-    if (!githubToken) {
-      const lastMessage = messages[messages.length - 1];
-      const reply = getFallbackReply(lastMessage.content);
-      return NextResponse.json({
-        content: reply.content,
-        cta: reply.cta,
-        fallback: true,
-      });
-    }
-
-    // Call GitHub Models API (Copilot)
     const response = await fetch("https://models.inference.ai.azure.com/chat/completions", {
       method: "POST",
       headers: {
@@ -258,26 +246,28 @@ export async function POST(request: NextRequest) {
             content: m.content,
           })),
         ],
-        model: "gpt-5-mini", // Leveraging the "Unlimited agent mode and chats with GPT-5 mini" from Copilot Pro plan
-        max_completion_tokens: 2000,
+        model: currentModel,
+        max_completion_tokens: currentModel.includes("gpt-5") || currentModel === "o1-mini" ? 2000 : 1000,
       }),
     });
 
+    if (response.status === 429) {
+      console.warn(`Rate limit reached for ${currentModel}. Trying next model in chain...`);
+      if (modelIndex + 1 < MODELS_FALLBACK_CHAIN.length) {
+        return callGitHubModels(messages, githubToken, modelIndex + 1);
+      }
+    }
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("GitHub Models API error:", errorData);
+      console.error(`GitHub Models API error (${currentModel}):`, errorData);
       throw new Error(`GitHub Models API failed with status ${response.status}`);
     }
 
     const data = await response.json();
-    console.log("GitHub Models API raw response:", JSON.stringify(data, null, 2));
     const text = data.choices?.[0]?.message?.content || "";
 
-    if (!text) {
-      console.warn("GitHub Models API returned empty content. Full response:", data);
-    }
-
-    // Parse CTA from response if present
+    // Parse CTA
     const ctaRegex = /\[CTA:(.+?)\|(.+?)(?:\|(external))?\]\s*$/;
     const ctaMatch = text.match(ctaRegex);
     let content = text;
@@ -294,9 +284,39 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ content, cta });
   } catch (error) {
+    // If we have more models to try, move on. Otherwise rethrow.
+    if (modelIndex + 1 < MODELS_FALLBACK_CHAIN.length) {
+      return callGitHubModels(messages, githubToken, modelIndex + 1);
+    }
+    throw error;
+  }
+}
+
+export async function POST(request: NextRequest) {
+  const githubToken = process.env.GITHUB_TOKEN;
+
+  // Parse body
+  const { messages } = await request.json();
+
+  try {
+    // 1. Try GitHub Models Fallback Chain
+    if (githubToken) {
+      return await callGitHubModels(messages, githubToken);
+    }
+
+    // 2. If no API key, use fallback
+    const lastMessage = messages[messages.length - 1];
+    const reply = getFallbackReply(lastMessage.content);
+    return NextResponse.json({
+      content: reply.content,
+      cta: reply.cta,
+      fallback: true,
+    });
+
+  } catch (error) {
     console.error("Chat API error:", error);
 
-    // Fallback to rule-based responses
+    // Final Fallback to rule-based responses
     const lastMessage = messages[messages.length - 1];
     const reply = getFallbackReply(lastMessage.content);
     return NextResponse.json({
