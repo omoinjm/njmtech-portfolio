@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EdgeTTS } from "edge-tts-universal";
-import { Client } from "@gradio/client";
-
-// VoxCPM Configuration
-const VOXCPM_REF_AUDIO = process.env.VOXCPM_REF_AUDIO || null;
-const VOXCPM_VOICE_INSTRUCTION = process.env.VOXCPM_VOICE_INSTRUCTION || "A young male voice with a clear but anxious and overthinking tone. Nervous energy.";
-const HF_TOKEN = process.env.HF_TOKEN || "";
+import { TtsOrchestrator } from "@/services/tts/orchestrator";
+import { VoxCpmProvider } from "@/services/tts/voxcpm-provider";
+import { EdgeTtsProvider } from "@/services/tts/edge-provider";
+import { DatabaseTtsProvider } from "@/services/tts/db-provider";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,80 +12,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    const truncated = text.length > 1000 ? text.slice(0, 1000) + "..." : text;
+    // Dependency Injection: Initialize providers and orchestrator
+    const providers = [];
 
-    // 1. Try VoxCPM (Primary - Cloned Voice)
-    try {
-      console.log("Attempting VoxCPM with config:", {
-        hasToken: !!HF_TOKEN,
-        refAudio: VOXCPM_REF_AUDIO,
-        instruction: VOXCPM_VOICE_INSTRUCTION
-      });
+    // 0. Cache (Check for pre-generated audio first - INSTANT)
+    providers.push(new DatabaseTtsProvider());
 
-      const client = await Client.connect("openbmb/VoxCPM-Demo", {
-        hf_token: HF_TOKEN as `hf_${string}` || undefined,
-      });
+    // 1. VoxCPM (Primary Generation - if configured)
+    const refAudio = process.env.VOXCPM_REF_AUDIO || null;
+    const instruction = process.env.VOXCPM_VOICE_INSTRUCTION || "A young male voice with a clear but anxious and overthinking tone. Nervous energy.";
+    const hfToken = process.env.HF_TOKEN || "";
 
-      console.log("Connected to VoxCPM Space. Running prediction...");
+    providers.push(new VoxCpmProvider(refAudio, instruction, hfToken));
 
-      const result = await client.predict("/generate", { 
-        text_input: truncated,
-        control_instruction: VOXCPM_VOICE_INSTRUCTION,
-        reference_wav_path_input: VOXCPM_REF_AUDIO ? { 
-          path: VOXCPM_REF_AUDIO,
-          meta: { _type: "gradio.FileData" }
-        } : null,
-        use_prompt_text: false,
-        prompt_text_input: "",
-        cfg_value_input: 1.5,
-        do_normalize: true,
-        denoise: true,
-      });
+    // 2. Edge TTS (Fallback)
+    providers.push(new EdgeTtsProvider("en-US-ChristopherNeural"));
 
-      if (result && result.data && result.data[0]) {
-        const audioData = result.data[0];
-        const audioUrl = typeof audioData === 'string' ? audioData : audioData.url;
+    const orchestrator = new TtsOrchestrator(providers, 15000); // 15s timeout
+    const { buffer, provider } = await orchestrator.getSpeech(text);
 
-        if (audioUrl) {
-          const audioResponse = await fetch(audioUrl);
-          if (audioResponse.ok) {
-            const audioBuffer = await audioResponse.arrayBuffer();
-            return new NextResponse(audioBuffer, {
-              headers: {
-                "Content-Type": "audio/mpeg",
-                "Content-Length": String(audioBuffer.byteLength),
-                "Cache-Control": "public, max-age=3600",
-              },
-            });
-          }
-        }
-      }
-      
-      // If we reach here, VoxCPM didn't return a valid audio buffer but didn't throw
-      throw new Error("VoxCPM returned invalid data structure");
-
-    } catch (err) {
-      console.error("VoxCPM failed, falling back to Edge TTS:", err);
-      
-      // 2. Fallback: Microsoft Edge Neural TTS (Only on error)
-      const tts = new EdgeTTS(truncated, "en-US-ChristopherNeural");
-      const result = await tts.synthesize();
-      const audioBuffer = result.audio;
-
-      return new NextResponse(audioBuffer, {
-        headers: {
-          "Content-Type": "audio/mpeg",
-          "Content-Length": String(audioBuffer.length),
-          "Cache-Control": "public, max-age=3600",
-        },
-      });
-    }
+    return new NextResponse(buffer, {
+      headers: {
+        "Content-Type": "audio/mpeg",
+        "Content-Length": String(buffer.byteLength),
+        "Cache-Control": "public, max-age=3600",
+        "X-Speech-Provider": provider,
+      },
+    });
 
   } catch (error) {
-    console.error("TTS critical error:", error);
+    console.error("TTS orchestration critical failure:", error);
     return NextResponse.json(
       { error: "Failed to generate speech" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

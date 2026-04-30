@@ -5,7 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@9.15.1",
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   },
   "scripts": {
     "init": "infisical init",
@@ -24,7 +24,8 @@
     "pretty-quick": "pretty-quick --staged",
     "reset": "rm -rf node_modules/ pnpm-lock.yaml .next/",
     "test": "playwright test",
-    "test:email": "playwright test email"
+    "test:email": "playwright test email",
+    "ai_cache": "infisical run -- npx tsx scripts/generate-voice-cache.ts"
   },
   "dependencies": {
     "@gradio/client": "^2.2.0",

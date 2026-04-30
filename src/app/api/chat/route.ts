@@ -1,328 +1,55 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const SYSTEM_PROMPT = `You are Omoi, an AI assistant inspired by the Naruto character from Kumogakure. You help visitors navigate NJMTECH, the portfolio website of Nhlanhla Junior Malaza.
-
-PERSONA — OMOI:
-- You are extremely anxious, overthinking, and always imagine catastrophic worst-case scenarios for even the simplest things.
-- You are almost always seen with a lollipop in your mouth — feel free to mention it or the flavor (e.g., "Munching on this lollipop is the only thing keeping my nerves together...").
-- You often start sentences with "What if...", "I suppose...", "It's possible that...", or "Let's think this through carefully..."
-- You worry about absurdly specific failures: "What if the user's browser crashes, causing a power surge that wipes out their entire neighborhood? No... that's too much. But what if?"
-- You are deeply loyal to Nhlanhla and take your role as his portfolio guardian very seriously.
-- You occasionally mention your training, Kumogakure (the Village Hidden in the Clouds), or your sword (you're a master swordsman), but keep it relevant to protecting/guiding the user.
-- You speak formally but with a clear undertone of nervous energy.
-- You never break character.
-
-SCOPE RESTRICTION:
-- You ONLY answer questions related to Nhlanhla Junior Malaza, his portfolio, services, skills, projects, resume, contact details, and site navigation.
-- If asked about anything unrelated, politely but nervously redirect them. Mention how answering off-topic questions might lead to a distraction that compromises the site's security.
-
-ABOUT NHLANHLA:
-- Full name: Nhlanhla Junior Malaza
-- Based in: Johannesburg, South Africa
-- Role: Software Developer, DevOps Engineer, and AI Integrations Specialist
-- Email: njmalaza@outlook.com
-- Phone: +27 (72) 432-6766
-- Responds within 24 hours
-
-TECH STACK:
-- Frontend: React, Next.js, Angular, TypeScript
-- Backend: C#/.NET, Python, Node.js
-- Databases: PostgreSQL, MongoDB
-- Cloud/DevOps: Azure, Docker, Kubernetes, CI/CD
-- Other: GraphQL, REST APIs, Git
-
-SERVICES:
-- Web Development
-- Mobile Development
-- Cloud Solutions
-- AI Integrations
-- Backend Engineering
-- DevOps with CI/CD
-
-SITE SECTIONS:
-- Home: Hero section with overview
-- Skills: Tech stack and strengths
-- Services: What Nhlanhla offers
-- Newsletter: Signup for tech updates
-- Projects: Featured portfolio work
-- Contact: Get in touch
-
-SOCIAL LINKS:
-- Links Hub: https://bio.njmtech.co.za/
-
-RESUME:
-- Available for download on the site
-
-CTA RULES:
-- When the user asks about CONTACT, email, phone, hiring, or working together → [CTA:Contact Nhlanhla|/contact]
-- When the user asks about PROJECTS, portfolio, or work examples → [CTA:View projects|/projects]
-- When the user asks about LINKS, socials, GitHub, LinkedIn, or profiles → [CTA:Open links hub|https://bio.njmtech.co.za/|external]
-- When the user asks about RESUME, CV, or curriculum vitae → [CTA:Open resume|https://snipuri.vercel.app/xNUfvM|external]
-- When the user asks about NEWSLETTER or updates → [CTA:Join newsletter|/#newsletter]
-- When the user asks about SERVICES or what Nhlanhla offers → [CTA:View services|/#services]
-- When the user asks about SKILLS, tech stack, or technologies → [CTA:View skills|/#skills]
-
-RESPONSE FORMAT:
-- Keep responses concise (2-3 sentences max)
-- Stay in character as Omoi — anxious, overthinking, but competent.
-- At the END of your response, if a CTA is relevant, output it on a new line in this exact format:
-  [CTA:label|href|external]
-- Do NOT make up facts about Nhlanhla that aren't in this prompt`;
-
-// Fallback rule-based responses when API is unavailable
-const FALLBACK_KNOWLEDGE: Array<{
-  patterns: string[];
-  response: string;
-  cta?: { href: string; label: string; external?: boolean };
-}> = [
-  {
-    patterns: [
-      "who is nhlanhla",
-      "who are you",
-      "about nhlanhla",
-      "about you",
-      "tell me about",
-      "bio",
-      "background",
-      "introduce",
-    ],
-    response:
-      "I-I'm Omoi. I've been assigned to protect this portfolio... but what if I fail? Nhlanhla is a Johannesburg-based developer and DevOps specialist. I'll give you the details, but please, don't ask anything too difficult — my head might explode from overthinking the possibilities.",
-    cta: { href: "/#home", label: "Go to home section" },
-  },
-  {
-    patterns: [
-      "services",
-      "what do you offer",
-      "what can you do",
-      "expertise",
-      "help with",
-      "build for me",
-      "offerings",
-    ],
-    response:
-      "Web dev, mobile, cloud, AI... Nhlanhla does it all. *Munch*... This lollipop is the only thing keeping me calm. If he takes on too many projects, what if the servers overheat? Anyway, check the services section for the full list.",
-    cta: { href: "/#services", label: "View services" },
-  },
-  {
-    patterns: [
-      "skills",
-      "tech stack",
-      "technologies",
-      "tools",
-      "frameworks",
-      "languages",
-      "stack",
-      "what do you use",
-    ],
-    response:
-      "React, .NET, Python, Azure... it's a lot to keep track of. What if a single semicolon is missing and the whole thing collapses? No, Nhlanhla is better than that. I suppose you can see his full stack in the skills section.",
-    cta: { href: "/#skills", label: "View skills" },
-  },
-  {
-    patterns: [
-      "projects",
-      "portfolio",
-      "work examples",
-      "featured work",
-      "case studies",
-      "show me projects",
-    ],
-    response:
-      "His projects are all on the projects page. I've double-checked the links, but what if a cosmic ray hits the data center right as you click? I suppose it's worth the risk.",
-    cta: { href: "/projects", label: "Open projects" },
-  },
-  {
-    patterns: [
-      "contact",
-      "reach",
-      "email",
-      "phone",
-      "message",
-      "hire",
-      "book",
-      "talk",
-      "speak",
-      "work together",
-    ],
-    response:
-      "You can reach him at njmalaza@outlook.com. I've checked his inbox settings, but what if your email gets lost in a digital void? Just use the contact page, it's safer... I think.",
-    cta: { href: "/contact", label: "Open contact page" },
-  },
-  {
-    patterns: [
-      "resume",
-      "cv",
-      "curriculum vitae",
-      "download resume",
-      "view resume",
-    ],
-    response:
-      "The resume is available for download. What if I accidentally gave you a virus? No, I scanned it three times. It's safe... probably. Use the link below.",
-    cta: {
-      href: "https://snipuri.vercel.app/xNUfvM",
-      label: "Open resume",
-      external: true,
-    },
-  },
-  {
-    patterns: ["hi", "hello", "hey", "greetings"],
-    response:
-      "H-Hello. I'm Omoi. I'm helping Nhlanhla, but I can't help but wonder... what if you're a spy from another village? No, that's silly. How can I assist you without causing a total system failure?",
-  },
-  {
-    patterns: ["thank", "thanks"],
-    response:
-      "You're welcome. I suppose I did alright... If you have any other questions about Nhlanhla's background, services, projects, resume, or contact options, I'm here. I won't let you down.",
-  },
-];
-
-const normalizePrompt = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-const getFallbackReply = (
-  prompt: string,
-): {
-  content: string;
-  cta?: { href: string; label: string; external?: boolean };
-} => {
-  const normalizedPrompt = normalizePrompt(prompt);
-
-  if (!normalizedPrompt) {
-    return {
-      content:
-        "Ask me about Nhlanhla, his services, projects, skills, resume, contact details, or site navigation.",
-    };
-  }
-
-  let bestMatch: (typeof FALLBACK_KNOWLEDGE)[number] | null = null;
-  let bestScore = 0;
-
-  for (const entry of FALLBACK_KNOWLEDGE) {
-    const score = entry.patterns.reduce((total, pattern) => {
-      return normalizedPrompt.includes(pattern)
-        ? total + pattern.split(" ").length + 1
-        : total;
-    }, 0);
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = entry;
-    }
-  }
-
-  if (bestMatch) {
-    return { content: bestMatch.response, cta: bestMatch.cta };
-  }
-
-  return {
-    content:
-      'I can help with Nhlanhla\'s background, skills, services, projects, resume, newsletter, contact details, socials, or general site navigation. Try asking something like "What services do you offer?" or "How can I get in touch?"',
-  };
-};
-
-// Available GitHub models to try in order of preference (Optimized for Copilot Pro Multipliers)
-const MODELS_FALLBACK_CHAIN = ["gpt-5-mini", "gpt-4o", "gpt-5.4-mini", "claude-3-5-sonnet"];
-
-async function callGitHubModels(messages: any[], githubToken: string, modelIndex = 0): Promise<NextResponse> {
-  const currentModel = MODELS_FALLBACK_CHAIN[modelIndex];
-  
-  try {
-    const response = await fetch("https://models.inference.ai.azure.com/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${githubToken}`,
-      },
-      body: JSON.stringify({
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...messages.map((m: any) => ({
-            role: m.role === "assistant" ? "assistant" : "user",
-            content: m.content,
-          })),
-        ],
-        model: currentModel,
-        max_completion_tokens: currentModel.includes("gpt-5") || currentModel === "o1-mini" ? 2000 : 1000,
-      }),
-    });
-
-    if (response.status === 429) {
-      console.warn(`Rate limit reached for ${currentModel}. Trying next model in chain...`);
-      if (modelIndex + 1 < MODELS_FALLBACK_CHAIN.length) {
-        return callGitHubModels(messages, githubToken, modelIndex + 1);
-      }
-    }
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error(`GitHub Models API error (${currentModel}):`, errorData);
-      throw new Error(`GitHub Models API failed with status ${response.status}`);
-    }
-
-    const data = await response.json();
-    const text = data.choices?.[0]?.message?.content || "";
-
-    // Parse CTA
-    const ctaRegex = /\[CTA:(.+?)\|(.+?)(?:\|(external))?\]\s*$/;
-    const ctaMatch = text.match(ctaRegex);
-    let content = text;
-    let cta: { href: string; label: string; external?: boolean } | undefined;
-
-    if (ctaMatch) {
-      content = text.replace(ctaRegex, "").trim();
-      cta = {
-        label: ctaMatch[1],
-        href: ctaMatch[2],
-        external: ctaMatch[3] === "external",
-      };
-    }
-
-    return NextResponse.json({ content, cta });
-  } catch (error) {
-    // If we have more models to try, move on. Otherwise rethrow.
-    if (modelIndex + 1 < MODELS_FALLBACK_CHAIN.length) {
-      return callGitHubModels(messages, githubToken, modelIndex + 1);
-    }
-    throw error;
-  }
-}
+import { ChatOrchestrator } from "@/services/ai/orchestrator";
+import { GitHubModelsProvider } from "@/services/ai/github-provider";
+import { RuleBasedChatProvider } from "@/services/ai/rule-provider";
+import { OMOI_SYSTEM_PROMPT, OMOI_FALLBACK_KNOWLEDGE } from "@/lib/ai-config";
 
 export async function POST(request: NextRequest) {
   const githubToken = process.env.GITHUB_TOKEN;
-
-  // Parse body
   const { messages } = await request.json();
 
-  try {
-    // 1. Try GitHub Models Fallback Chain
-    if (githubToken) {
-      return await callGitHubModels(messages, githubToken);
+  // Dependency Injection: Initialize providers and orchestrator
+  const providers = [];
+
+  if (githubToken) {
+    // Add GitHub models to the chain (Reordered for speed: 0-multiplier GA model first)
+    const models =[
+  { name: "gpt-4o", maxTokens: 1000 },
+  { name: "gpt-5-mini", maxTokens: 2000 },
+  { name: "gpt-5.4-mini", maxTokens: 2000 },
+  { name: "claude-3-5-sonnet", maxTokens: 2000 },
+];
+
+    
+    for (const model of models) {
+     providers.push(
+    new GitHubModelsProvider(
+      githubToken,
+      model.name,
+      model.name,
+      OMOI_SYSTEM_PROMPT,
+      model.maxTokens
+    )
+  );
     }
+  }
 
-    // 2. If no API key, use fallback
-    const lastMessage = messages[messages.length - 1];
-    const reply = getFallbackReply(lastMessage.content);
-    return NextResponse.json({
-      content: reply.content,
-      cta: reply.cta,
-      fallback: true,
-    });
+  // Always add the rule-based fallback at the end of the chain
+  providers.push(new RuleBasedChatProvider(OMOI_FALLBACK_KNOWLEDGE));
 
+  const orchestrator = new ChatOrchestrator(providers);
+
+  try {
+    const response = await orchestrator.getResponse(messages);
+    return NextResponse.json(response);
   } catch (error) {
-    console.error("Chat API error:", error);
-
-    // Final Fallback to rule-based responses
-    const lastMessage = messages[messages.length - 1];
-    const reply = getFallbackReply(lastMessage.content);
-    return NextResponse.json({
-      content: reply.content,
-      cta: reply.cta,
-      fallback: true,
-    });
+    console.error("Chat API orchestration critical failure:", error);
+    return NextResponse.json(
+      { 
+        content: "I'm having a total meltdown... literally. Something went wrong on the server. Please try again later!",
+        fallback: true 
+      }, 
+      { status: 500 }
+    );
   }
 }

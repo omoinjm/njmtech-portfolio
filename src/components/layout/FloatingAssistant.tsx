@@ -18,9 +18,10 @@ import {
   Zap,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { publicConfig } from "@/lib/config.client";
 import { cn } from "@/lib/utils";
-import { useChatWebSocket } from "@/hooks/useChatWebSocket";
+import { useSpeech } from "@/hooks/use-speech";
+import { useChat } from "@/hooks/use-chat";
+import { ChatResponse } from "@/services/ai/types";
 
 type AssistantCta = {
   href: string;
@@ -44,36 +45,12 @@ type PromptChip = {
 type ChatMode = "copilot" | "websocket";
 
 const promptChips: PromptChip[] = [
-  {
-    id: "about",
-    label: "Who is Nhlanhla?",
-    prompt: "Who is Nhlanhla Junior Malaza?",
-  },
-  {
-    id: "services",
-    label: "Services",
-    prompt: "What services do you offer?",
-  },
-  {
-    id: "skills",
-    label: "Tech stack",
-    prompt: "What technologies do you work with?",
-  },
-  {
-    id: "projects",
-    label: "Projects",
-    prompt: "Can I see the projects?",
-  },
-  {
-    id: "contact",
-    label: "Contact",
-    prompt: "How can I get in touch?",
-  },
-  {
-    id: "resume",
-    label: "Resume",
-    prompt: "Can I view the resume?",
-  },
+  { id: "about", label: "Who is Nhlanhla?", prompt: "Who is Nhlanhla Junior Malaza?" },
+  { id: "services", label: "Services", prompt: "What services do you offer?" },
+  { id: "skills", label: "Tech stack", prompt: "What technologies do you work with?" },
+  { id: "projects", label: "Projects", prompt: "Can I see the projects?" },
+  { id: "contact", label: "Contact", prompt: "How can I get in touch?" },
+  { id: "resume", label: "Resume", prompt: "Can I view the resume?" },
 ];
 
 const omoiStatuses = [
@@ -103,316 +80,78 @@ const initialMessages: AssistantMessage[] = [
   },
 ];
 
-const ctaBaseClassName =
-  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all";
-
+const ctaBaseClassName = "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all";
 const isDev = process.env.NODE_ENV === "development";
 
 export const FloatingAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<AssistantMessage[]>(initialMessages);
   const [prompt, setPrompt] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isWsTyping, setIsWsTyping] = useState(false);
-  const [conversationId, setConversationId] = useState<string | undefined>();
   const [statusIndex, setStatusIndex] = useState(0);
   const [loadingIndex, setLoadingIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(() => {
     if (typeof window === "undefined") return true;
     return localStorage.getItem("chat-muted") === "true";
   });
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  
   const [visibleChips, setVisibleChips] = useState<PromptChip[]>(promptChips);
   const messagesRef = useRef<HTMLDivElement>(null);
   const messageSequenceRef = useRef(0);
-  const lastAssistantContentRef = useRef("");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Toggle assistant with Cmd/Ctrl + K
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        event.preventDefault();
-        setIsOpen((prev) => !prev);
-      }
-      // Close with Escape
-      if (event.key === "Escape" && isOpen) {
-        setIsOpen(false);
-      }
-      // Reset conversation with Cmd/Ctrl + L (only when open)
-      if ((event.metaKey || event.ctrlKey) && event.key === "l" && isOpen) {
-        event.preventDefault();
-        resetConversation();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
-
-  // Cycle status messages
-  useEffect(() => {
-    if (!isOpen) return;
-    const interval = setInterval(() => {
-      setStatusIndex((prev) => (prev + 1) % omoiStatuses.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isOpen]);
-
-  // Cycle loading messages
-  useEffect(() => {
-    if (!isLoading && !isWsTyping) return;
-    const interval = setInterval(() => {
-      setLoadingIndex((prev) => (prev + 1) % loadingMessages.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, [isLoading, isWsTyping]);
-
-  // Dev-only: chat mode toggle (persisted in sessionStorage)
+  // Chat Mode State
   const [chatMode, setChatMode] = useState<ChatMode>(() => {
     if (!isDev) return "copilot";
-    return (
-      (typeof window !== "undefined" &&
-        (sessionStorage.getItem("chat-mode") as ChatMode)) ||
-      "copilot"
-    );
+    return (typeof window !== "undefined" && (sessionStorage.getItem("chat-mode") as ChatMode)) || "copilot";
   });
 
-  // Speech synthesis via Edge TTS (neural voices)
-  const speak = useCallback(
-    async (text: string) => {
-      if (isMuted || !text || typeof window === "undefined") return;
+  // 1. Dependency Injection: Initialize Speech Service via Hook
+  const { isSpeaking, speak, stop } = useSpeech({ isMuted });
 
-      // Stop any currently playing audio
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+  const handleAssistantResponse = useCallback((response: ChatResponse) => {
+    messageSequenceRef.current += 1;
+    const content = response.content;
+    
+    setMessages((prev) => [...prev, {
+      id: `assistant-${messageSequenceRef.current}`,
+      role: "assistant",
+      content,
+      cta: response.cta,
+    }]);
+    
+    speak(content);
+  }, [speak]);
 
-      try {
-        setIsSpeaking(true);
-
-        const response = await fetch("/api/tts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text }),
-        });
-
-        if (!response.ok) {
-          throw new Error("TTS API failed");
-        }
-
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-
-        const audio = new Audio(url);
-        audioRef.current = audio;
-
-        audio.onended = () => {
-          setIsSpeaking(false);
-          URL.revokeObjectURL(url);
-          audioRef.current = null;
-        };
-
-        audio.onerror = () => {
-          setIsSpeaking(false);
-          URL.revokeObjectURL(url);
-          audioRef.current = null;
-        };
-
-        await audio.play();
-      } catch (error) {
-        // Fallback to browser SpeechSynthesis
-        if ("speechSynthesis" in window) {
-          const utterance = new SpeechSynthesisUtterance(text);
-
-          // Try to find a nice voice
-          const voices = window.speechSynthesis.getVoices();
-          const preferredVoice = voices.find(
-            (v) =>
-              v.name.includes("Google US English") ||
-              v.name.includes("Male") ||
-              v.lang.startsWith("en-US"),
-          );
-
-          if (preferredVoice) {
-            utterance.voice = preferredVoice;
-          }
-
-          utterance.rate = 1.0;
-          utterance.pitch = 0.9; // Slightly lower pitch for Omoi's anxious/muttering vibe
-
-          utterance.onend = () => setIsSpeaking(false);
-          utterance.onerror = () => setIsSpeaking(false);
-
-          window.speechSynthesis.speak(utterance);
-        } else {
-          setIsSpeaking(false);
-        }
-      }
-    },
-    [isMuted],
-  );
-
-  // Stop speaking when panel closes
-  useEffect(() => {
-    if (!isOpen && audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-      setIsSpeaking(false);
-    }
-  }, [isOpen]);
-
-  const toggleMute = useCallback(() => {
-    setIsMuted((prev) => {
-      const next = !prev;
-      localStorage.setItem("chat-muted", String(next));
-      if (next && audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-        setIsSpeaking(false);
-      }
-      return next;
-    });
+  const handleChatError = useCallback((err: string) => {
+    console.error("Chat Error:", err);
+    setMessages((prev) => [...prev, {
+      id: `error-${Date.now()}`,
+      role: "assistant",
+      content: "Sorry, I'm having trouble connecting right now. Please try again or contact Nhlanhla directly.",
+      cta: { href: "/contact", label: "Contact Nhlanhla" }
+    }]);
   }, []);
 
-  const wsUrl = process.env.NEXT_PUBLIC_WS_CHAT_URL || "";
-  const useWebSocket = isDev && chatMode === "websocket" && !!wsUrl;
-
-  const handleWsMessage = useCallback(
-    (content: string, type: "response" | "error") => {
-      messageSequenceRef.current += 1;
-      const messageId = `message-${messageSequenceRef.current}`;
-
-      // Parse CTA from response if present
-      const ctaRegex = /\[CTA:(.+?)\|(.+?)(?:\|(external))?\]\s*$/;
-      const ctaMatch = content.match(ctaRegex);
-      let messageContent = content;
-      let cta: AssistantCta | undefined;
-
-      if (ctaMatch) {
-        messageContent = content.replace(ctaRegex, "").trim();
-        cta = {
-          label: ctaMatch[1],
-          href: ctaMatch[2],
-          external: ctaMatch[3] === "external",
-        };
-      }
-
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        {
-          id: `${messageId}-assistant`,
-          role: "assistant",
-          content: messageContent,
-          cta,
-        },
-      ]);
-      setIsLoading(false);
-      speak(messageContent);
-    },
-    [speak],
-  );
-
-  const { isConnected, sendMessage } = useChatWebSocket({
-    url: wsUrl,
-    onMessage: handleWsMessage,
+  const { sendMessage, isLoading } = useChat({
+    mode: chatMode,
+    wsUrl: process.env.NEXT_PUBLIC_WS_CHAT_URL,
+    onMessage: handleAssistantResponse,
     onTyping: setIsWsTyping,
-    onConnectionChange: () => {},
-    conversationId,
-    onConversationIdChange: setConversationId,
+    onError: handleChatError,
   });
 
-  useEffect(() => {
-    if (!messagesRef.current) {
-      return;
-    }
-
-    messagesRef.current.scrollTo({
-      top: messagesRef.current.scrollHeight,
-      behavior: "smooth",
-    });
-  }, [messages, isOpen, isWsTyping]);
-
+  // UI Handlers
   const appendConversation = async (userPrompt: string) => {
-    const trimmedPrompt = userPrompt.trim();
-    if (!trimmedPrompt) {
-      return;
-    }
+    const trimmed = userPrompt.trim();
+    if (!trimmed) return;
 
     messageSequenceRef.current += 1;
-    const messageId = `message-${messageSequenceRef.current}`;
-
-    // Add user message immediately
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      {
-        id: `${messageId}-user`,
-        role: "user",
-        content: trimmedPrompt,
-      },
-    ]);
+    setMessages((prev) => [...prev, { id: `user-${messageSequenceRef.current}`, role: "user", content: trimmed }]);
     setPrompt("");
-    setIsLoading(true);
     setIsOpen(true);
 
-    // WebSocket mode
-    if (useWebSocket) {
-      sendMessage(trimmedPrompt);
-      return;
-    }
-
-    // Copilot mode (GitHub Models API)
-    try {
-      const apiMessages = [
-        ...messages,
-        { role: "user" as const, content: trimmedPrompt },
-      ];
-
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to get response");
-      }
-
-      const data = await response.json();
-
-      const responseContent = data.fallback
-        ? `${data.content}\n\n_(AI is temporarily unavailable — using quick answers)_`
-        : data.content;
-
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        {
-          id: `${messageId}-assistant`,
-          role: "assistant",
-          content: responseContent,
-          cta: data.cta,
-        },
-      ]);
-      speak(responseContent);
-    } catch {
-      setMessages((currentMessages) => [
-        ...currentMessages,
-        {
-          id: `${messageId}-assistant`,
-          role: "assistant",
-          content:
-            "Sorry, I'm having trouble connecting right now. Please try again or contact Nhlanhla directly.",
-          cta: {
-            href: "/contact",
-            label: "Contact Nhlanhla",
-          },
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
+    // Send to Chat Orchestrator
+    sendMessage([...messages, { role: "user", content: trimmed }]);
   };
 
   const handleQuickPrompt = (nextPrompt: string, chipId: string) => {
@@ -423,13 +162,8 @@ export const FloatingAssistant = () => {
   const resetConversation = () => {
     setMessages(initialMessages);
     setPrompt("");
-    setConversationId(undefined);
     setVisibleChips(promptChips);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-      setIsSpeaking(false);
-    }
+    stop();
   };
 
   const toggleChatMode = () => {
@@ -440,15 +174,47 @@ export const FloatingAssistant = () => {
     resetConversation();
   };
 
-  // Cleanup audio on unmount
+  const toggleMute = useCallback(() => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      localStorage.setItem("chat-muted", String(next));
+      if (next) stop();
+      return next;
+    });
+  }, [stop]);
+
+  // Effects for UX
   useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+    if (!isOpen) return;
+    const interval = setInterval(() => setStatusIndex((p) => (p + 1) % omoiStatuses.length), 5000);
+    return () => clearInterval(interval);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isLoading && !isWsTyping) return;
+    const interval = setInterval(() => setLoadingIndex((p) => (p + 1) % loadingMessages.length), 2500);
+    return () => clearInterval(interval);
+  }, [isLoading, isWsTyping]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault();
+        setIsOpen((prev) => !prev);
+      }
+      if (event.key === "Escape" && isOpen) setIsOpen(false);
+      if ((event.metaKey || event.ctrlKey) && event.key === "l" && isOpen) {
+        event.preventDefault();
+        resetConversation();
       }
     };
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  useEffect(() => {
+    messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, isOpen, isWsTyping]);
 
   const activeLoading = isLoading || isWsTyping;
 
@@ -470,23 +236,10 @@ export const FloatingAssistant = () => {
               <div className="relative flex items-start gap-3">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-background/15 ring-1 ring-white/20">
                   <motion.div
-                    animate={
-                      activeLoading
-                        ? {
-                            x: [0, -1, 1, -1, 1, 0],
-                            y: [0, 1, -1, 1, -1, 0],
-                          }
-                        : {}
-                    }
+                    animate={activeLoading ? { x: [0, -1, 1, -1, 1, 0], y: [0, 1, -1, 1, -1, 0] } : {}}
                     transition={{ repeat: Infinity, duration: 0.2 }}
                   >
-                    <Image
-                      src="/omoi-mascot-v2.png"
-                      alt="Omoi"
-                      width={48}
-                      height={48}
-                      className="h-12 w-12 object-contain"
-                    />
+                    <Image src="/omoi-mascot-v2.png" alt="Omoi" width={48} height={48} className="h-12 w-12 object-contain" />
                   </motion.div>
                 </div>
 
@@ -502,8 +255,8 @@ export const FloatingAssistant = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-sm text-primary-foreground/80"
                   >
-                    {useWebSocket
-                      ? `Llama 3.2${isConnected ? " — connected" : " — connecting..."}`
+                    {chatMode === "websocket"
+                      ? `Llama 3.2 — ${activeLoading ? 'thinking' : 'ready'}`
                       : isSpeaking
                         ? "Speaking..."
                         : omoiStatuses[statusIndex]}
@@ -529,11 +282,7 @@ export const FloatingAssistant = () => {
                     )}
                     aria-label={isMuted ? "Unmute assistant" : "Mute assistant"}
                   >
-                    {isMuted ? (
-                      <VolumeX className="h-4 w-4" />
-                    ) : (
-                      <Volume2 className="h-4 w-4" />
-                    )}
+                    {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                   </button>
                   <button
                     type="button"
@@ -555,54 +304,21 @@ export const FloatingAssistant = () => {
               </div>
             </div>
 
-            <div
-              ref={messagesRef}
-              className="max-h-[22rem] space-y-3 overflow-y-auto bg-card/30 px-4 py-4"
-            >
+            <div ref={messagesRef} className="max-h-[22rem] space-y-3 overflow-y-auto bg-card/30 px-4 py-4">
               {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={cn(
-                    "flex",
-                    message.role === "user" ? "justify-end" : "justify-start",
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "max-w-[88%] rounded-3xl px-4 py-3 text-sm leading-relaxed shadow-sm",
-                      message.role === "user"
-                        ? "gradient-bg text-primary-foreground"
-                        : "border border-border bg-background text-foreground",
-                    )}
-                  >
+                <div key={message.id} className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}>
+                  <div className={cn("max-w-[88%] rounded-3xl px-4 py-3 text-sm leading-relaxed shadow-sm", message.role === "user" ? "gradient-bg text-primary-foreground" : "border border-border bg-background text-foreground")}>
                     <p>{message.content}</p>
-
-                    {message.cta ? (
-                      message.cta.external ? (
-                        <a
-                          href={message.cta.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={cn(
-                            ctaBaseClassName,
-                            "mt-3 bg-accent/10 text-accent hover:bg-accent/20",
-                          )}
-                        >
-                          {message.cta.label}
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      ) : (
-                        <Link
-                          href={message.cta.href}
-                          className={cn(
-                            ctaBaseClassName,
-                            "mt-3 bg-accent/10 text-accent hover:bg-accent/20",
-                          )}
-                        >
-                          {message.cta.label}
-                        </Link>
-                      )
-                    ) : null}
+                    {message.cta && (
+                      <Link
+                        href={message.cta.href}
+                        target={message.cta.external ? "_blank" : undefined}
+                        className={cn(ctaBaseClassName, "mt-3 bg-accent/10 text-accent hover:bg-accent/20")}
+                      >
+                        {message.cta.label}
+                        {message.cta.external && <ExternalLink className="h-4 w-4" />}
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}
@@ -612,18 +328,10 @@ export const FloatingAssistant = () => {
                   <div className="max-w-[88%] rounded-3xl border border-border bg-background px-4 py-3 text-sm shadow-sm">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <motion.span
-                        key={loadingIndex}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                      >
-                        {useWebSocket
-                          ? "Llama is thinking..."
-                          : loadingMessages[loadingIndex]}
+                      <motion.span key={loadingIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        {chatMode === "websocket" ? "Llama is thinking..." : loadingMessages[loadingIndex]}
                       </motion.span>
-                      {!useWebSocket && (
-                        <ShieldAlert className="h-3 w-3 text-amber-500 animate-pulse" />
-                      )}
+                      {chatMode !== "websocket" && <ShieldAlert className="h-3 w-3 text-amber-500 animate-pulse" />}
                     </div>
                   </div>
                 </div>
@@ -631,21 +339,12 @@ export const FloatingAssistant = () => {
             </div>
 
             <div className="border-t border-border bg-background px-4 py-4">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                Ask anything
-              </p>
-
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  appendConversation(prompt);
-                }}
-                className="flex items-center gap-2"
-              >
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Ask anything</p>
+              <form onSubmit={(e) => { e.preventDefault(); appendConversation(prompt); }} className="flex items-center gap-2">
                 <input
                   type="text"
                   value={prompt}
-                  onChange={(event) => setPrompt(event.target.value)}
+                  onChange={(e) => setPrompt(e.target.value)}
                   placeholder="Ask about skills, services, projects, contact..."
                   disabled={activeLoading}
                   className="h-11 flex-1 rounded-full border border-border bg-card px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent/50 disabled:opacity-50"
@@ -656,14 +355,9 @@ export const FloatingAssistant = () => {
                   className="flex h-11 w-11 items-center justify-center rounded-full gradient-bg text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                   aria-label="Send assistant message"
                 >
-                  {activeLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Send className="h-4 w-4" />
-                  )}
+                  {activeLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </button>
               </form>
-
               <div className="mt-4 flex flex-wrap gap-2">
                 {visibleChips.map((chip) => (
                   <button
@@ -679,7 +373,6 @@ export const FloatingAssistant = () => {
               </div>
             </div>
 
-            {/* Dev-only: mode toggle */}
             {isDev && (
               <button
                 type="button"
@@ -687,9 +380,7 @@ export const FloatingAssistant = () => {
                 className="absolute bottom-0 left-4 flex items-center gap-1 rounded-t-md bg-muted px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:text-foreground"
                 title={`Switch to ${chatMode === "copilot" ? "WebSocket (Llama)" : "Copilot"}`}
               >
-                <Zap
-                  className={cn("h-3 w-3", useWebSocket && "text-green-500")}
-                />
+                <Zap className={cn("h-3 w-3", chatMode === "websocket" && "text-green-500")} />
                 {chatMode === "copilot" ? "Copilot" : "Llama"}
               </button>
             )}
@@ -709,17 +400,8 @@ export const FloatingAssistant = () => {
       >
         <span className="gradient-bg absolute inset-0 rounded-full opacity-20 blur-md transition-opacity group-hover:opacity-30" />
         <span className="absolute inset-0 rounded-full border border-white/10" />
-        <Image
-          src="/omoi-mascot-v2.png"
-          alt="AI assistant"
-          width={80}
-          height={80}
-          className="relative h-20 w-20 object-contain"
-          priority
-        />
-        {!isOpen ? (
-          <span className="absolute -right-0.5 top-0 inline-flex h-3.5 w-3.5 rounded-full border-2 border-background bg-primary" />
-        ) : null}
+        <Image src="/omoi-mascot-v2.png" alt="AI assistant" width={80} height={80} className="relative h-20 w-20 object-contain" priority />
+        {!isOpen && <span className="absolute -right-0.5 top-0 inline-flex h-3.5 w-3.5 rounded-full border-2 border-background bg-primary" />}
       </motion.button>
     </div>
   );
