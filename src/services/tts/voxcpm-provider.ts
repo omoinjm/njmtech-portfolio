@@ -1,6 +1,8 @@
 import { ITtsProvider } from "./types";
 import { Client } from "@gradio/client";
 
+const isHuggingFaceToken = (value: string): value is `hf_${string}` => value.startsWith("hf_");
+
 export class VoxCpmProvider implements ITtsProvider {
   public readonly name = "VoxCPM";
 
@@ -11,9 +13,18 @@ export class VoxCpmProvider implements ITtsProvider {
   ) {}
 
   async synthesize(text: string): Promise<ArrayBuffer> {
-    const client = await Client.connect("openbmb/VoxCPM-Demo", {
-      hf_token: this.hfToken as `hf_${string}` || undefined,
-    });
+    const token = this.hfToken;
+    let clientOptions: { token: `hf_${string}` } | undefined;
+
+    if (token) {
+      if (!isHuggingFaceToken(token)) {
+        throw new Error("Invalid Hugging Face token format");
+      }
+
+      clientOptions = { token };
+    }
+
+    const client = await Client.connect("openbmb/VoxCPM-Demo", clientOptions);
 
     const result = await client.predict("/generate", { 
       text_input: text,

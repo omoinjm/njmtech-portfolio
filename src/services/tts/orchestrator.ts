@@ -1,5 +1,22 @@
 import { ITtsProvider } from "./types";
 
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === "object" && error !== null && "message" in error && typeof error.message === "string") {
+    return error.message;
+  }
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  const serializedError = JSON.stringify(error);
+  return serializedError ?? String(error);
+};
+
 /**
  * Orchestrates multiple TTS providers with fallback.
  * Adheres to SRP and DIP.
@@ -25,10 +42,7 @@ export class TtsOrchestrator {
 
         return { buffer, provider: provider.name };
       } catch (error) {
-        let message = "Unknown error";
-        if (error instanceof Error) message = error.message;
-        else if (typeof error === 'object' && error !== null && 'message' in error) message = String((error as any).message);
-        else message = JSON.stringify(error);
+        const message = getErrorMessage(error);
 
         console.warn(`TTS Provider ${provider.name} failed or timed out:`, message);
         errors.push(new Error(message));

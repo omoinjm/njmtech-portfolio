@@ -1,5 +1,12 @@
 import { ChatMessage, ChatResponse, IChatProvider } from "./types";
 
+interface ExactMatchChatProvider extends IChatProvider {
+  isExactMatch(prompt: string): boolean;
+}
+
+const isExactMatchProvider = (provider: IChatProvider): provider is ExactMatchChatProvider =>
+  "isExactMatch" in provider && typeof provider.isExactMatch === "function";
+
 /**
  * Orchestrates multiple chat providers with a fallback mechanism.
  * Adheres to Single Responsibility and Open/Closed principles.
@@ -16,8 +23,11 @@ export class ChatOrchestrator {
 
     // 1. Short-circuit: If this is an exact match for a pill, use the rule immediately.
     // This guarantees a voice cache hit and saves AI tokens.
-    const ruleProvider = this.providers.find(p => p.name === "RuleBasedFallback") as any;
-    if (ruleProvider && typeof ruleProvider.isExactMatch === 'function') {
+    const ruleProvider = this.providers.find(
+      (provider): provider is ExactMatchChatProvider =>
+        provider.name === "RuleBasedFallback" && isExactMatchProvider(provider)
+    );
+    if (ruleProvider) {
       if (ruleProvider.isExactMatch(lastMessage.content)) {
         console.log("[Orchestrator] Exact match found. Short-circuiting to rules.");
         return await ruleProvider.generateResponse(messages);

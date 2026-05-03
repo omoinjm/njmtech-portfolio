@@ -1,6 +1,20 @@
 import { ITtsProvider } from "./types";
 import { EdgeTTS } from "edge-tts-universal";
 
+type ArrayBufferLikeSource = {
+  arrayBuffer(): Promise<ArrayBuffer>;
+};
+
+const hasArrayBuffer = (value: unknown): value is ArrayBufferLikeSource => {
+  if (typeof value !== "object" || value === null || !("arrayBuffer" in value)) {
+    return false;
+  }
+
+  return typeof value.arrayBuffer === "function";
+};
+
+const getAudioDataDescription = (value: unknown): string => Object.prototype.toString.call(value);
+
 export class EdgeTtsProvider implements ITtsProvider {
   public readonly name = "EdgeTTS";
 
@@ -14,21 +28,20 @@ export class EdgeTtsProvider implements ITtsProvider {
       throw new Error("EdgeTTS returned no audio data");
     }
 
-    const buf = result.audio;
+    const buf: unknown = result.audio;
 
-    // Handle Web API 'Blob' (found in your logs)
-    if (typeof (buf as any).arrayBuffer === 'function') {
-      return await (buf as any).arrayBuffer();
+    if (hasArrayBuffer(buf)) {
+      return await buf.arrayBuffer();
     }
 
-    // Handle Node.js Buffer / Uint8Array
-    if (buf instanceof Uint8Array || (typeof Buffer !== 'undefined' && Buffer.isBuffer(buf))) {
-      return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+    if (buf instanceof Uint8Array) {
+      return Uint8Array.from(buf).buffer;
     }
 
-    // If it's already an ArrayBuffer
-    if (buf instanceof ArrayBuffer) return buf;
+    if (buf instanceof ArrayBuffer) {
+      return buf;
+    }
 
-    throw new Error(`Unsupported audio data format from EdgeTTS: ${buf?.constructor?.name || typeof buf}`);
+    throw new Error(`Unsupported audio data format from EdgeTTS: ${getAudioDataDescription(buf)}`);
   }
 }
