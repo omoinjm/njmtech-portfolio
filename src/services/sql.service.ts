@@ -12,6 +12,7 @@ const VALID_TABLES = [
   "nav_footer",
   "mail_template",
   "subscribers",
+  "ai_voice_cache",
 ] as const;
 
 function validateTableName(
@@ -56,6 +57,17 @@ export async function getRecord(tblName: string) {
   } catch (err: unknown) {
     const rows = await handleError(err, tblName);
     return rows?.[0];
+  }
+}
+
+export async function getVoiceCache(textHash: string) {
+  if (!sql) return null;
+  try {
+    const rows = await sql`SELECT audio_url FROM ai_voice_cache WHERE response_text_hash = ${textHash} LIMIT 1`;
+    return rows[0]?.audio_url || null;
+  } catch (err) {
+    logger.error("Failed to query ai_voice_cache", err);
+    return null;
   }
 }
 

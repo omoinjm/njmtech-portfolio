@@ -16,22 +16,15 @@ export const Footer = ({ data }) => {
             <Link href="/" className="text-2xl font-bold gradient-text">
               NJM<span className="text-foreground">TECH</span>
             </Link>
-            {/*
-          <a
-              href="#home"
-              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
-            >
-              <Image
-                src="/logo.png"
-                alt="NJMTECH Logo"
-                width={60}
-                height={60}
-              />
-            </a>
-            */}
             <p className="text-muted-foreground text-sm mt-1">
               © {currentYear} All rights reserved.
             </p>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-shortcuts"))}
+              className="hidden md:inline-block text-xs text-muted-foreground/60 hover:text-accent transition-colors mt-2 underline decoration-dotted underline-offset-4"
+            >
+              Keyboard Shortcuts
+            </button>
           </div>
 
           {/* Social Links */}
