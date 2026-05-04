@@ -1,5 +1,6 @@
 import HomePage from '@/components/home/Index';
 import {
+  generateOrganizationSchema,
   generatePersonSchema,
   generateProfilePageSchema,
   generateWebsiteSchema,
@@ -40,6 +41,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteConfig.url,
   },
+  other: {
+    'profile:first_name': 'Nhlanhla',
+    'profile:last_name': 'Malaza',
+    'profile:username': 'njmalaza',
+  },
 };
 
 export default function Home() {
@@ -48,6 +54,10 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(generatePersonSchema()) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema()) }}
       />
       <script
         type="application/ld+json"

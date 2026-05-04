@@ -5,6 +5,7 @@ import { Footer } from "./Footer";
 import { FloatingAssistant } from "./FloatingAssistant";
 import { Navbar } from "./Navbar";
 import { KeyboardShortcuts } from "./KeyboardShortcuts";
+import { SEOGuideDialog } from "./SEOGuideDialog";
 import { MenuModel, FooterModel, LinkModel } from "@/types";
 import DataService from "@/services/data.service";
 import { PageLoader } from "@/components/ui/page-loader";
@@ -55,6 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Footer data={fLinks} />
       <FloatingAssistant />
       <KeyboardShortcuts />
+      <SEOGuideDialog />
     </div>
   );
 };

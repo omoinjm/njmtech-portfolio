@@ -37,14 +37,16 @@ export const pageConfig: Record<string, SEOProps> = {
   home: {
     title: "Nhlanhla Junior Malaza | Software Developer, DevOps Engineer & AI Integrations Specialist",
     description:
-      "Portfolio of Nhlanhla Junior Malaza (Nhlanhla Junior) — Software Developer, DevOps Engineer, and AI Integrations Specialist from South Africa. Expert in Next.js, React, TypeScript, Node.js, cloud infrastructure, and AI integrations.",
+      "Portfolio of Nhlanhla Junior Malaza (NJMTech) — Software Developer, DevOps Engineer, and AI Integrations Specialist from South Africa. Expert in Next.js, React, TypeScript, Node.js, cloud infrastructure, and AI integrations.",
     canonical: `${siteConfig.url}/`,
     keywords: [
       "Nhlanhla",
       "Nhlanhla Junior",
       "Nhlanhla Junior Malaza",
       "Nhlanhla Malaza",
+      "Junior Malaza",
       "NJMTech",
+      "njmtech",
       "NJM",
       "njmalaza",
       "software developer South Africa",
@@ -153,7 +155,7 @@ export function generatePersonSchema() {
     givenName: "Nhlanhla",
     additionalName: "Junior",
     familyName: "Malaza",
-    alternateName: ["Nhlanhla Junior", "Nhlanhla Malaza", "NJM", "NJMTech"],
+    alternateName: ["Nhlanhla Junior", "Nhlanhla Malaza", "Junior Malaza", "NJM", "NJMTech", "njmtech", "njmalaza"],
     url: siteConfig.url,
     email: siteConfig.email,
     image: {

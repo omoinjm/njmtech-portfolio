@@ -24,9 +24,17 @@ export const metadata: Metadata = {
     "Nhlanhla",
     "Nhlanhla Junior",
     "Nhlanhla Junior Malaza",
+    "Nhlanhla Malaza",
+    "Junior Malaza",
     "NJMTech",
-    "software developer",
-    "devops engineer",
+    "njmtech",
+    "NJM",
+    "njmalaza",
+    "software developer South Africa",
+    "devops engineer South Africa",
+    "AI integrations specialist",
+    "full stack developer",
+    "web developer portfolio",
     "South Africa developer",
   ],
   authors: [{ name: "Nhlanhla Junior Malaza", url: siteConfig.url }],
@@ -86,6 +94,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="me" href={siteConfig.social.linkedin} />
+        <link rel="me" href={siteConfig.social.github} />
+        <link rel="me" href={`https://twitter.com/njmalaza`} />
+      </head>
       <body className={inter.className}>
         <Providers>
           <TooltipProvider>

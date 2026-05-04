@@ -19,12 +19,21 @@ export const Footer = ({ data }) => {
             <p className="text-muted-foreground text-sm mt-1">
               © {currentYear} All rights reserved.
             </p>
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-shortcuts"))}
-              className="hidden md:inline-block text-xs text-muted-foreground/60 hover:text-accent transition-colors mt-2 underline decoration-dotted underline-offset-4"
-            >
-              Keyboard Shortcuts
-            </button>
+            <div className="hidden md:flex items-center gap-3 mt-2">
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("open-shortcuts"))}
+                className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+              >
+                Keyboard Shortcuts
+              </button>
+              <span className="text-muted-foreground/30 text-xs">·</span>
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("open-seo-guide"))}
+                className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+              >
+                SEO Guide
+              </button>
+            </div>
           </div>
 
           {/* Social Links */}

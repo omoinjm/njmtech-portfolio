@@ -107,7 +107,7 @@ export const Hero = () => {
             transition={{ delay: 0.3 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
           >
-            <span className="gradient-text">Nhlanhla Malaza</span>
+            <span className="gradient-text">Nhlanhla Junior Malaza</span>
           </motion.h1>
 
           <motion.p
@@ -116,7 +116,7 @@ export const Hero = () => {
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground mb-4"
           >
-            Full Stack Developer & Tech Enthusiast
+            Software Developer, DevOps Engineer & AI Integrations Specialist
           </motion.p>
 
           <motion.p
