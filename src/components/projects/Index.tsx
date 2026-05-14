@@ -57,7 +57,12 @@ export const Projects = ({ data }: ProjectsProps) => {
   }, [allProjects, activeCategory]);
 
   return (
-    <section id="projects" className="py-24 bg-card/30" ref={ref}>
+    <section
+      id="projects"
+      data-keyboard-section="projects"
+      className="py-24 bg-card/30"
+      ref={ref}
+    >
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div

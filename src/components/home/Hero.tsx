@@ -1,54 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Code, Sparkles, Zap } from "lucide-react";
-import dynamic from "next/dynamic";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { publicConfig } from "@/lib/config.client";
 import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
-
-const Hero3DScene = dynamic(
-  () => import("./Hero3DScene").then((module) => module.Hero3DScene),
-  {
-    ssr: false,
-    loading: () => <HeroVisualFallback />,
-  },
-);
-
-const HeroVisualFallback = () => {
-  return (
-    <div className="absolute inset-0">
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/55 to-background/70" />
-      <div className="absolute inset-y-0 left-[8%] w-72 rounded-full bg-accent/10 blur-3xl animate-pulse-slow" />
-      <div className="absolute inset-y-0 right-[10%] w-80 rounded-full bg-primary/10 blur-3xl animate-pulse-slow" />
-
-      <motion.div
-        animate={{ y: [-10, 10, -10] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[18%] right-[14%] p-4 rounded-xl bg-card/80 border border-border shadow-xl"
-      >
-        <Code className="w-8 h-8 text-accent" />
-      </motion.div>
-
-      <motion.div
-        animate={{ y: [10, -10, 10] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-[18%] left-[10%] p-4 rounded-xl bg-card/80 border border-border shadow-xl"
-      >
-        <Zap className="w-8 h-8 text-primary" />
-      </motion.div>
-
-      <motion.div
-        animate={{ y: [-5, 15, -5] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[44%] right-[30%] p-4 rounded-xl bg-card/80 border border-border shadow-xl"
-      >
-        <Sparkles className="w-8 h-8 text-accent" />
-      </motion.div>
-    </div>
-  );
-};
 
 export const Hero = () => {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
@@ -67,18 +24,14 @@ export const Hero = () => {
   return (
     <section
       id="home"
+      data-keyboard-section="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
     >
-      <div className="absolute inset-0 z-0">
-        <Hero3DScene />
-      </div>
-
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-[1]">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-accent/20 blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-primary/20 blur-3xl animate-pulse-slow" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-accent/5 to-primary/5 blur-3xl" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/45 to-background/70" />
+        <div className="absolute top-[18%] -left-24 h-80 w-80 rounded-full bg-accent/18 blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-[16%] right-0 h-96 w-96 rounded-full bg-primary/16 blur-3xl animate-pulse-slow" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_hsl(var(--accent)/0.1),_transparent_28%),linear-gradient(90deg,_hsl(var(--background)/0.9)_0%,_hsl(var(--background)/0.54)_45%,_hsl(var(--background)/0.82)_100%)]" />
       </div>
 
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -186,16 +139,21 @@ export const Hero = () => {
                   animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -28, scale: 0.92, filter: "blur(14px)" }}
                   transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="px-8 py-10 rounded-[2rem] border border-border/60 bg-background/35 shadow-[0_24px_80px_rgba(16,24,40,0.28)] backdrop-blur-md"
+                  className="mx-auto max-w-sm text-center"
                 >
-                  <div className="text-center">
-                    <div className="text-6xl md:text-8xl font-bold gradient-text mb-3 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
-                      {"</>"}
+                  <div className="relative flex justify-center">
+                    <div className="absolute inset-x-12 top-3 h-20 rounded-full bg-accent/20 blur-3xl" />
+                    <div className="relative text-6xl md:text-8xl font-bold gradient-text mb-4 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+                      {"⌨"}
                     </div>
-                    <p className="text-muted-foreground text-base md:text-lg">
-                      Drag or tap the tech dice anywhere in the hero
-                    </p>
                   </div>
+                  <p className="text-balance text-sm uppercase tracking-[0.3em] text-foreground/45 mb-3">
+                    Follow the keyboard
+                  </p>
+                  <p className="text-balance text-base md:text-lg text-foreground/78">
+                      Scroll through the page to follow the keyboard, then hover
+                      the keys in the skills section
+                  </p>
                 </motion.div>
               ) : null}
             </AnimatePresence>

@@ -49,7 +49,12 @@ export const Services = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="services" className="py-24 relative" ref={ref}>
+    <section
+      id="services"
+      data-keyboard-section="services"
+      className="py-24 relative"
+      ref={ref}
+    >
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-accent/10 blur-3xl" />

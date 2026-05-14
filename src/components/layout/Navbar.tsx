@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FooterModel, MenuModel } from "@/types";
 import * as LucideIcons from "lucide-react";
+import { AccentThemePicker } from "@/components/layout/AccentThemePicker";
 
 const socialLinks = [
   { icon: "Github", href: "https://github.com/omoinjm", label: "GitHub" },
@@ -112,6 +113,7 @@ export const Navbar = ({ data }) => {
 
           {/* Social Links & Connect Button */}
           <div className="hidden md:flex items-center gap-4">
+            <AccentThemePicker />
             {links.map((social: FooterModel) => {
               const Icon = LucideIcons[social.label];
               return (
@@ -184,6 +186,7 @@ export const Navbar = ({ data }) => {
 
             {/* Bottom — social icons + connect button */}
             <div className="flex flex-col items-center gap-6 pb-12 pt-8 border-t border-border">
+              <AccentThemePicker />
               <div className="flex items-center gap-8">
                 {socialLinks.map((social) => {
                   const Icon = LucideIcons[social.icon];

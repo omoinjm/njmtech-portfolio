@@ -60,7 +60,11 @@ export const Newsletter = () => {
   };
 
   return (
-    <section id="newsletter" className="py-20 relative overflow-hidden">
+    <section
+      id="newsletter"
+      data-keyboard-section="newsletter"
+      className="py-20 relative overflow-hidden"
+    >
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card/50 to-background" />
       

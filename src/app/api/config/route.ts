@@ -12,6 +12,8 @@
 import { config } from "@/lib/config";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/config
  * Returns public configuration (safe to expose to client)
