@@ -31,7 +31,6 @@ export const Hero = () => {
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-[1]">
         <div className="absolute top-[18%] -left-24 h-80 w-80 rounded-full bg-accent/18 blur-3xl animate-pulse-slow" />
         <div className="absolute bottom-[16%] right-0 h-96 w-96 rounded-full bg-primary/16 blur-3xl animate-pulse-slow" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_hsl(var(--accent)/0.1),_transparent_28%),linear-gradient(90deg,_hsl(var(--background)/0.9)_0%,_hsl(var(--background)/0.54)_45%,_hsl(var(--background)/0.82)_100%)]" />
       </div>
 
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">

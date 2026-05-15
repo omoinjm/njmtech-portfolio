@@ -22,10 +22,7 @@ export const Skills = ({ activeSkill }: SkillsProps) => {
       ref={ref}
     >
       {/* Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/4 w-64 h-64 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-accent/10 blur-3xl" />
-      </div>
+      <div className="absolute inset-0 overflow-hidden" />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}

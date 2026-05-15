@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Footer } from "./Footer";
 import { FloatingAssistant } from "./FloatingAssistant";
 import { Navbar } from "./Navbar";
+import { RightSideNav } from "./RightSideNav";
 import { KeyboardShortcuts } from "./KeyboardShortcuts";
 import { SEOGuideDialog } from "./SEOGuideDialog";
 import { MouseGlow } from "./MouseGlow";
@@ -58,6 +59,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <FloatingAssistant />
       <KeyboardShortcuts />
       <SEOGuideDialog />
+      <RightSideNav
+        pages={nLinks.nav_menu ?? []}
+        socialLinks={nLinks.nav_footer ?? []}
+      />
       <MouseGlow />
     </div>
   );

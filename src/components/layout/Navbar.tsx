@@ -8,21 +8,15 @@ import { FooterModel, MenuModel } from "@/types";
 import * as LucideIcons from "lucide-react";
 import { AccentThemePicker } from "@/components/layout/AccentThemePicker";
 
-const socialLinks = [
-  { icon: "Github", href: "https://github.com/omoinjm", label: "GitHub" },
-  { icon: "Linkedin", href: "https://linkedin.com", label: "LinkedIn" },
-  {
-    icon: "Twitter",
-    href: "https://twitter.com/nhlanhlamalaza_",
-    label: "Twitter",
-  },
-];
 
 export const Navbar = ({ data }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  const pages = data?.nav_menu ?? [];
+  const socialLinks: FooterModel[] = data?.nav_footer ?? [];
 
   // Keyboard navigation shortcuts
   useEffect(() => {
@@ -59,8 +53,7 @@ export const Navbar = ({ data }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen, router]);
 
-  const pages = data?.nav_menu ?? [];
-  const links = data?.nav_footer ?? [];
+  const isActive = (href: string) => pathname === href;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,7 +72,6 @@ export const Navbar = ({ data }) => {
     };
   }, [isMobileMenuOpen]);
 
-  const isActive = (href: string) => pathname === href;
   return (
     <>
       <motion.nav
@@ -93,46 +85,17 @@ export const Navbar = ({ data }) => {
         }`}
       >
         <div className="container mx-auto px-4 flex items-center justify-between">
-          {/* Logo */}
+          {/* Desktop: logo left, theme picker + Links right — nav links live in RightSideNav */}
           <Link href="/" className="text-2xl font-bold gradient-text">
             NJM<span className="text-foreground">TECH</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {pages.map((link: MenuModel) => (
-              <Link
-                key={link.id}
-                href={link.url}
-                className={`nav-link ${isActive(link.url) ? "active" : ""}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Social Links & Connect Button */}
           <div className="hidden md:flex items-center gap-4">
             <AccentThemePicker />
-            {links.map((social: FooterModel) => {
-              const Icon = LucideIcons[social.label];
-              return (
-                <a
-                  key={social.label}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={social.label}
-                >
-                  {Icon ? <Icon size={20} /> : <span>{social.label}</span>}
-                </a>
-              );
-            })}
             <Link
               href="https://bio.njmtech.co.za/"
               target="_blank"
-              className="ml-4 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
+              className="ml-2 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
             >
               Links
             </Link>
@@ -189,11 +152,11 @@ export const Navbar = ({ data }) => {
               <AccentThemePicker />
               <div className="flex items-center gap-8">
                 {socialLinks.map((social) => {
-                  const Icon = LucideIcons[social.icon];
+                  const Icon = LucideIcons[social.icon as keyof typeof LucideIcons] as React.ElementType | undefined;
                   return (
                     <a
-                      key={social.label}
-                      href={social.href}
+                      key={social.id}
+                      href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-foreground transition-colors"

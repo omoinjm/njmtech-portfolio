@@ -29,9 +29,9 @@ export async function seed() {
 				sort_order INT NOT NULL,
 				createdAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 			)`,
-			tx`INSERT INTO nav_footer (name, icon, route_url, is_active, sort_order) VALUES ('LinkedIn', 'https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064212/public/logo/nav-icon1_dx8dcr.svg', 'https://www.linkedin.com/in/njmalaza', true, 1) ON CONFLICT (route_url) DO NOTHING`,
-			tx`INSERT INTO nav_footer (name, icon, route_url, is_active, sort_order) VALUES ('Facebook', 'https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064213/public/logo/nav-icon2_j3cdqp.svg', 'https://www.facebook.com/', true, 2) ON CONFLICT (route_url) DO NOTHING`,
-			tx`INSERT INTO nav_footer (name, icon, route_url, is_active, sort_order) VALUES ('Instagram', 'https://res.cloudinary.com/dfta3fn6p/image/upload/v1676064213/public/logo/nav-icon3_k4zon2.svg', 'https://www.instagram.com/nhlanhlamalaza_', true, 3) ON CONFLICT (route_url) DO NOTHING`,
+			tx`INSERT INTO nav_footer (name, icon, route_url, is_active, sort_order) VALUES ('LinkedIn', 'Linkedin', 'https://www.linkedin.com/in/njmalaza', true, 1) ON CONFLICT (route_url) DO UPDATE SET name = EXCLUDED.name, icon = EXCLUDED.icon`,
+			tx`INSERT INTO nav_footer (name, icon, route_url, is_active, sort_order) VALUES ('Twitter', 'Twitter', 'https://twitter.com/nhlanhlamalaza_', true, 2) ON CONFLICT (route_url) DO UPDATE SET name = EXCLUDED.name, icon = EXCLUDED.icon`,
+			tx`INSERT INTO nav_footer (name, icon, route_url, is_active, sort_order) VALUES ('GitHub', 'Github', 'https://github.com/omoinjm', true, 3) ON CONFLICT (route_url) DO UPDATE SET name = EXCLUDED.name, icon = EXCLUDED.icon`,
 			//#endregion
 
 			//#region Mail Template
