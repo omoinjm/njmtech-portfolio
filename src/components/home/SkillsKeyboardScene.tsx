@@ -78,8 +78,8 @@ const SECTION_CONFIGS: Record<HomeSectionId, SectionConfig> = {
       yaw: 0.48,
       roll: -0.08,
       x: 0.72,
-      y: -0.42,
-      scale: 1.5,
+      y: -0.55,
+      scale: 1.35,
     },
     useSkillsProgress: true,
     idlePitch: 0.008,
@@ -368,14 +368,14 @@ const createIconTexture = async (skill: KeyboardSkill) => {
     const width = image.width * scale;
     const height = image.height * scale;
     const x = (256 - width) / 2;
-    const y = 48;
+    const y = (256 - height) / 2;
     context.drawImage(image, x, y, width, height);
   } else {
     context.fillStyle = "#f8fafc";
     context.font = "bold 92px sans-serif";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.fillText(skill.label.slice(0, 1), 128, 104);
+    context.fillText(skill.label.slice(0, 1), 128, 128);
   }
 
   const texture = new THREE.CanvasTexture(canvas);
@@ -455,7 +455,7 @@ const getResponsiveCameraState = (
   const wideViewportStrength = clamp((aspect - 0.6) / 0.95, 0, 1);
 
   return {
-    fov: THREE.MathUtils.lerp(31, 22, wideViewportStrength),
+    fov: THREE.MathUtils.lerp(34, 25, wideViewportStrength),
     x: THREE.MathUtils.lerp(0.35, 1.5, wideViewportStrength),
     y: THREE.MathUtils.lerp(3.2, 3.6, wideViewportStrength),
     z: THREE.MathUtils.lerp(12.9, 11, wideViewportStrength),
