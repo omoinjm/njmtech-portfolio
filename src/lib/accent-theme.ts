@@ -64,10 +64,28 @@ export const ACCENT_THEMES: AccentTheme[] = [
 
 const accentThemeIds = ACCENT_THEMES.map((theme) => theme.id);
 
+const JS_UNSAFE_CHAR_MAP: Record<string, string> = {
+  "<": "\\u003C",
+  ">": "\\u003E",
+  "/": "\\u002F",
+  "\\": "\\\\",
+  "\b": "\\b",
+  "\f": "\\f",
+  "\n": "\\n",
+  "\r": "\\r",
+  "\t": "\\t",
+  "\0": "\\0",
+  "\u2028": "\\u2028",
+  "\u2029": "\\u2029",
+};
+
+const escapeUnsafeChars = (value: string): string =>
+  value.replace(/[<>\/\\\b\f\n\r\t\0\u2028\u2029]/g, (char) => JS_UNSAFE_CHAR_MAP[char] ?? char);
+
 export const isAccentThemeId = (value: string): value is AccentThemeId =>
   accentThemeIds.includes(value as AccentThemeId);
 
 export const getAccentTheme = (id: AccentThemeId) =>
   ACCENT_THEMES.find((theme) => theme.id === id) ?? ACCENT_THEMES[0];
 
-export const ACCENT_THEME_BOOT_SCRIPT = `(function(){var key=${JSON.stringify(ACCENT_THEME_STORAGE_KEY)};var fallback=${JSON.stringify(DEFAULT_ACCENT_THEME)};var ids=${JSON.stringify(accentThemeIds)};try{var value=localStorage.getItem(key);var theme=ids.indexOf(value)>-1?value:fallback;document.documentElement.dataset.accentTheme=theme;}catch(e){document.documentElement.dataset.accentTheme=fallback;}})();`;
+export const ACCENT_THEME_BOOT_SCRIPT = `(function(){var key=${escapeUnsafeChars(JSON.stringify(ACCENT_THEME_STORAGE_KEY))};var fallback=${escapeUnsafeChars(JSON.stringify(DEFAULT_ACCENT_THEME))};var ids=${escapeUnsafeChars(JSON.stringify(accentThemeIds))};try{var value=localStorage.getItem(key);var theme=ids.indexOf(value)>-1?value:fallback;document.documentElement.dataset.accentTheme=theme;}catch(e){document.documentElement.dataset.accentTheme=fallback;}})();`;
