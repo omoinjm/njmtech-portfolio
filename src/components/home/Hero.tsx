@@ -101,25 +101,7 @@ export const Hero = () => {
           </motion.div>
 
           {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="flex gap-8 mt-12 justify-center lg:justify-start"
-          >
-            {[
-              { value: "5+", label: "Years Experience" },
-              { value: "10+", label: "Projects Completed" },
-              { value: "3+", label: "Happy Clients" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl font-bold gradient-text">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
+
         </motion.div>
 
         {/* Animated Visual */}

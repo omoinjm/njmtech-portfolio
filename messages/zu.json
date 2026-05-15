@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "projects": "Imisebenzi",
+    "contact": "Xhumana",
+    "links": "Izixhumanisi"
+  },
+  "hero": {
+    "greeting": "Sawubona, ngi",
+    "name": "Nhlanhla Junior Malaza",
+    "title": "Unjiniyela Wesoftware & Unjiniyela Wama-DevOps",
+    "subtitle": "Ngakha izisombululo ezikhulayo ngezitekinoloji zanamuhla. Ngijabule nge-AI kanye ne-cloud infrastructure.",
+    "cta_primary": "Buka Umsebenzi Wami",
+    "cta_secondary": "Xhumana Nami"
+  },
+  "skills": {
+    "heading": "Amakhono Nezitekinoloji",
+    "subheading": "Izitekinoloji engisebenza nazo"
+  },
+  "services": {
+    "heading": "Izinsizakalo Nobuchwepheshe",
+    "subheading": "Engingakwenzela khona"
+  },
+  "newsletter": {
+    "heading": "Hlala Uzwile",
+    "subheading": "Thola izibuyekezo zakamuva zemisebenzi yami nezindatshana.",
+    "placeholder": "Faka i-imeyili yakho",
+    "cta": "Bhalisa"
+  },
+  "contact": {
+    "heading": "Xhumana Nami",
+    "subheading": "Unephrojekthi engqondweni? Asisho.",
+    "name_label": "Igama",
+    "email_label": "I-imeyili",
+    "message_label": "Umlayezo",
+    "submit": "Thumela Umlayezo"
+  },
+  "projects": {
+    "heading": "Imisebenzi Yami",
+    "subheading": "Iqoqo lezinto engizakhile"
+  }
+}

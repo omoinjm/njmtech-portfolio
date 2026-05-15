@@ -1,0 +1,41 @@
+{
+  "nav": {
+    "projects": "Projects",
+    "contact": "Contact",
+    "links": "Links"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "name": "Nhlanhla Junior Malaza",
+    "title": "Software Developer & DevOps Engineer",
+    "subtitle": "Building scalable solutions with modern technologies. Passionate about AI integrations and cloud infrastructure.",
+    "cta_primary": "View My Work",
+    "cta_secondary": "Get In Touch"
+  },
+  "skills": {
+    "heading": "Skills & Technologies",
+    "subheading": "Technologies I work with"
+  },
+  "services": {
+    "heading": "Services & Expertise",
+    "subheading": "What I can do for you"
+  },
+  "newsletter": {
+    "heading": "Stay Updated",
+    "subheading": "Get the latest updates on my projects and articles.",
+    "placeholder": "Enter your email",
+    "cta": "Subscribe"
+  },
+  "contact": {
+    "heading": "Get In Touch",
+    "subheading": "Have a project in mind? Let's talk.",
+    "name_label": "Name",
+    "email_label": "Email",
+    "message_label": "Message",
+    "submit": "Send Message"
+  },
+  "projects": {
+    "heading": "My Projects",
+    "subheading": "A collection of things I've built"
+  }
+}

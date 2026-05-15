@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { FooterModel, MenuModel } from "@/types";
 import * as LucideIcons from "lucide-react";
 import { AccentThemePicker } from "@/components/layout/AccentThemePicker";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 
 export const Navbar = ({ data }) => {
@@ -91,6 +92,7 @@ export const Navbar = ({ data }) => {
           </Link>
 
           <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher />
             <AccentThemePicker />
             <Link
               href="https://bio.njmtech.co.za/"
@@ -150,6 +152,7 @@ export const Navbar = ({ data }) => {
             {/* Bottom — social icons + connect button */}
             <div className="flex flex-col items-center gap-6 pb-12 pt-8 border-t border-border">
               <AccentThemePicker />
+              <LanguageSwitcher />
               <div className="flex items-center gap-8">
                 {socialLinks.map((social) => {
                   const Icon = LucideIcons[social.icon as keyof typeof LucideIcons] as React.ElementType | undefined;
