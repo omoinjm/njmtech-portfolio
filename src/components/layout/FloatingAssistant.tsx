@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -44,15 +45,6 @@ type PromptChip = {
 
 type ChatMode = "copilot" | "websocket";
 
-const promptChips: PromptChip[] = [
-  { id: "about", label: "Who is Nhlanhla?", prompt: "Who is Nhlanhla Junior Malaza?" },
-  { id: "services", label: "Services", prompt: "What services do you offer?" },
-  { id: "skills", label: "Tech stack", prompt: "What technologies do you work with?" },
-  { id: "projects", label: "Projects", prompt: "Can I see the projects?" },
-  { id: "contact", label: "Contact", prompt: "How can I get in touch?" },
-  { id: "resume", label: "Resume", prompt: "Can I view the resume?" },
-];
-
 const omoiStatuses = [
   "Kumogakure's finest... I suppose.",
   "Munching on a grape lollipop...",
@@ -84,6 +76,17 @@ const ctaBaseClassName = "inline-flex items-center gap-2 rounded-full px-4 py-2 
 const isDev = process.env.NODE_ENV === "development";
 
 export const FloatingAssistant = () => {
+  const t = useTranslations("assistant");
+
+  const promptChips: PromptChip[] = [
+    { id: "about", label: t("chip_about"), prompt: "Who is Nhlanhla Junior Malaza?" },
+    { id: "services", label: t("chip_services"), prompt: "What services do you offer?" },
+    { id: "skills", label: t("chip_skills"), prompt: "What technologies do you work with?" },
+    { id: "projects", label: t("chip_projects"), prompt: "Can I see the projects?" },
+    { id: "contact", label: t("chip_contact"), prompt: "How can I get in touch?" },
+    { id: "resume", label: t("chip_resume"), prompt: "Can I view the resume?" },
+  ];
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<AssistantMessage[]>(initialMessages);
   const [prompt, setPrompt] = useState("");
@@ -339,13 +342,13 @@ export const FloatingAssistant = () => {
             </div>
 
             <div className="border-t border-border bg-background px-4 py-4">
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Ask anything</p>
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{t("ask_anything")}</p>
               <form onSubmit={(e) => { e.preventDefault(); appendConversation(prompt); }} className="flex items-center gap-2">
                 <input
                   type="text"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Ask about skills, services, projects, contact..."
+                  placeholder={t("placeholder")}
                   disabled={activeLoading}
                   className="h-11 flex-1 rounded-full border border-border bg-card px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent/50 disabled:opacity-50"
                 />

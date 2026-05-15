@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FooterModel, MenuModel } from "@/types";
@@ -11,6 +12,7 @@ import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 
 
 export const Navbar = ({ data }) => {
+  const t = useTranslations("nav");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -99,7 +101,7 @@ export const Navbar = ({ data }) => {
               target="_blank"
               className="ml-2 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
             >
-              Links
+              {t("links")}
             </Link>
           </div>
 
@@ -176,7 +178,7 @@ export const Navbar = ({ data }) => {
                 className="px-8 py-3 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Links
+                {t("links")}
               </Link>
             </div>
           </motion.div>

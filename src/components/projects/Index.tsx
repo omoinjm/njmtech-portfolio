@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState, useMemo } from "react";
@@ -11,6 +12,7 @@ interface ProjectsProps {
 }
 
 export const Projects = ({ data }: ProjectsProps) => {
+  const t = useTranslations("projects");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -72,14 +74,13 @@ export const Projects = ({ data }: ProjectsProps) => {
           className="text-center mb-16"
         >
           <span className="text-accent font-semibold text-sm tracking-wider uppercase">
-            Portfolio
+            {t("label")}
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
-            Featured <span className="gradient-text">Projects</span>
+            {t("heading")} <span className="gradient-text">{t("heading_gradient")}</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Here are some of my recent works. Each project represents unique
-            challenges and creative solutions.
+            {t("subheading")}
           </p>
         </motion.div>
 

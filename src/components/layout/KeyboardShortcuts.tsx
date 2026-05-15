@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -10,19 +11,20 @@ import {
 import { Keyboard } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const shortcuts = [
-  { key: "Ctrl/Cmd + K", description: "Toggle AI Assistant" },
-  { key: "Ctrl/Cmd + L", description: "Reset AI Assistant Chat" },
-  { key: "Alt + 1", description: "Navigate to Home" },
-  { key: "Alt + 2", description: "Navigate to Projects" },
-  { key: "Alt + 3", description: "Navigate to Contact" },
-  { key: "Esc", description: "Close Assistant or Menus" },
-  { key: "?", description: "Show Keyboard Shortcuts" },
-];
-
 export const KeyboardShortcuts = () => {
+  const t = useTranslations("shortcuts");
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
+
+  const shortcuts = [
+    { key: "Ctrl/Cmd + K", description: t("toggle_ai") },
+    { key: "Ctrl/Cmd + L", description: t("reset_ai") },
+    { key: "Alt + 1", description: t("nav_home") },
+    { key: "Alt + 2", description: t("nav_projects") },
+    { key: "Alt + 3", description: t("nav_contact") },
+    { key: "Esc", description: t("close") },
+    { key: "?", description: t("show") },
+  ];
 
   useEffect(() => {
     if (isMobile) return;
@@ -52,7 +54,7 @@ export const KeyboardShortcuts = () => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl font-bold">
             <Keyboard className="h-5 w-5 text-accent" />
-            Keyboard Shortcuts
+            {t("title")}
           </DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">

@@ -4,7 +4,128 @@
     "contact": "Xhumana",
     "links": "Izixhumanisi"
   },
+  "footer": {
+    "copyright": "Wonke amalungelo agcinwe.",
+    "keyboard_shortcuts": "Izinqamuleli Zekhiybhodi",
+    "seo_guide": "Umhlahlandlela we-SEO"
+  },
   "hero": {
+    "welcome_badge": "Wamukelekile ku-Portfolio Yami",
+    "name": "Nhlanhla Junior Malaza",
+    "title": "Unjiniyela Wesoftware, Unjiniyela we-DevOps & Inzexpert ye-AI Integrations",
+    "subtitle": "Unjiniyela wesoftware othanda umsebenzi wakhe, olungele ukufunda nokuzijwayeza kunoma yimuphi umuntu wesoftware. Ngihlale ngizama ukuzithuthukisa kanye namakhono ami. Ngiyajabula ukusebenza nabanye naseqenjini.",
+    "cta_primary": "Xhumana Nami",
+    "cta_resume": "I-CV",
+    "keyboard_label": "Landela ikhiybhodi",
+    "keyboard_desc": "Skrola ikhasi ulandele ikhiybhodi, bese usho phezu kwamakinobho esigabeni samakhono"
+  },
+  "skills": {
+    "label": "Amakhono Ekhiybhodi",
+    "heading": "Amakhono",
+    "heading_gradient": "Nobuchwepheshe",
+    "hint": "(Cebo: shweba phezu kwengcezu)",
+    "idle_label": "Ukusebenzisana",
+    "idle_title": "Izinto Zobuchwepheshe",
+    "idle_desc_desktop": "Hambela kulesi sigaba, bese usho phezu kwengcezu ukuze uhlole ingxenye yezinto zami.",
+    "idle_desc_mobile": "Skrola ungene kulesi sigaba, bese usho phezu kwengcezu ukuze uhlole ingxenye yezinto zami."
+  },
+  "services": {
+    "label": "Engikwenzayo",
+    "heading": "Izinsizakalo",
+    "heading_gradient": "Nobuchwepheshe",
+    "subheading": "Indawo ephelele yezinsizakalo zokuthuthukisa ukuze izimvo zakho zibe yiqiniso ngobuchwepheshe banamuhla.",
+    "cta": "Qala Ingxoxo",
+    "cta_sub": "Unephrojekthi engqondweni? Asisho.",
+    "item_0_title": "Ukuthuthukisa Iwebhusayithi",
+    "item_0_desc": "Ukwakha izinhlelo ze-web ezisetshenziswa ngendlela ekhethekile, ezisebenza kahle, kusetshenziswa izinsizakalo zanamuhla njengeReact, Next.js, neVue.js.",
+    "item_1_title": "Ukuthuthukisa Izinhlelo Zeselula",
+    "item_1_desc": "Ukwakha izinhlelo ze-mobile ezisebenza kuzo zombili izinhlelo ngeReact Native neFlutter ze-iOS ne-Android.",
+    "item_2_title": "Izisombululo Zefu",
+    "item_2_desc": "Ukwakha nokufaka isikhungo se-cloud esikhulayo ku-AWS, GCP, ne-Azure.",
+    "item_3_title": "Ukuhlanganisa i-AI",
+    "item_3_desc": "Ukufaka amakhono e-AI nokufunda kwezinto eziphilayo ezinhlelweni ukuze kuzenzeke imisebenzi ngokwayo nokuletha izimpendulo ezihlakanipha kubasebenzisi.",
+    "item_4_title": "Ukuthuthukisa Inhlangothi Yangemuva",
+    "item_4_desc": "Ukwakha ama-API anekhono, ama-microservice, nezakhiwo ze-database ezinkampanini ezinkulu.",
+    "item_5_title": "I-DevOps Nokuhlanganisa Okuqhubekayo",
+    "item_5_desc": "Ukufaka izinhlelo ze-CI/CD ezizenzakalayo, ukufaka izinto ezisezitsheni, nezakhiwo zemishini."
+  },
+  "newsletter": {
+    "badge": "Hlala Uzwile",
+    "heading": "Bhalisa Ku-Nuusletha Yami",
+    "subheading": "Thola izibuyekezo zakamuva ngemisebenzi ye-web, izindaba zobuchwepheshe, nokuqukethwe okukhethekile okufikiswa ngqo ku-inbox yakho. Akukho spam, hoxisa noma nini.",
+    "placeholder": "Faka i-imeyili yakho",
+    "cta": "Bhalisa",
+    "cta_loading": "Iyabhaliswa...",
+    "disclaimer": "Ngokubhalisa, uyavuma ukwamukelwa kwama-imeyili avela kimi. Ungahoxisa noma nini.",
+    "toast_required_title": "I-imeyili iyadingeka",
+    "toast_required_desc": "Sicela ufake ikheli le-imeyili yakho.",
+    "toast_success_title": "Ubhalisile! 🎉",
+    "toast_success_desc": "Siyabonga ngokubhalisa. Hlola i-inbox yakho ukuqinisekisa.",
+    "toast_error_title": "Ukubhalisa kwehlulekile",
+    "toast_error_desc": "Kukhona okungahambanga kahle. Sicela uzame futhi.",
+    "toast_network_title": "Iphutha lenethiwekhi",
+    "toast_network_desc": "Ayikwazanga ukuxhumeka. Sicela uhlole uxhumeko lwakho uzame futhi."
+  },
+  "contact": {
+    "label": "Xhumana",
+    "heading": "Asisebenzisane",
+    "heading_gradient": "Ndawonye",
+    "subheading": "Ngihlale ngiyimeme ukuxoxa ngamaphrojekthi amasha, imibono ekhuthazayo, noma amathuba okuba ingxenye yemibono yakho.",
+    "info_heading": "Ulwazi Lokuxhumana",
+    "info_desc": "Zizwa ukhululekile ukuxhumana nami ngawo noma muphi walamazindlela. Ngijwayele ukuphendula phakathi nehora lama-24.",
+    "email_label": "I-imeyili",
+    "phone_label": "Ucingo",
+    "location_label": "Indawo",
+    "follow": "Ngilandele ku",
+    "name_label": "Igama Lakho",
+    "email_field_label": "I-imeyili Yakho",
+    "subject_label": "Isihloko",
+    "message_label": "Umlayezo",
+    "name_placeholder": "John Doe",
+    "email_placeholder": "john@isibonelo.com",
+    "subject_placeholder": "Imibuzo Ngephrojekthi",
+    "message_placeholder": "Ngixoxele ngephrojekthi yakho...",
+    "submit": "Thumela Umlayezo",
+    "submitting": "Iyathunyelwa...",
+    "toast_success_title": "Umlayezo Uthunyelwe! ✉️",
+    "toast_success_desc": "Ngizophendula phakathi nehora lama-24.",
+    "toast_error_title": "Ukuthumela kwehlulekile",
+    "toast_error_desc": "Kukhona okungahambanga kahle. Sicela uzame futhi.",
+    "toast_network_title": "Iphutha lenethiwekhi",
+    "toast_network_desc": "Ayikwazanga ukuxhumeka. Sicela uhlole uxhumeko lwakho uzame futhi."
+  },
+  "projects": {
+    "label": "Ikhava",
+    "heading": "Imisebenzi",
+    "heading_gradient": "Eyakhethiwe",
+    "subheading": "Nants'imisebenzi yami yakamuva. Iphrojekthi ngayinye ikhombisa izinselelo ezikhethekile nezisombululo ezikhuthazayo."
+  },
+  "not_found": {
+    "message": "Ikhasi alitholakalanga",
+    "go_home": "Buyela Ekhaya"
+  },
+  "assistant": {
+    "ask_anything": "Buza noma yini",
+    "placeholder": "Buza ngamakhono, izinsizakalo, imisebenzi, ukuxhumana...",
+    "chip_about": "Ubani uNhlanhla?",
+    "chip_services": "Izinsizakalo",
+    "chip_skills": "Izinto Zobuchwepheshe",
+    "chip_projects": "Imisebenzi",
+    "chip_contact": "Xhumana",
+    "chip_resume": "I-CV"
+  },
+  "shortcuts": {
+    "title": "Izinqamuleli Zekhiybhodi",
+    "toggle_ai": "Vula/Vala Umsizi we-AI",
+    "reset_ai": "Setha Kabusha Ingxoxo Nomsizi we-AI",
+    "nav_home": "Yiya Ekhaya",
+    "nav_projects": "Yiya Emisebenzi",
+    "nav_contact": "Yiya Ekuxhumaneni",
+    "close": "Vala Umsizi Noma Imenyu",
+    "show": "Bonisa Izinqamuleli Zekhiybhodi"
+  }
+}
+
     "welcome_badge": "Wamukelekile ku-Portfolio Yami",
     "name": "Nhlanhla Junior Malaza",
     "title": "Unjiniyela Wesoftware, Unjiniyela we-DevOps & Inzexpert ye-AI Integrations",

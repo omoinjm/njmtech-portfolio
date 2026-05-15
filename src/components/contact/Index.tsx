@@ -1,11 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useToast } from "@/hooks/use-toast";
 import { motion, useInView } from "framer-motion";
 import { Github, Linkedin, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
 import { useRef, useState } from "react";
 
 export const Contact = () => {
+  const t = useTranslations("contact");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { toast } = useToast();
@@ -33,21 +35,21 @@ export const Contact = () => {
 
       if (res.ok) {
         toast({
-          title: "Message Sent! ✉️",
-          description: data.message ?? "I'll get back to you within 24 hours.",
+          title: t("toast_success_title"),
+          description: data.message ?? t("toast_success_desc"),
         });
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         toast({
-          title: "Failed to send",
-          description: data.message ?? "Something went wrong. Please try again.",
+          title: t("toast_error_title"),
+          description: data.message ?? t("toast_error_desc"),
           variant: "destructive",
         });
       }
     } catch {
       toast({
-        title: "Network error",
-        description: "Could not connect. Please check your connection and try again.",
+        title: t("toast_network_title"),
+        description: t("toast_network_desc"),
         variant: "destructive",
       });
     } finally {
@@ -58,6 +60,12 @@ export const Contact = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const contactItems = [
+    { icon: Mail, label: t("email_label"), value: "njmalaza@outlook.com", href: "mailto:njmalaza@outlook.com" },
+    { icon: Phone, label: t("phone_label"), value: "+27 (72) 432-6766", href: "tel:+27724326766" },
+    { icon: MapPin, label: t("location_label"), value: "Johannesburg", href: "#" },
+  ];
 
   return (
     <section
@@ -75,14 +83,13 @@ export const Contact = () => {
           className="text-center mb-16"
         >
           <span className="text-accent font-semibold text-sm tracking-wider uppercase">
-            Get In Touch
+            {t("label")}
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
-            Let's Work <span className="gradient-text">Together</span>
+            {t("heading")} <span className="gradient-text">{t("heading_gradient")}</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            I'm always open to discussing new projects, creative ideas, or
-            opportunities to be part of your visions.
+            {t("subheading")}
           </p>
         </motion.div>
 
@@ -95,20 +102,13 @@ export const Contact = () => {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-              <p className="text-muted-foreground mb-8">
-                Feel free to reach out through any of these channels. I typically
-                respond within 24 hours.
-              </p>
+              <h3 className="text-2xl font-bold mb-6">{t("info_heading")}</h3>
+              <p className="text-muted-foreground mb-8">{t("info_desc")}</p>
             </div>
 
             {/* Contact Details */}
             <div className="space-y-6">
-              {[
-                { icon: Mail, label: "Email", value: "njmalaza@outlook.com", href: "mailto:njmalaza@outlook.com" },
-                { icon: Phone, label: "Phone", value: "+27 (72) 432-6766", href: "tel:+27724326766" },
-                { icon: MapPin, label: "Location", value: "Johannesburg", href: "#" },
-              ].map((item, index) => (
+              {contactItems.map((item, index) => (
                 <motion.a
                   key={item.label}
                   href={item.href}
@@ -132,7 +132,7 @@ export const Contact = () => {
 
             {/* Social Links */}
             <div className="pt-8 border-t border-border">
-              <p className="text-sm text-muted-foreground mb-4">Follow me on</p>
+              <p className="text-sm text-muted-foreground mb-4">{t("follow")}</p>
               <div className="flex gap-4">
                 {[
                   { icon: Github, href: "https://github.com/omoinjm", label: "GitHub" },
@@ -165,7 +165,7 @@ export const Contact = () => {
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Your Name
+                    {t("name_label")}
                   </label>
                   <input
                     type="text"
@@ -175,12 +175,12 @@ export const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-xl glass-input focus:outline-none"
-                    placeholder="John Doe"
+                    placeholder={t("name_placeholder")}
                   />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Your Email
+                    {t("email_field_label")}
                   </label>
                   <input
                     type="email"
@@ -190,14 +190,14 @@ export const Contact = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-xl glass-input focus:outline-none"
-                    placeholder="john@example.com"
+                    placeholder={t("email_placeholder")}
                   />
                 </div>
               </div>
 
               <div>
                 <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                  Subject
+                  {t("subject_label")}
                 </label>
                 <input
                   type="text"
@@ -207,13 +207,13 @@ export const Contact = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-xl glass-input focus:outline-none"
-                  placeholder="Project Inquiry"
+                  placeholder={t("subject_placeholder")}
                 />
               </div>
 
               <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  Message
+                  {t("message_label")}
                 </label>
                 <textarea
                   id="message"
@@ -223,7 +223,7 @@ export const Contact = () => {
                   required
                   rows={5}
                   className="w-full px-4 py-3 rounded-xl glass-input focus:outline-none resize-none"
-                  placeholder="Tell me about your project..."
+                  placeholder={t("message_placeholder")}
                 />
               </div>
 
@@ -233,10 +233,10 @@ export const Contact = () => {
                 className="w-full px-8 py-4 rounded-xl gradient-bg text-foreground font-semibold hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
-                  "Sending..."
+                  t("submitting")
                 ) : (
                   <>
-                    Send Message
+                    {t("submit")}
                     <Send className="w-4 h-4" />
                   </>
                 )}
@@ -248,3 +248,4 @@ export const Contact = () => {
     </section>
   );
 };
+
