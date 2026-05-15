@@ -439,13 +439,15 @@ const getResponsivePose = (
 ): KeyboardPose => {
   const aspect = viewportWidth / Math.max(viewportHeight, 1);
   const wideViewportStrength = clamp((aspect - 0.55) / 0.85, 0, 1);
-  const xScale = THREE.MathUtils.lerp(0.22, 1, wideViewportStrength);
+  const mobileViewportStrength = clamp((768 - viewportWidth) / 420, 0, 1);
+  const xScale = THREE.MathUtils.lerp(0.24, 1, wideViewportStrength);
+  const sideBias = Math.sign(pose.x || 1) * 0.18 * mobileViewportStrength;
   const scaleFactor = THREE.MathUtils.lerp(0.58, 1, wideViewportStrength);
   const yLift = THREE.MathUtils.lerp(0.34, 0, wideViewportStrength);
 
   return {
     ...pose,
-    x: pose.x * xScale,
+    x: pose.x * xScale + sideBias,
     y: pose.y + yLift,
     scale: pose.scale * scaleFactor,
   };
