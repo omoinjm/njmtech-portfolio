@@ -6,6 +6,7 @@ import { FloatingAssistant } from "./FloatingAssistant";
 import { Navbar } from "./Navbar";
 import { KeyboardShortcuts } from "./KeyboardShortcuts";
 import { SEOGuideDialog } from "./SEOGuideDialog";
+import { MouseGlow } from "./MouseGlow";
 import { MenuModel, FooterModel, LinkModel } from "@/types";
 import DataService from "@/services/data.service";
 import { PageLoader } from "@/components/ui/page-loader";
@@ -57,6 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <FloatingAssistant />
       <KeyboardShortcuts />
       <SEOGuideDialog />
+      <MouseGlow />
     </div>
   );
 };

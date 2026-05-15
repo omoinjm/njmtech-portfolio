@@ -551,7 +551,7 @@ export function SkillsKeyboardScene({
       new THREE.CircleGeometry(3.3, 48),
       new THREE.MeshBasicMaterial({
         color: accentTheme.chipTo,
-        opacity: 0.12,
+        opacity: 0,
         transparent: true,
       }),
     );
@@ -801,13 +801,6 @@ export function SkillsKeyboardScene({
         0.06,
       );
       keyboardGroup.scale.setScalar(nextScale);
-      (
-        glowMesh.material as THREE.MeshBasicMaterial
-      ).opacity = THREE.MathUtils.lerp(
-        (glowMesh.material as THREE.MeshBasicMaterial).opacity,
-        sectionConfig.glowOpacity,
-        0.08,
-      );
 
       keyRuntimes.forEach((runtime) => {
         const isHovered =

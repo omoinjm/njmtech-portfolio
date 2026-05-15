@@ -28,7 +28,7 @@ export function AccentThemePicker({
 
   return (
     <div
-      className={`flex items-center gap-1 rounded-full border border-[#7ad39b]/20 bg-[#0b2a18]/70 p-1.5 shadow-[0_10px_30px_rgba(7,31,18,0.28)] backdrop-blur-md ${className}`}
+      className={`flex items-center gap-1 rounded-full border border-primary/20 bg-background/70 p-1.5 shadow-[0_10px_30px_rgba(7,31,18,0.28)] backdrop-blur-md ${className}`}
       aria-label="Accent theme picker"
       role="group"
     >
@@ -45,8 +45,8 @@ export function AccentThemePicker({
             aria-pressed={isActive}
             className={`flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-200 ${
               isActive
-                ? "border-[#9bf5be]/40 bg-[#9bf5be] text-[#0e2116] shadow-[0_0_0_1px_rgba(155,245,190,0.18),0_0_24px_rgba(112,255,182,0.3)]"
-                : "border-transparent text-[#b8d7c2] hover:border-[#7ad39b]/20 hover:bg-white/5 hover:text-white"
+                ? "border-primary/40 bg-primary text-primary-foreground shadow-[0_0_0_1px_hsl(var(--primary)/0.18),0_0_24px_hsl(var(--primary)/0.3)]"
+                : "border-transparent text-muted-foreground hover:border-primary/20 hover:bg-white/5 hover:text-foreground"
             }`}
             title={theme.label}
           >
