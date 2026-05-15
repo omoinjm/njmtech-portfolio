@@ -364,9 +364,13 @@ const createIconTexture = async (skill: KeyboardSkill) => {
   const image = await loadImage(skill.iconSrc);
 
   if (image) {
-    const scale = Math.min(148 / image.width, 148 / image.height, 1);
-    const width = image.width * scale;
-    const height = image.height * scale;
+    // SVGs without explicit width/height may report naturalWidth=0 or 300×150.
+    // Fall back to the viewBox dimensions (128×128) for consistent centered rendering.
+    const srcW = image.naturalWidth > 0 ? image.naturalWidth : 128;
+    const srcH = image.naturalHeight > 0 ? image.naturalHeight : 128;
+    const scale = Math.min(148 / srcW, 148 / srcH);
+    const width = srcW * scale;
+    const height = srcH * scale;
     const x = (256 - width) / 2;
     const y = (256 - height) / 2;
     context.drawImage(image, x, y, width, height);
