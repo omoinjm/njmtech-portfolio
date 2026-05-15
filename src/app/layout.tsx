@@ -9,6 +9,7 @@ import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteConfig } from "@/utils/seo";
 import { Analytics } from "@vercel/analytics/next";
+import { ACCENT_THEME_BOOT_SCRIPT } from "@/lib/accent-theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -98,6 +99,7 @@ export default function RootLayout({
         <link rel="me" href={siteConfig.social.linkedin} />
         <link rel="me" href={siteConfig.social.github} />
         <link rel="me" href={`https://twitter.com/njmalaza`} />
+        <script dangerouslySetInnerHTML={{ __html: ACCENT_THEME_BOOT_SCRIPT }} />
       </head>
       <body className={inter.className}>
         <Providers>

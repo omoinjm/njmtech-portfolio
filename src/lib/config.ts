@@ -41,7 +41,7 @@ class ConfigService {
 
   /**
    * Validates environment variables against schema
-   * Throws if validation fails
+   * Throws if validation fails, unless in build phase
    */
   private validateEnv(): Config {
     const result = envSchema.safeParse(process.env);
@@ -51,9 +51,17 @@ class ConfigService {
         .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
         .join("\n");
 
-      throw new Error(
-        `❌ Invalid environment variables:\n${missingVars}\n\nPlease check your .env.local file.`
-      );
+      const errorMessage = `❌ Invalid environment variables:\n${missingVars}\n\nPlease check your .env.local file.`;
+
+      // During build time, we might not have all environment variables (especially secrets)
+      // We log a warning instead of throwing to allow the build to complete.
+      // NEXT_PHASE is set by Next.js during build.
+      if (process.env.NEXT_PHASE === "phase-production-build") {
+        console.warn(`[Config] Build-time validation warning:\n${errorMessage}`);
+        return result.data as Config;
+      }
+
+      throw new Error(errorMessage);
     }
 
     return result.data;

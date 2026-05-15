@@ -60,7 +60,12 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 bg-card/30" ref={ref}>
+    <section
+      id="contact"
+      data-keyboard-section="contact"
+      className="py-24 bg-card/30"
+      ref={ref}
+    >
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div
