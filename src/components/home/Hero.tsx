@@ -3,11 +3,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { publicConfig } from "@/lib/config.client";
 import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
 
 export const Hero = () => {
+  const t = useTranslations("hero");
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [showInteractionPrompt, setShowInteractionPrompt] = useState(true);
 
@@ -49,7 +51,7 @@ export const Hero = () => {
           >
             <Sparkles className="w-4 h-4 text-accent" />
             <span className="text-sm text-muted-foreground">
-              Welcome to my Portfolio
+              {t("welcome_badge")}
             </span>
           </motion.div>
 
@@ -59,7 +61,7 @@ export const Hero = () => {
             transition={{ delay: 0.3 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
           >
-            <span className="gradient-text">Nhlanhla Junior Malaza</span>
+            <span className="gradient-text">{t("name")}</span>
           </motion.h1>
 
           <motion.p
@@ -68,7 +70,7 @@ export const Hero = () => {
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground mb-4"
           >
-            Software Developer, DevOps Engineer & AI Integrations Specialist
+            {t("title")}
           </motion.p>
 
           <motion.p
@@ -77,7 +79,7 @@ export const Hero = () => {
             transition={{ delay: 0.5 }}
             className="text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-8"
           >
-            A passionate software developer, willing to learn and adapt to any software environment. I am always striving to improve myself and my skills. I enjoy working with others and within a team.
+            {t("subtitle")}
           </motion.p>
 
           <motion.div
@@ -88,13 +90,13 @@ export const Hero = () => {
           >
             <Link href="/contact" className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
-              Get In Touch
+              {t("cta_primary")}
             </Link>
             <button
               onClick={() => setIsResumeOpen(true)}
               className="px-8 py-4 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
-              Resume
+              {t("cta_resume")}
               <ArrowRight className="w-4 h-4" />
             </button>
 
@@ -129,11 +131,10 @@ export const Hero = () => {
                     </div>
                   </div>
                   <p className="text-balance text-sm uppercase tracking-[0.3em] text-foreground/45 mb-3">
-                    Follow the keyboard
+                    {t("keyboard_label")}
                   </p>
                   <p className="text-balance text-base md:text-lg text-foreground/78">
-                      Scroll through the page to follow the keyboard, then hover
-                      the keys in the skills section
+                    {t("keyboard_desc")}
                   </p>
                 </motion.div>
               ) : null}
@@ -167,3 +168,4 @@ export const Hero = () => {
     </section>
   );
 };
+

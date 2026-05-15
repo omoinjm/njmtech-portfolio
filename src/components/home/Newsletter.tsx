@@ -2,12 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Mail, Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 export const Newsletter = () => {
+  const t = useTranslations("newsletter");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -17,8 +19,8 @@ export const Newsletter = () => {
 
     if (!email) {
       toast({
-        title: "Email required",
-        description: "Please enter your email address.",
+        title: t("toast_required_title"),
+        description: t("toast_required_desc"),
         variant: "destructive",
       });
       return;
@@ -37,21 +39,21 @@ export const Newsletter = () => {
 
       if (res.ok && data.success) {
         toast({
-          title: "Subscribed! 🎉",
-          description: "Thank you for subscribing. Check your inbox to confirm.",
+          title: t("toast_success_title"),
+          description: t("toast_success_desc"),
         });
         setEmail("");
       } else {
         toast({
-          title: "Subscription failed",
-          description: data.error ?? "Something went wrong. Please try again.",
+          title: t("toast_error_title"),
+          description: data.error ?? t("toast_error_desc"),
           variant: "destructive",
         });
       }
     } catch {
       toast({
-        title: "Network error",
-        description: "Could not connect. Please check your connection and try again.",
+        title: t("toast_network_title"),
+        description: t("toast_network_desc"),
         variant: "destructive",
       });
     } finally {
@@ -80,16 +82,15 @@ export const Newsletter = () => {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-6">
                 <Mail className="w-4 h-4 text-accent" />
-                <span className="text-sm text-muted-foreground">Stay Updated</span>
+                <span className="text-sm text-muted-foreground">{t("badge")}</span>
               </div>
 
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Subscribe to My <span className="gradient-text">Newsletter</span>
+                {t("heading")}
               </h2>
 
               <p className="text-muted-foreground mb-8 max-w-md">
-                Get the latest updates on web development, tech insights, and exclusive
-                content delivered straight to your inbox. No spam, unsubscribe anytime.
+                {t("subheading")}
               </p>
 
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md">
@@ -97,7 +98,7 @@ export const Newsletter = () => {
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t("placeholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-12 h-12 bg-card border-border rounded-full"
@@ -109,10 +110,10 @@ export const Newsletter = () => {
                   className="h-12 px-8 rounded-full gradient-bg hover:opacity-90 transition-opacity"
                 >
                   {isLoading ? (
-                    "Subscribing..."
+                    t("cta_loading")
                   ) : (
                     <>
-                      Subscribe
+                      {t("cta")}
                       <Send className="w-4 h-4 ml-2" />
                     </>
                   )}
@@ -120,7 +121,7 @@ export const Newsletter = () => {
               </form>
 
               <p className="text-xs text-muted-foreground mt-4">
-                By subscribing, you agree to receive emails from me. You can unsubscribe at any time.
+                {t("disclaimer")}
               </p>
             </motion.div>
           </div>

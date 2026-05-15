@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useInView } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import {
   SKILL_CATEGORY_LABELS,
@@ -11,6 +12,7 @@ type SkillsProps = {
 };
 
 export const Skills = ({ activeSkill }: SkillsProps) => {
+  const t = useTranslations("skills");
   const ref = useRef<HTMLElement | null>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -33,13 +35,13 @@ export const Skills = ({ activeSkill }: SkillsProps) => {
           className="text-center"
         >
           <span className="text-accent font-semibold text-sm tracking-[0.28em] uppercase">
-            Keyboard Skills
+            {t("label")}
           </span>
           <h2 className="mt-4 text-4xl font-bold leading-none md:text-6xl lg:text-[5.5rem]">
-            Skills & <span className="gradient-text">Technologies</span>
+            {t("heading")} <span className="gradient-text">{t("heading_gradient")}</span>
           </h2>
           <p className="mt-4 text-sm text-accent/80 md:text-lg">
-            (hint: hover over a key)
+            {t("hint")}
           </p>
         </motion.div>
 
@@ -87,14 +89,13 @@ export const Skills = ({ activeSkill }: SkillsProps) => {
                 ) : (
                   <>
                     <p className="mb-2 text-sm uppercase tracking-[0.3em] text-accent/85">
-                      Interaction
+                      {t("idle_label")}
                     </p>
                     <h3 className="mb-3 text-5xl font-bold leading-none text-foreground/90">
-                      Tech Stack
+                      {t("idle_title")}
                     </h3>
                     <p className="max-w-xs text-2xl leading-snug text-foreground/62">
-                      Move through this section, then hover a key to inspect the
-                      part of my stack it represents.
+                      {t("idle_desc_desktop")}
                     </p>
                   </>
                 )}
@@ -125,12 +126,11 @@ export const Skills = ({ activeSkill }: SkillsProps) => {
                 ) : (
                   <>
                     <p className="mb-2 text-[11px] uppercase tracking-[0.22em] text-accent">
-                      Interaction
+                      {t("idle_label")}
                     </p>
-                    <h3 className="mb-3 text-2xl font-semibold">Tech Stack</h3>
+                    <h3 className="mb-3 text-2xl font-semibold">{t("idle_title")}</h3>
                     <p className="text-base text-muted-foreground">
-                      Scroll into the section and hover a key to inspect the part
-                      of my stack it represents.
+                      {t("idle_desc_mobile")}
                     </p>
                   </>
                 )}

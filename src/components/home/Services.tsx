@@ -9,44 +9,21 @@ import {
   Rocket,
   Smartphone
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
-const services = [
-  {
-    icon: Code2,
-    title: "Web Development",
-    description: "Building responsive, performant web applications using modern frameworks like React, Next.js, and Vue.js.",
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile Development",
-    description: "Creating cross-platform mobile apps with React Native and Flutter for iOS and Android.",
-  },
-  {
-    icon: Cloud,
-    title: "Cloud Solutions",
-    description: "Designing and deploying scalable cloud infrastructure on AWS, GCP, and Azure.",
-  },
-  {
-    icon: Bot,
-    title: "AI Integrations",
-    description: "Integrating AI and machine learning capabilities into applications to automate workflows and deliver intelligent user experiences.",
-  },
-  {
-    icon: Database,
-    title: "Backend Development",
-    description: "Building robust APIs, microservices, and database architectures for enterprise applications.",
-  },
-  {
-    icon: Rocket,
-    title: "DevOps & CI/CD",
-    description: "Implementing automated pipelines, containerization, and infrastructure as code.",
-  },
-];
+const SERVICE_ICONS = [Code2, Smartphone, Cloud, Bot, Database, Rocket];
 
 export const Services = () => {
+  const t = useTranslations("services");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const services = SERVICE_ICONS.map((Icon, i) => ({
+    icon: Icon,
+    title: t(`item_${i}_title` as Parameters<typeof t>[0]),
+    description: t(`item_${i}_desc` as Parameters<typeof t>[0]),
+  }));
 
   return (
     <section
@@ -75,14 +52,13 @@ export const Services = () => {
               className="mb-8 text-center lg:text-left"
             >
               <span className="text-accent font-semibold text-sm tracking-wider uppercase">
-                What I Do
+                {t("label")}
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-3">
-                Services & <span className="gradient-text">Expertise</span>
+                {t("heading")} <span className="gradient-text">{t("heading_gradient")}</span>
               </h2>
               <p className="text-muted-foreground text-sm max-w-md">
-                A full range of development services to bring your ideas to life
-                with cutting-edge technology.
+                {t("subheading")}
               </p>
             </motion.div>
 
@@ -122,10 +98,10 @@ export const Services = () => {
                 href="/contact"
                 className="inline-flex px-6 py-3 rounded-full gradient-bg text-foreground text-sm font-semibold hover:opacity-90 transition-all hover:scale-105"
               >
-                Start a Conversation
+                {t("cta")}
               </a>
               <p className="text-muted-foreground text-sm self-center">
-                Have a project in mind? Let's talk.
+                {t("cta_sub")}
               </p>
             </motion.div>
           </div>
