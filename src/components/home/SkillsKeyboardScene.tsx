@@ -749,14 +749,15 @@ export function SkillsKeyboardScene({
       0.6,
     );
     const neutralKeyColor = new THREE.Color("#f8fafc");
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
 
     const animate = () => {
       if (isDisposed) {
         return;
       }
 
-      const elapsed = clock.getElapsedTime();
+      timer.update();
+      const elapsed = timer.getElapsed();
       const activeSection = activeSectionRef.current;
       const sectionConfig = SECTION_CONFIGS[activeSection];
       const responsivePose = getResponsivePose(
@@ -850,6 +851,7 @@ export function SkillsKeyboardScene({
       isDisposed = true;
       window.cancelAnimationFrame(animationFrameId);
       observer.disconnect();
+      timer.dispose();
       window.removeEventListener("resize", updateViewport);
       window.removeEventListener("pointermove", handleWindowPointerMove);
       window.removeEventListener("pointerleave", handleWindowPointerLeave);
