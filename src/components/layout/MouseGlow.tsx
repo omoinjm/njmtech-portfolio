@@ -19,7 +19,7 @@ export function MouseGlow() {
       current.current.y += (pos.current.y - current.current.y) * 0.08;
 
       if (glowRef.current) {
-        glowRef.current.style.transform = `translate(${current.current.x}px, ${current.current.y}px)`;
+        glowRef.current.style.transform = `translate(${current.current.x}px, ${current.current.y}px) translate(-50%, -50%)`;
       }
 
       rafId.current = requestAnimationFrame(animate);
