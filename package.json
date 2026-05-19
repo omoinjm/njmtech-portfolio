@@ -103,7 +103,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vercel/postgres": "^0.10.0",
-    "@vitejs/plugin-react-swc": "^4.2.3",
+    "@vitejs/plugin-react-swc": "^4.3.1",
     "autoprefixer": "^10.4.27",
     "eslint": "^10.0.3",
     "eslint-plugin-react-hooks": "^7.0.1",
