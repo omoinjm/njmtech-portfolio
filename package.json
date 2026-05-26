@@ -111,7 +111,7 @@
     "globals": "^17.4.0",
     "husky": "^9.1.7",
     "jsdom": "^28.1.0",
-    "lint-staged": "^16.3.2",
+    "lint-staged": "^17.0.5",
     "lovable-tagger": "^1.1.13",
     "next": "^16.2.6",
     "postcss": "^8.5.10",
