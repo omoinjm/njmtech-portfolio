@@ -1,4 +1,10 @@
-import { sql } from "@/lib/neon-client";
+import { config } from "@/lib/config";
+import { isD1Configured } from "@/lib/d1-client";
+import {
+  createSubscriber,
+  getSubscriberByEmail,
+  touchSubscriberLastAttempt,
+} from "@/services/sql.service";
 import { logger } from "@/utils/logger";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
@@ -6,33 +12,11 @@ import nodemailer from "nodemailer";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RATE_LIMIT_HOURS = 48;
 
-interface SubscriberRow {
-  id: number;
-  email: string;
-  subscribed_at: string;
-  last_attempt_at: string;
-}
-
-let tableEnsured = false;
-
-async function ensureTable() {
-  if (tableEnsured) return;
-  await sql`
-    CREATE TABLE IF NOT EXISTS subscribers (
-      id SERIAL PRIMARY KEY,
-      email VARCHAR(255) UNIQUE NOT NULL,
-      subscribed_at TIMESTAMPTZ DEFAULT NOW(),
-      last_attempt_at TIMESTAMPTZ DEFAULT NOW()
-    )
-  `;
-  tableEnsured = true;
-}
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_APP_PASS,
+    user: config.get("EMAIL_USER"),
+    pass: config.get("EMAIL_APP_PASS"),
   },
 });
 
@@ -83,6 +67,20 @@ body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
   });
 }
 
+function parseStoredTimestamp(value: string) {
+  const normalized = value.includes("T") ? value : value.replace(" ", "T");
+  const timestamp = /(?:Z|[+-]\d{2}:\d{2})$/.test(normalized)
+    ? normalized
+    : `${normalized}Z`;
+  const parsed = new Date(timestamp);
+
+  if (Number.isNaN(parsed.getTime())) {
+    throw new Error(`Invalid subscriber timestamp: ${value}`);
+  }
+
+  return parsed;
+}
+
 export async function POST(req: NextRequest) {
   const { email } = (await req.json()) as { email?: string };
 
@@ -93,10 +91,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const senderEmail = process.env.EMAIL_USER;
-  const appPass = process.env.EMAIL_APP_PASS;
+  const senderEmail = config.get("EMAIL_USER");
+  const appPass = config.get("EMAIL_APP_PASS");
 
-  if (!senderEmail || !appPass) {
+  if (!senderEmail || !appPass || !isD1Configured()) {
     return NextResponse.json(
       { error: "Newsletter is not configured." },
       { status: 500 },
@@ -104,22 +102,14 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await ensureTable();
+    const existing = await getSubscriberByEmail(email);
 
-    const rows = (await sql`
-      SELECT id, email, subscribed_at, last_attempt_at
-      FROM subscribers
-      WHERE email = ${email}
-    `) as SubscriberRow[];
-
-    if (rows.length > 0) {
-      const existing = rows[0];
+    if (existing) {
       const hoursSinceLastAttempt =
-        (Date.now() - new Date(existing.last_attempt_at).getTime()) / 36e5;
+        (Date.now() - parseStoredTimestamp(existing.last_attempt_at).getTime()) /
+        36e5;
 
-      await sql`
-        UPDATE subscribers SET last_attempt_at = NOW() WHERE email = ${email}
-      `;
+      await touchSubscriberLastAttempt(email);
 
       if (hoursSinceLastAttempt < RATE_LIMIT_HOURS) {
         const hoursLeft = Math.ceil(RATE_LIMIT_HOURS - hoursSinceLastAttempt);
@@ -135,9 +125,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await sql`
-      INSERT INTO subscribers (email) VALUES (${email})
-    `;
+    await createSubscriber(email);
 
     await sendWelcomeEmail(email, senderEmail);
 

@@ -2,6 +2,7 @@ import HomePage from '@/components/home/Index';
 import {
   generateOrganizationSchema,
   generatePersonSchema,
+  generateProfessionalServiceSchema,
   generateProfilePageSchema,
   generateWebsiteSchema,
   pageConfig,
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     title: pageConfig.home.title,
     description: pageConfig.home.description,
     images: [siteConfig.logo],
-    creator: siteConfig.social.twitter,
+    creator: siteConfig.social.twitterHandle,
   },
   alternates: {
     canonical: siteConfig.url,
@@ -58,6 +59,10 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema()) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(generateProfessionalServiceSchema()) }}
       />
       <script
         type="application/ld+json"

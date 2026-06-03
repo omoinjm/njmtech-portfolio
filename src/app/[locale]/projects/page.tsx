@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: `${pageConfig.projects.title} | Nhlanhla Junior Malaza`,
     description: pageConfig.projects.description,
     images: [siteConfig.logo],
-    creator: siteConfig.social.twitter,
+    creator: siteConfig.social.twitterHandle,
   },
   alternates: {
     canonical: `${siteConfig.url}/projects`,

@@ -168,7 +168,7 @@ test.describe('Email API', () => {
 	/**
 	 * POST /api/subscribe
 	 *
-	 * The subscribe route validates the email, stores it in Neon PostgreSQL,
+	 * The subscribe route validates the email, stores it in Cloudflare D1,
 	 * enforces a 48-hour per-email rate limit, and sends a welcome email on first
 	 * successful subscription.
 	 */

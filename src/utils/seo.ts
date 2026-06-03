@@ -17,21 +17,45 @@ export interface SEOProps {
 }
 
 export const siteConfig = {
-  name: "NJMTECH Portfolio",
+  name: "NJMTECH",
   shortName: "NJMTECH",
   description:
     "Professional portfolio of Nhlanhla Junior Malaza — Software Developer, DevOps Engineer, and AI Integrations Specialist based in South Africa",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://njmtech.co.za",
   email: "njmalaza@outlook.com",
+  telephone: "+27 72 432 6766",
   social: {
     linkedin: "https://www.linkedin.com/in/njmalaza",
-    github: "https://github.com/njmalaza",
-    twitter: "@njmalaza",
+    github: "https://github.com/omoinjm",
+    twitterUrl: "https://twitter.com/nhlanhlamalaza_",
+    twitterHandle: "@nhlanhlamalaza_",
   },
+  location: {
+    city: "Johannesburg",
+    region: "Gauteng",
+    country: "South Africa",
+    countryCode: "ZA",
+  },
+  services: [
+    "Web Development",
+    "DevOps Engineering",
+    "AI Integrations",
+    "Cloud Infrastructure",
+    "Technical Consulting",
+  ],
   logo: "/logo.png",
   locales: ["en_ZA", "en_US"],
   locale: "en_ZA",
 };
+
+function getSameAsLinks() {
+  return [
+    siteConfig.social.linkedin,
+    siteConfig.social.github,
+    siteConfig.social.twitterUrl,
+    siteConfig.url,
+  ];
+}
 
 export const pageConfig: Record<string, SEOProps> = {
   home: {
@@ -158,6 +182,7 @@ export function generatePersonSchema() {
     alternateName: ["Nhlanhla Junior", "Nhlanhla Malaza", "Junior Malaza", "NJM", "NJMTech", "njmtech", "njmalaza"],
     url: siteConfig.url,
     email: siteConfig.email,
+    telephone: siteConfig.telephone,
     image: {
       "@type": "ImageObject",
       url: `${siteConfig.url}${siteConfig.logo}`,
@@ -172,14 +197,11 @@ export function generatePersonSchema() {
     },
     address: {
       "@type": "PostalAddress",
-      addressCountry: "ZA",
+      addressLocality: siteConfig.location.city,
+      addressRegion: siteConfig.location.region,
+      addressCountry: siteConfig.location.countryCode,
     },
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.github,
-      `https://twitter.com/njmalaza`,
-      siteConfig.url,
-    ],
+    sameAs: getSameAsLinks(),
     jobTitle: [
       "Software Developer",
       "DevOps Engineer",
@@ -224,17 +246,45 @@ export function generateOrganizationSchema() {
     },
     description: siteConfig.description,
     founder: { "@id": `${siteConfig.url}/#person` },
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.github,
-      `https://twitter.com/njmalaza`,
-    ],
+    sameAs: getSameAsLinks(),
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Customer Service",
+      telephone: siteConfig.telephone,
       email: siteConfig.email,
       availableLanguage: "English",
     },
+  };
+}
+
+/**
+ * Generate ProfessionalService schema for branded search and local entity signals
+ */
+export function generateProfessionalServiceSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": `${siteConfig.url}/#professional-service`,
+    name: siteConfig.name,
+    url: siteConfig.url,
+    image: `${siteConfig.url}${siteConfig.logo}`,
+    description: siteConfig.description,
+    email: siteConfig.email,
+    telephone: siteConfig.telephone,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: siteConfig.location.city,
+      addressRegion: siteConfig.location.region,
+      addressCountry: siteConfig.location.countryCode,
+    },
+    areaServed: {
+      "@type": "Country",
+      name: siteConfig.location.country,
+    },
+    founder: { "@id": `${siteConfig.url}/#person` },
+    sameAs: getSameAsLinks(),
+    serviceType: siteConfig.services,
+    availableLanguage: ["en"],
   };
 }
 
@@ -246,7 +296,8 @@ export function generateWebsiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${siteConfig.url}/#website`,
-    name: "Nhlanhla Junior Malaza | NJMTECH Portfolio",
+    name: siteConfig.name,
+    alternateName: "Nhlanhla Junior Malaza Portfolio",
     url: siteConfig.url,
     description: siteConfig.description,
     inLanguage: "en-ZA",
@@ -254,14 +305,6 @@ export function generateWebsiteSchema() {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,
       name: "Nhlanhla Junior Malaza",
-    },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
     },
   };
 }
@@ -431,7 +474,7 @@ export function generateMetaTags(config: SEOProps) {
     },
     {
       name: "twitter:creator",
-      content: siteConfig.social.twitter,
+      content: siteConfig.social.twitterHandle,
       key: "twitter:creator",
     },
   ];
@@ -460,6 +503,7 @@ export default {
   pageConfig,
   generatePersonSchema,
   generateOrganizationSchema,
+  generateProfessionalServiceSchema,
   generateWebsiteSchema,
   generateProfilePageSchema,
   generateContactPageSchema,

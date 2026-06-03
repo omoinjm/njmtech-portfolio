@@ -21,7 +21,7 @@ npx playwright show-report           # Open HTML test report
 
 ## Architecture
 
-Next.js 15 **App Router** portfolio with a Neon (serverless PostgreSQL) backend. All pages live under `src/app/`, all reusable logic lives outside it.
+Next.js 15 **App Router** portfolio with a Cloudflare D1 backend. All pages live under `src/app/`, all reusable logic lives outside it.
 
 ```
 src/
@@ -39,12 +39,12 @@ src/
 │   └── layout/         # Layout, Navbar, Footer
 ├── services/
 │   ├── data.service.ts # Central HTTP client (get_call / post_call)
-│   └── sql.service.ts  # Raw SQL queries via Neon
+│   └── sql.service.ts  # D1-backed query and mapping helpers
 ├── hooks/
 │   └── useDataService.ts  # Generic data-fetching hook wrapping data.service.ts
 ├── lib/
 │   ├── config.ts       # Zod-validated env vars — access config via this, not process.env directly
-│   ├── neon-client.ts  # PostgreSQL connection
+│   ├── d1-client.ts    # Cloudflare D1 REST client
 │   └── utils.ts        # cn() helper (clsx + tailwind-merge)
 ├── types/              # TypeScript models (snake_case filenames, PascalCase types)
 └── utils/
@@ -54,7 +54,7 @@ src/
 
 ### Data flow
 
-Client components call the `useDataService` hook → `DataService.get_call()` → `/api/*` route handler → `sql.service.ts` → Neon PostgreSQL.
+Client components call the `useDataService` hook → `DataService.get_call()` → `/api/*` route handler → `sql.service.ts` → Cloudflare D1.
 
 API routes serving read data use `unstable_cache` with 1-hour revalidation and named cache tags (e.g., `["projects-links-next-js"]`).
 
@@ -80,7 +80,7 @@ API routes serving read data use `unstable_cache` with 1-hour revalidation and n
 ### Environment / Config
 - Access environment variables through the `config` singleton from `src/lib/config.ts`, not `process.env` directly. It validates all vars at startup via Zod.
 - Client-safe config is exposed separately via `src/lib/config.client.ts`.
-- Required env vars: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_EMAIL_MAIL`, `NEXT_PUBLIC_EMAIL_USER`, `NEXT_PUBLIC_EMAIL_APP_PASS`, `NEXT_PUBLIC_MAILCHIMP_URL`. Database vars (`POSTGRES_URL`, etc.) are optional for email-only operation.
+- Required env vars: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_EMAIL_MAIL`, `NEXT_PUBLIC_EMAIL_USER`, `NEXT_PUBLIC_EMAIL_APP_PASS`, `NEXT_PUBLIC_MAILCHIMP_URL`. D1 vars (`D1_ACCOUNT_ID`, `D1_DATABASE_ID`, `D1_API_TOKEN`) are optional for email-only operation.
 
 ### API Routes
 - Validate request bodies with a **type guard** function before processing (see `validateContactForm` in `src/app/api/contact/route.ts` as the reference pattern).

@@ -13,13 +13,9 @@ const envSchema = z.object({
   EMAIL_MAIL: z.string().email(),
   EMAIL_USER: z.string().email(),
   EMAIL_APP_PASS: z.string(),
-  DATABASE_URL: z.string().optional(),
-  POSTGRES_URL: z.string().optional(),
-  POSTGRES_URL_NON_POOLING: z.string().optional(),
-  POSTGRES_HOST: z.string().optional(),
-  POSTGRES_USER: z.string().optional(),
-  POSTGRES_PASSWORD: z.string().optional(),
-  POSTGRES_DATABASE: z.string().optional(),
+  D1_ACCOUNT_ID: z.string().optional(),
+  D1_DATABASE_ID: z.string().optional(),
+  D1_API_TOKEN: z.string().optional(),
 });
 
 export type Config = z.infer<typeof envSchema>;
@@ -58,7 +54,17 @@ class ConfigService {
       // NEXT_PHASE is set by Next.js during build.
       if (process.env.NEXT_PHASE === "phase-production-build") {
         console.warn(`[Config] Build-time validation warning:\n${errorMessage}`);
-        return result.data as Config;
+        return {
+          NEXT_PUBLIC_SITE_URL:
+            process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+          NEXT_PUBLIC_RESUME_URL: process.env.NEXT_PUBLIC_RESUME_URL,
+          EMAIL_MAIL: process.env.EMAIL_MAIL ?? "",
+          EMAIL_USER: process.env.EMAIL_USER ?? "",
+          EMAIL_APP_PASS: process.env.EMAIL_APP_PASS ?? "",
+          D1_ACCOUNT_ID: process.env.D1_ACCOUNT_ID,
+          D1_DATABASE_ID: process.env.D1_DATABASE_ID,
+          D1_API_TOKEN: process.env.D1_API_TOKEN,
+        };
       }
 
       throw new Error(errorMessage);

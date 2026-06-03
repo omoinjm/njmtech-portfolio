@@ -1,9 +1,9 @@
-import { getRecord } from "@/services/sql.service";
+import { getProjects } from "@/services/sql.service";
 import { NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
 
 const getCachedLinks = unstable_cache(
-  async () => await getRecord("projects"),
+  async () => await getProjects(),
   ["projects-links"],
   {
     tags: ["projects-links-next-js"],
@@ -14,10 +14,6 @@ const getCachedLinks = unstable_cache(
 export async function GET() {
   try {
     const data = await getCachedLinks();
-
-    // For local development test
-    // const data = await getRecord("projects");
-
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(

@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="me" href={siteConfig.social.linkedin} />
         <link rel="me" href={siteConfig.social.github} />
-        <link rel="me" href="https://twitter.com/njmalaza" />
+        <link rel="me" href={siteConfig.social.twitterUrl} />
         <script dangerouslySetInnerHTML={{ __html: ACCENT_THEME_BOOT_SCRIPT }} />
       </head>
       <body>{children}</body>

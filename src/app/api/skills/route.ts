@@ -1,9 +1,9 @@
-import { getList } from '@/services/sql.service';
+import { getSkills } from '@/services/sql.service';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
 	try {
-		const data = await getList('skills');
+		const data = await getSkills();
 		return NextResponse.json(data);
 	} catch (error) {
 		return NextResponse.json({

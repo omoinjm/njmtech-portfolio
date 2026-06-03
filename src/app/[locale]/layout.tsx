@@ -15,7 +15,7 @@ import { setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  applicationName: "NJMTECH Portfolio",
+  applicationName: siteConfig.name,
   title: {
     default: "Nhlanhla Junior Malaza | Software Developer",
     template: "%s | Nhlanhla Junior Malaza",
@@ -25,6 +25,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Nhlanhla Junior Malaza", url: siteConfig.url }],
   creator: "Nhlanhla Junior Malaza",
   publisher: "Nhlanhla Junior Malaza",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/logo.png",
+  },
   robots: {
     index: true,
     follow: true,
@@ -41,8 +46,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@njmalaza",
-    creator: "@njmalaza",
+    site: siteConfig.social.twitterHandle,
+    creator: siteConfig.social.twitterHandle,
     title: "Nhlanhla Junior Malaza | Software Developer",
     description: siteConfig.description,
     images: [siteConfig.logo],

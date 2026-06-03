@@ -1,12 +1,12 @@
 # NJMTECH Portfolio - Gemini CLI Context
 
-This project is a modern, high-performance portfolio website built with **Next.js 16**, **React 18**, and **TypeScript**. It features immersive 3D scenes using **Three.js** and a robust backend integrated with **Neon PostgreSQL**.
+This project is a modern, high-performance portfolio website built with **Next.js 16**, **React 18**, and **TypeScript**. It features immersive 3D scenes using **Three.js** and a backend integrated with **Cloudflare D1**.
 
 ## Project Overview
 
 - **Framework**: Next.js 16 (App Router)
 - **Styling**: Tailwind CSS + shadcn/ui + Framer Motion
-- **Database**: PostgreSQL (Neon) via `@neondatabase/serverless`
+- **Database**: Cloudflare D1 (SQLite) via the Cloudflare REST API
 - **Secrets Management**: Infisical
 - **3D Graphics**: Three.js (React Three Fiber)
 - **State/Data**: TanStack React Query + custom `DataService`
@@ -38,7 +38,7 @@ Environment variables are managed in `src/lib/config.ts` using **Zod** for runti
 
 ### Data Management
 - **`src/services/data.service.ts`**: Client-side wrapper for API calls.
-- **`src/services/sql.service.ts`**: Server-side service for interacting with the database. Includes automatic table creation and seeding logic via `src/lib/seed.ts`.
+- **`src/services/sql.service.ts`**: Server-side service for querying Cloudflare D1 and mapping rows into the API response shapes used by the app.
 - **API Routes**: Located in `src/app/api/`, handling chat, contact, projects, skills, and more.
 
 ### UI & Styling

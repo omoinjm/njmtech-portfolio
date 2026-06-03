@@ -6,7 +6,7 @@
 ```typescript
 import { config } from '@/lib/config'
 
-config.get('DATABASE_URL')           // Get specific variable
+config.get('D1_ACCOUNT_ID')          // Get specific variable
 config.get('NEXT_PUBLIC_SITE_URL')   // Type-safe access
 config.isProduction()                // Check environment
 config.isDevelopment()               // Check environment
@@ -67,7 +67,7 @@ If validation fails on startup, Next.js will show:
 ```
 ❌ Invalid environment variables:
 EMAIL_MAIL: Invalid email
-DATABASE_URL: Required
+D1_ACCOUNT_ID: Required
 ```
 
 Check `.env.local` and make sure all required vars are set.
@@ -89,8 +89,8 @@ config.get('NEXT_PUBLIC_EMAIL_USER')
 config.get('NEXT_PUBLIC_EMAIL_APP_PASS')
 
 // Database (server-only)
-config.get('DATABASE_URL')
-config.get('POSTGRES_URL')
+config.get('D1_ACCOUNT_ID')
+config.get('D1_DATABASE_ID')
 
 // Website
 config.get('NEXT_PUBLIC_SITE_URL')
