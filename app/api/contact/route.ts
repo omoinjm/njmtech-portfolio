@@ -1,6 +1,5 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { logger } from '@/utils/logger';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 interface ContactRequest {
 	first_name: string;
@@ -31,30 +30,24 @@ const validateContactForm = (data: unknown): data is ContactRequest => {
 	);
 };
 
-const handler = async (
-	req: NextApiRequest,
-	res: NextApiResponse<ContactResponse>,
-) => {
-	if (req.method !== 'POST') {
-		return res.status(405).json({
-			status: 405,
-			message: 'Method not allowed',
-			error: 'Only POST requests are accepted',
-		});
-	}
-
+export async function POST(request: Request): Promise<NextResponse<ContactResponse>> {
 	try {
-		if (!validateContactForm(req.body)) {
-			logger.warn('Invalid contact form submission', req.body);
-			return res.status(400).json({
-				status: 400,
-				message: 'Invalid request',
-				error:
-					'Missing required fields: first_name, last_name, email_address, message',
-			});
+		const body = await request.json();
+
+		if (!validateContactForm(body)) {
+			logger.warn('Invalid contact form submission', body);
+			return NextResponse.json(
+				{
+					status: 400,
+					message: 'Invalid request',
+					error:
+						'Missing required fields: first_name, last_name, email_address, message',
+				},
+				{ status: 400 }
+			);
 		}
 
-		const { first_name, last_name, email_address, message, phone } = req.body;
+		const { first_name, last_name, email_address, message, phone } = body;
 
 		// TODO: Implement email sending
 		// You can use services like:
@@ -71,18 +64,22 @@ const handler = async (
 			timestamp: new Date().toISOString(),
 		});
 
-		return res.status(200).json({
-			status: 200,
-			message: 'Contact form submitted successfully. We will be in touch soon!',
-		});
+		return NextResponse.json(
+			{
+				status: 200,
+				message: 'Contact form submitted successfully. We will be in touch soon!',
+			},
+			{ status: 200 }
+		);
 	} catch (error) {
 		logger.error('Contact API error', error);
-		return res.status(500).json({
-			status: 500,
-			message: 'Internal server error',
-			error: error instanceof Error ? error.message : 'Unknown error',
-		});
+		return NextResponse.json(
+			{
+				status: 500,
+				message: 'Internal server error',
+				error: error instanceof Error ? error.message : 'Unknown error',
+			},
+			{ status: 500 }
+		);
 	}
-};
-
-export default handler;
+}

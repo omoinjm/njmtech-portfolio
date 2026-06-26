@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { ExternalLink, Github, Folder } from "lucide-react";
+import { useDataService } from "@/hooks/useDataService";
 
 const projects = [
   {
     title: "E-Commerce Platform",
-    description: "A full-stack e-commerce solution with real-time inventory management, payment processing, and admin dashboard.",
+    description:
+      "A full-stack e-commerce solution with real-time inventory management, payment processing, and admin dashboard.",
     tags: ["Next.js", "TypeScript", "Stripe", "PostgreSQL"],
     github: "https://github.com/omoinjm",
     live: "#",
@@ -17,7 +19,8 @@ const projects = [
   },
   {
     title: "AI Content Generator",
-    description: "An intelligent content creation tool powered by GPT-4, featuring templates, tone adjustment, and SEO optimization.",
+    description:
+      "An intelligent content creation tool powered by GPT-4, featuring templates, tone adjustment, and SEO optimization.",
     tags: ["React", "Python", "OpenAI", "FastAPI"],
     github: "https://github.com/omoinjm",
     live: "#",
@@ -26,7 +29,8 @@ const projects = [
   },
   {
     title: "Real-Time Dashboard",
-    description: "Analytics dashboard with live data streaming, interactive charts, and customizable widgets for business insights.",
+    description:
+      "Analytics dashboard with live data streaming, interactive charts, and customizable widgets for business insights.",
     tags: ["React", "D3.js", "WebSocket", "Node.js"],
     github: "https://github.com/omoinjm",
     live: "#",
@@ -35,7 +39,8 @@ const projects = [
   },
   {
     title: "Task Management App",
-    description: "Collaborative project management tool with Kanban boards, time tracking, and team communication features.",
+    description:
+      "Collaborative project management tool with Kanban boards, time tracking, and team communication features.",
     tags: ["React", "Redux", "Firebase", "Material UI"],
     github: "https://github.com/omoinjm",
     live: "#",
@@ -43,7 +48,8 @@ const projects = [
   },
   {
     title: "Portfolio Website",
-    description: "Modern, responsive portfolio website with smooth animations and dark theme.",
+    description:
+      "Modern, responsive portfolio website with smooth animations and dark theme.",
     tags: ["Next.js", "Framer Motion", "Tailwind"],
     github: "https://github.com/omoinjm/njmtech-portfolio",
     live: "#",
@@ -51,7 +57,8 @@ const projects = [
   },
   {
     title: "Weather Application",
-    description: "Beautiful weather app with location-based forecasts, interactive maps, and weather alerts.",
+    description:
+      "Beautiful weather app with location-based forecasts, interactive maps, and weather alerts.",
     tags: ["React", "OpenWeather API", "Mapbox"],
     github: "https://github.com/omoinjm",
     live: "#",
@@ -70,10 +77,18 @@ export const Projects = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeCategory, setActiveCategory] = useState("website");
 
-  const filteredProjects = projects.filter((p) => p.category === activeCategory);
+  const { data, loading, error, refetch } = useDataService({
+    endpoint: "/projects",
+    mapper: (res: any) => res?.data, // optional
+  });
+
+  console.log("Fetched data:", data);
+
+  const filteredProjects = projects.filter(
+    (p) => p.category === activeCategory,
+  );
 
   const featuredProjects = filteredProjects.filter((p) => p.featured);
-  const otherProjects = filteredProjects.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-24 bg-card/30" ref={ref}>
@@ -134,7 +149,7 @@ export const Projects = () => {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Folder className="w-16 h-16 text-muted-foreground/30" />
                 </div>
-                
+
                 {/* Overlay on Hover */}
                 <div className="project-card-overlay rounded-t-2xl">
                   <div className="flex gap-4">

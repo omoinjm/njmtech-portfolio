@@ -4,11 +4,11 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
 	connectionString: process.env.POSTGRES_URL_NON_POOLING,
-	ssl: { rejectUnauthorized: false },
+	ssl: false,
 });
 
 // Allowlist of valid table names to prevent SQL injection
-const VALID_TABLES = ['skills', 'projects', 'menu', 'socials'] as const;
+const VALID_TABLES = ['skills', 'projects', 'menu', 'socials', 'nav_footer', 'nav_menu'] as const;
 
 function validateTableName(tblName: string): asserts tblName is typeof VALID_TABLES[number] {
 	if (!VALID_TABLES.includes(tblName as typeof VALID_TABLES[number])) {
