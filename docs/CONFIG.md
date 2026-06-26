@@ -1,4 +1,4 @@
-# Config Service Documentation
+             # Config Service Documentation
 
 ## Overview
 
@@ -19,7 +19,7 @@ import { config } from '@/lib/config'
 
 // Get a specific variable
 const siteUrl = config.get('NEXT_PUBLIC_SITE_URL')
-const dbUrl = config.get('DATABASE_URL')
+const d1AccountId = config.get('D1_ACCOUNT_ID')
 
 // Check environment
 if (config.isProduction()) {
@@ -57,10 +57,10 @@ export function ContactButton() {
 ```typescript
 // ✅ DO: Use the config service
 import { config } from '@/lib/config'
-const url = config.get('DATABASE_URL')
+const accountId = config.get('D1_ACCOUNT_ID')
 
 // ❌ DON'T: Access process.env directly
-const url = process.env.DATABASE_URL // loses type safety
+const accountId = process.env.D1_ACCOUNT_ID // loses type safety
 ```
 
 ## Environment Variables
@@ -80,13 +80,9 @@ These are accessible in browser and server:
 
 These are only accessible in server-side code:
 
-- `DATABASE_URL` - Primary database connection string
-- `POSTGRES_URL` - PostgreSQL connection (with pooler)
-- `POSTGRES_URL_NON_POOLING` - PostgreSQL connection (direct)
-- `POSTGRES_HOST` - Database host
-- `POSTGRES_USER` - Database user
-- `POSTGRES_PASSWORD` - Database password
-- `POSTGRES_DATABASE` - Database name
+- `D1_ACCOUNT_ID` - Cloudflare account identifier
+- `D1_DATABASE_ID` - Cloudflare D1 database identifier
+- `D1_API_TOKEN` - Cloudflare API token with D1 access
 
 ## Validation
 
@@ -97,7 +93,7 @@ If validation fails, you'll see an error like:
 ```
 ❌ Invalid environment variables:
 NEXT_PUBLIC_EMAIL_MAIL: Invalid email
-DATABASE_URL: Required
+D1_ACCOUNT_ID: Required
 
 Please check your .env.local file.
 ```
@@ -111,7 +107,7 @@ import { config, Config } from '@/lib/config'
 
 // Type inference
 const url = config.get('NEXT_PUBLIC_SITE_URL') // string
-const dbUrl = config.get('DATABASE_URL') // string | undefined
+const d1AccountId = config.get('D1_ACCOUNT_ID') // string | undefined
 
 // Access typed config directly
 const allConfig: Config = config.getAll()

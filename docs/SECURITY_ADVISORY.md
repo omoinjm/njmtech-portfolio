@@ -122,9 +122,9 @@
 - ⚠️ API logging in development mode only
 
 ### Database Security
-- ✅ Using Neon PostgreSQL (managed database)
-- ✅ SSL/TLS connection required
-- ⚠️ Using connection pooling (good)
+- ✅ Using Cloudflare D1 (managed database)
+- ✅ HTTPS API access required
+- ⚠️ Access is mediated through the Cloudflare API token
 - ⚠️ No row-level security implemented
 
 ### Dependency Security

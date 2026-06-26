@@ -22,7 +22,7 @@ import { config } from '@/lib/config'
 
 // Get a specific variable
 const siteUrl = config.get('NEXT_PUBLIC_SITE_URL')
-const dbUrl = config.get('DATABASE_URL')
+const d1AccountId = config.get('D1_ACCOUNT_ID')
 
 // Check environment
 if (config.isProduction()) {
@@ -61,10 +61,9 @@ export function Component() {
 
 ### Private Variables (Server-Only)
 
-- `DATABASE_URL` - Primary database connection
-- `POSTGRES_URL` - PostgreSQL with pooler
-- `POSTGRES_URL_NON_POOLING` - Direct PostgreSQL connection
-- `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`
+- `D1_ACCOUNT_ID` - Cloudflare account identifier
+- `D1_DATABASE_ID` - Cloudflare D1 database identifier
+- `D1_API_TOKEN` - Cloudflare API token with D1 access
 
 ## Features
 
@@ -134,7 +133,7 @@ If validation fails on startup:
 ```
 ❌ Invalid environment variables:
 NEXT_PUBLIC_EMAIL_MAIL: Invalid email
-DATABASE_URL: Required
+D1_ACCOUNT_ID: Required
 
 Please check your .env.local file.
 ```

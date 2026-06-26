@@ -1,36 +1,30 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
+import {
+  SKILL_CATEGORY_LABELS,
+  type KeyboardSkill,
+} from "./skills-keyboard-data";
+type SkillsProps = {
+  activeSkill: KeyboardSkill | null;
+};
 
-const skills = [
-  { name: "React / Next.js / Angular", level: 95 },
-  { name: "TypeScript", level: 90 },
-  { name: "C# / .NET", level: 88 },
-  { name: "Python", level: 85 },
-  { name: "PostgreSQL / MongoDB", level: 82 },
-  { name: "Azure / Cloud", level: 80 },
-  { name: "Docker / DevOps", level: 78 },
-  { name: "GraphQL", level: 75 },
-];
-
-const technologies = [
-  "React", "Next.js", "TypeScript", "C#", "Python", "PostgreSQL",
-  "MongoDB", "Azure", "Docker", "Kubernetes", "GraphQL", "REST APIs",
-  "Postman", "Vim", "Git", "CI/CD"
-];
-
-export const Skills = () => {
-  const ref = useRef(null);
+export const Skills = ({ activeSkill }: SkillsProps) => {
+  const t = useTranslations("skills");
+  const ref = useRef<HTMLElement | null>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" className="py-24 relative" ref={ref}>
+    <section
+      id="skills"
+      data-keyboard-section="skills"
+      className="relative min-h-[110vh] overflow-hidden py-24"
+      ref={ref}
+    >
       {/* Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/4 w-64 h-64 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-accent/10 blur-3xl" />
-      </div>
+      <div className="absolute inset-0 overflow-hidden" />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
@@ -38,90 +32,112 @@ export const Skills = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center"
         >
-          <span className="text-accent font-semibold text-sm tracking-wider uppercase">
-            My Expertise
+          <span className="text-accent font-semibold text-sm tracking-[0.28em] uppercase">
+            {t("label")}
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
-            Skills & <span className="gradient-text">Technologies</span>
+          <h2 className="mt-4 text-4xl font-bold leading-none md:text-6xl lg:text-[5.5rem]">
+            {t("heading")} <span className="gradient-text">{t("heading_gradient")}</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            I've worked with a wide range of technologies in the web development
-            world, from front-end frameworks to back-end systems and cloud infrastructure.
+          <p className="mt-4 text-sm text-accent/80 md:text-lg">
+            {t("hint")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Skill Bars */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6"
-          >
-            <h3 className="text-xl font-semibold mb-6">Core Competencies</h3>
-            {skills.map((skill, index) => (
-              <div key={skill.name}>
-                <div className="flex justify-between mb-2">
-                  <span className="font-medium">{skill.name}</span>
-                  <span className="text-muted-foreground">{skill.level}%</span>
-                </div>
-                <div className="h-2 rounded-full bg-secondary overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={isInView ? { width: `${skill.level}%` } : {}}
-                    transition={{ duration: 1, delay: 0.3 + index * 0.1 }}
-                    className="h-full rounded-full gradient-bg"
-                  />
-                </div>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Technology Tags */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <h3 className="text-xl font-semibold mb-6">Technologies I Work With</h3>
-            <div className="flex flex-wrap gap-3">
-              {technologies.map((tech, index) => (
-                <motion.span
-                  key={tech}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.3, delay: 0.5 + index * 0.05 }}
-                  className="px-4 py-2 rounded-full bg-card border border-border hover:border-accent/50 transition-colors cursor-default"
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="relative mx-auto mt-10 min-h-[30rem] md:min-h-[40rem] lg:min-h-[48rem]"
+        >
+          <div className="absolute inset-x-0 top-0 z-10 flex justify-center">
+            <div className="flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-border/35 bg-background/18 px-2.5 py-1.5 backdrop-blur-sm">
+              {Object.entries(SKILL_CATEGORY_LABELS).map(([category, label]) => (
+                <span
+                  key={category}
+                  className="flex items-center gap-1.5 rounded-full border border-border/40 bg-background/28 px-2.5 py-1 text-[11px] font-medium"
                 >
-                  {tech}
-                </motion.span>
+                  <span className="h-2 w-2 rounded-full gradient-bg" />
+                  {label}
+                </span>
               ))}
             </div>
+          </div>
 
-            {/* Experience Cards */}
-            <div className="grid sm:grid-cols-2 gap-4 mt-8">
-              {[
-                { title: "Frontend", desc: "React, Next.js, Angular, TypeScript" },
-                { title: "Backend", desc: "C#, Python, REST/GraphQL, Unit Testing (NUnit)" },
-                { title: "Database", desc: "Microsoft SQL Server, PostgreSQL, MongoDB, Redis" },
-                { title: "DevOps", desc: "Azure, Docker, Kubernetes, CI/CD, Bash & PowerShell Scripting" },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
-                  className="p-4 rounded-xl bg-card border border-border hover:border-accent/30 transition-colors"
-                >
-                  <h4 className="font-semibold gradient-text">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+          <div className="absolute left-0 top-[32%] z-10 hidden max-w-sm -rotate-[32deg] text-left lg:block">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeSkill?.id ?? "default-desktop"}
+                initial={{ opacity: 0, x: -18 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.25 }}
+              >
+                {activeSkill ? (
+                  <>
+                    <p className="mb-2 text-sm uppercase tracking-[0.3em] text-accent/85">
+                      {SKILL_CATEGORY_LABELS[activeSkill.category]}
+                    </p>
+                    <h3 className="mb-3 text-5xl font-bold leading-none text-foreground/90">
+                      {activeSkill.label}
+                    </h3>
+                    <p className="max-w-xs text-2xl leading-snug text-foreground/62">
+                      {activeSkill.summary}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="mb-2 text-sm uppercase tracking-[0.3em] text-accent/85">
+                      {t("idle_label")}
+                    </p>
+                    <h3 className="mb-3 text-5xl font-bold leading-none text-foreground/90">
+                      {t("idle_title")}
+                    </h3>
+                    <p className="max-w-xs text-2xl leading-snug text-foreground/62">
+                      {t("idle_desc_desktop")}
+                    </p>
+                  </>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="absolute inset-x-0 bottom-0 z-10 px-4 lg:hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeSkill?.id ?? "default-mobile"}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 12 }}
+                transition={{ duration: 0.25 }}
+                className="mx-auto max-w-xl text-center"
+              >
+                {activeSkill ? (
+                  <>
+                    <p className="mb-2 text-[11px] uppercase tracking-[0.22em] text-accent">
+                      {SKILL_CATEGORY_LABELS[activeSkill.category]}
+                    </p>
+                    <h3 className="mb-3 text-2xl font-semibold">{activeSkill.label}</h3>
+                    <p className="text-base text-muted-foreground">
+                      {activeSkill.summary}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="mb-2 text-[11px] uppercase tracking-[0.22em] text-accent">
+                      {t("idle_label")}
+                    </p>
+                    <h3 className="mb-3 text-2xl font-semibold">{t("idle_title")}</h3>
+                    <p className="text-base text-muted-foreground">
+                      {t("idle_desc_mobile")}
+                    </p>
+                  </>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

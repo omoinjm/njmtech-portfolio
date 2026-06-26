@@ -1,21 +1,38 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Code, Sparkles, Zap } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { publicConfig } from "@/lib/config.client";
+import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
 
 export const Hero = () => {
+  const t = useTranslations("hero");
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [showInteractionPrompt, setShowInteractionPrompt] = useState(true);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setShowInteractionPrompt(false);
+    }, 10000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <section
       id="home"
+      data-keyboard-section="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
     >
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-accent/20 blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-primary/20 blur-3xl animate-pulse-slow" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-accent/5 to-primary/5 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden z-[1]">
+        <div className="absolute top-[18%] -left-24 h-80 w-80 rounded-full bg-accent/18 blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-[16%] right-0 h-96 w-96 rounded-full bg-primary/16 blur-3xl animate-pulse-slow" />
       </div>
 
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -34,7 +51,7 @@ export const Hero = () => {
           >
             <Sparkles className="w-4 h-4 text-accent" />
             <span className="text-sm text-muted-foreground">
-              Welcome to my Portfolio
+              {t("welcome_badge")}
             </span>
           </motion.div>
 
@@ -44,7 +61,7 @@ export const Hero = () => {
             transition={{ delay: 0.3 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
           >
-            <span className="gradient-text">Nhlanhla Malaza</span>
+            <span className="gradient-text">{t("name")}</span>
           </motion.h1>
 
           <motion.p
@@ -53,7 +70,7 @@ export const Hero = () => {
             transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground mb-4"
           >
-            Full Stack Developer & Tech Enthusiast
+            {t("title")}
           </motion.p>
 
           <motion.p
@@ -62,7 +79,7 @@ export const Hero = () => {
             transition={{ delay: 0.5 }}
             className="text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-8"
           >
-            A passionate software developer, willing to learn and adapt to any software environment. I am always striving to improve myself and my skills. I enjoy working with others and within a team.
+            {t("subtitle")}
           </motion.p>
 
           <motion.div
@@ -73,39 +90,20 @@ export const Hero = () => {
           >
             <Link href="/contact" className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
-              Get In Touch
+              {t("cta_primary")}
             </Link>
-            <a
-              href={publicConfig.RESUME_URL}
-              target="_blank"
+            <button
+              onClick={() => setIsResumeOpen(true)}
               className="px-8 py-4 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
-              Resume
+              {t("cta_resume")}
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
 
           </motion.div>
 
           {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="flex gap-8 mt-12 justify-center lg:justify-start"
-          >
-            {[
-              { value: "5+", label: "Years Experience" },
-              { value: "10+", label: "Projects Completed" },
-              { value: "3+", label: "Happy Clients" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl font-bold gradient-text">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
+
         </motion.div>
 
         {/* Animated Visual */}
@@ -115,45 +113,32 @@ export const Hero = () => {
           transition={{ duration: 0.8 }}
           className="relative flex items-center justify-center"
         >
-          <div className="relative w-80 h-80 md:w-96 md:h-96">
-            {/* Gradient Ring */}
-            <div className="absolute inset-0 rounded-full gradient-bg opacity-20 animate-pulse-slow" />
-            <div className="absolute inset-4 rounded-full bg-background" />
-
-            {/* Floating Elements */}
-            <motion.div
-              animate={{ y: [-10, 10, -10] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-8 right-8 p-4 rounded-xl bg-card border border-border shadow-xl"
-            >
-              <Code className="w-8 h-8 text-accent" />
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [10, -10, 10] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute bottom-12 left-4 p-4 rounded-xl bg-card border border-border shadow-xl"
-            >
-              <Zap className="w-8 h-8 text-primary" />
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [-5, 15, -5] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-1/2 -right-4 p-4 rounded-xl bg-card border border-border shadow-xl"
-            >
-              <Sparkles className="w-8 h-8 text-accent" />
-            </motion.div>
-
-            {/* Center Content */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-6xl md:text-8xl font-bold gradient-text mb-2">
-                  {"</>"}
-                </div>
-                <p className="text-muted-foreground">Building the Future</p>
-              </div>
-            </div>
+          <div className="relative w-full max-w-md mx-auto">
+            <AnimatePresence>
+              {showInteractionPrompt ? (
+                <motion.div
+                  key="hero-interaction-card"
+                  initial={{ opacity: 0, y: 24, scale: 0.96, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -28, scale: 0.92, filter: "blur(14px)" }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  className="mx-auto max-w-sm text-center"
+                >
+                  <div className="relative flex justify-center">
+                    <div className="absolute inset-x-12 top-3 h-20 rounded-full bg-accent/20 blur-3xl" />
+                    <div className="relative text-6xl md:text-8xl font-bold gradient-text mb-4 drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+                      {"⌨"}
+                    </div>
+                  </div>
+                  <p className="text-balance text-sm uppercase tracking-[0.3em] text-foreground/45 mb-3">
+                    {t("keyboard_label")}
+                  </p>
+                  <p className="text-balance text-base md:text-lg text-foreground/78">
+                    {t("keyboard_desc")}
+                  </p>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </div>
         </motion.div>
       </div>
@@ -173,6 +158,14 @@ export const Hero = () => {
           <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
         </motion.div>
       </motion.div>
+
+      {/* PDF Preview Dialog */}
+      <PdfPreviewDialog
+        open={isResumeOpen}
+        onOpenChange={setIsResumeOpen}
+        pdfUrl={publicConfig.RESUME_URL}
+      />
     </section>
   );
 };
+

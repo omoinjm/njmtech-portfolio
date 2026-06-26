@@ -4,7 +4,7 @@ export type TabProjectModel = {
 	project_group_name: string;
 	project_group_code: string;
 	project_group_icon: string;
-	project?: ProjectModel[];
+	projects?: ProjectModel[];
 };
 
 export type ProjectModel = {

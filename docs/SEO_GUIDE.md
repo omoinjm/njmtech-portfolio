@@ -601,6 +601,155 @@ For SEO-related questions:
 
 ---
 
-**Last Updated:** December 17, 2025
-**Version:** 1.0
+## Ranking #1 on Google for Your Name & NJMTech
+
+This section covers the exact steps to rank number one when someone searches for **Nhlanhla Junior Malaza**, **Nhlanhla Malaza**, **Junior Malaza**, or **NJMTech**, and how to get your subpages (Projects, Contact) appearing as sitelinks beneath the main result.
+
+---
+
+### Step 1: Submit to Google Search Console
+
+This is the single most impactful action you can take. Without it, Google may not discover or index your site for weeks.
+
+1. Go to **[search.google.com/search-console](https://search.google.com/search-console)**
+2. Click **Add Property** → enter `https://njmtech.co.za`
+3. Choose **URL prefix** verification method
+4. Google will auto-verify using:
+   - The `public/google126b0d387a31d50c.html` file already in your repo ✅
+   - The `verification.google` meta tag already in `layout.tsx` ✅
+5. Once verified, go to **Sitemaps** in the left sidebar
+6. Submit: `https://njmtech.co.za/sitemap.xml`
+7. Go to **URL Inspection** → paste `https://njmtech.co.za` → click **"Request Indexing"**
+8. Repeat URL Inspection and Request Indexing for:
+   - `https://njmtech.co.za/projects`
+   - `https://njmtech.co.za/contact`
+
+> Google will usually index a personal portfolio within **24–72 hours** of requesting indexing.
+
+---
+
+### Step 2: Get Sitelinks (Projects & Contact appearing under your result)
+
+Sitelinks are the sub-links that appear beneath your main search result — they look like this:
+
+```
+njmtech.co.za
+Nhlanhla Junior Malaza | Software Developer...
+
+  Projects          Contact
+  njmtech.co.za/projects    njmtech.co.za/contact
+```
+
+Google generates sitelinks **automatically** — you cannot force them, but you can influence them:
+
+| What Google looks for | Your site's status |
+|---|---|
+| Clear navigation links in HTML | ✅ Next.js `<Link>` renders real `<a>` tags |
+| Pages indexed and crawlable | ✅ robots.txt allows all |
+| Sitemap listing all pages | ✅ `/sitemap.xml` exists |
+| Consistent internal linking | ✅ Navbar links to `/projects` and `/contact` |
+| Page titles that describe the content | ✅ Each page has a unique `<title>` |
+
+**Timeline:** Sitelinks typically appear **2–6 weeks** after Google has indexed and understood your site structure.
+
+---
+
+### Step 3: Build Off-Page Identity Signals
+
+For a personal name search, these are the biggest ranking levers after on-page SEO is in place. Your `layout.tsx` already emits `<link rel="me">` for LinkedIn, GitHub, and Twitter — now complete the other side of that relationship:
+
+#### LinkedIn (highest impact)
+
+1. Go to your LinkedIn profile → **Edit** → **Contact info**
+2. Add `https://njmtech.co.za` as your website
+3. In your **About** section, write: *"Nhlanhla Junior Malaza (NJMTech) — Software Developer, DevOps Engineer..."*
+4. Your headline and summary should match your site's title tag
+
+#### GitHub
+
+1. Go to your GitHub profile → **Edit profile**
+2. Set your **Website** field to `https://njmtech.co.za`
+3. Set your **Name** field to `Nhlanhla Junior Malaza`
+4. Add `njmtech` to your **Bio**
+
+#### Twitter / X
+
+1. Add `https://njmtech.co.za` to your bio link
+2. Your display name should match: `Nhlanhla Junior Malaza`
+
+#### Google Business Profile (for Knowledge Panel)
+
+A Knowledge Panel is the info card that appears on the right side of Google results for known entities. To trigger one:
+
+1. Go to **[business.google.com](https://business.google.com)**
+2. Create a profile for **NJMTech** (use "Software company" or "Consultant" as category)
+3. Add your website, description, and social links
+4. Verify via postcard or phone
+
+> A knowledge panel dramatically increases click-through rate and signals that Google recognises you as an entity.
+
+---
+
+### Step 4: Validate Your Structured Data
+
+Your site emits four JSON-LD schemas on the homepage. Validate them to make sure Google can read them:
+
+1. Go to **[search.google.com/test/rich-results](https://search.google.com/test/rich-results)**
+2. Enter `https://njmtech.co.za`
+3. Confirm all four schemas are detected:
+   - `Person` — Nhlanhla Junior Malaza
+   - `Organization` — NJMTech
+   - `WebSite` — with search action
+   - `ProfilePage`
+4. Go to **[validator.schema.org](https://validator.schema.org)**
+5. Enter your URL and verify no errors on the Person or Organization schemas
+
+---
+
+### Step 5: Monitor Your Rankings
+
+Once submitted and indexed, track your progress:
+
+#### Weekly
+
+- [ ] Open **Google Search Console → Performance**
+- [ ] Filter by query: search for `nhlanhla`, `njmtech`, `junior malaza`
+- [ ] Check **Average Position** — anything under 3 is excellent for a personal name
+- [ ] Check **Coverage** for any indexing errors
+
+#### What to expect
+
+| Query | Expected ranking | Timeline |
+|---|---|---|
+| "Nhlanhla Junior Malaza" | #1 | 1–2 weeks after indexing |
+| "Nhlanhla Malaza" | #1–3 | 2–4 weeks |
+| "Junior Malaza" | Top 5 | 3–6 weeks (more competition) |
+| "njmtech" | #1 | 1–2 weeks after indexing |
+| "NJMTech developer" | #1 | 1–2 weeks |
+
+---
+
+### Step 6: Ongoing Checklist
+
+#### One-time actions (do these now)
+
+- [ ] Submit sitemap in Google Search Console
+- [ ] Request indexing for `/`, `/projects`, `/contact`
+- [ ] Add `https://njmtech.co.za` to LinkedIn website field
+- [ ] Add `https://njmtech.co.za` to GitHub profile website field
+- [ ] Add site URL to Twitter/X bio
+- [ ] Create Google Business Profile for NJMTech
+- [ ] Validate schemas at rich-results test and schema validator
+
+#### Monthly maintenance
+
+- [ ] Check Search Console Performance for name queries
+- [ ] Verify no new crawl errors in Coverage report
+- [ ] Check Core Web Vitals report (aim for all green)
+- [ ] Share a LinkedIn post or article linking to your site (fresh crawl trigger)
+
+---
+
+**Last Updated:** May 2026
+**Version:** 2.0
 **Status:** Active and Maintained

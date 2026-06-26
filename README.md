@@ -98,7 +98,7 @@ $PROJECT_ROOT
 - **Frontend**: [Next.js 13](https://nextjs.org/) - React framework with SSR/SSG
 - **Styling**: [Bootstrap 5](https://getbootstrap.com/) + [Styled Components](https://styled-components.com/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Database**: [PostgreSQL](https://www.postgresql.org/) with connection pooling
+- **Database**: [Cloudflare D1](https://developers.cloudflare.com/d1/) (SQLite) via the Cloudflare REST API
 - **Testing**: [Playwright](https://playwright.dev/) for E2E testing
 - **Code Quality**: ESLint, Prettier, Husky pre-commit hooks
 - **Deployment**: [Vercel](https://vercel.com/)
@@ -119,12 +119,10 @@ NEXT_PUBLIC_EMAIL_USER=your-email@example.com
 # Mailchimp Newsletter Integration
 NEXT_PUBLIC_MAILCHIMP_URL=https://your-mailchimp-list...
 
-# Database Configuration (PostgreSQL)
-POSTGRES_DATABASE=njmtech
-POSTGRES_PASSWORD=your-secure-password
-POSTGRES_HOST=your-database-host.aws.neon.tech
-POSTGRES_USER=default
-POSTGRES_URL=postgres://user:password@host/database?sslmode=require
+# Database Configuration (Cloudflare D1)
+D1_ACCOUNT_ID=your-cloudflare-account-id
+D1_DATABASE_ID=your-d1-database-id
+D1_API_TOKEN=your-cloudflare-api-token
 ```
 
 **⚠️ SECURITY WARNING**: Never commit `.env.local` to Git. It's already in `.gitignore`. Use Vercel's environment variable management for production.
@@ -172,7 +170,9 @@ Run container:
 
 ```bash
 docker run -p 3000:3000 \
-  -e POSTGRES_URL="your-database-url" \
+  -e D1_ACCOUNT_ID="your-cloudflare-account-id" \
+  -e D1_DATABASE_ID="your-d1-database-id" \
+  -e D1_API_TOKEN="your-cloudflare-api-token" \
   njmtech-portfolio
 ```
 
