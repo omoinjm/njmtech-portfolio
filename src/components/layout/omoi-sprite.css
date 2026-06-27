@@ -1,0 +1,26 @@
+@keyframes omoi-sprite-strip {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: var(--omoi-strip-offset-x);
+  }
+}
+
+.omoi-sprite {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+.omoi-sprite--animated {
+  animation-name: omoi-sprite-strip;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .omoi-sprite--animated {
+    animation: none;
+  }
+}

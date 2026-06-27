@@ -114,7 +114,18 @@
     "chip_skills": "Tech stack",
     "chip_projects": "Projects",
     "chip_contact": "Contact",
-    "chip_resume": "Resume"
+    "chip_resume": "Resume",
+    "chip_site_shortcuts": "Site shortcuts",
+    "chip_seo_guide": "SEO guide",
+    "chip_keyboard_guide": "Keyboard guide",
+    "guide_section": "Site guides",
+    "guide_tip": "Press ? for site shortcuts, or open the SEO and keyboard guides from here.",
+    "guide_tip_dismiss": "Dismiss",
+    "status_speaking": "Speaking...",
+    "status_guide": "Opening a guide...",
+    "open_site_shortcuts": "Open site keyboard shortcuts",
+    "open_seo_guide": "Open SEO guide",
+    "open_keyboard_guide": "Open keyboard guide"
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",
@@ -125,75 +136,5 @@
     "nav_contact": "Navigate to Contact",
     "close": "Close Assistant or Menus",
     "show": "Show Keyboard Shortcuts"
-  }
-}
-
-    "welcome_badge": "Welcome to my Portfolio",
-    "name": "Nhlanhla Junior Malaza",
-    "title": "Software Developer, DevOps Engineer & AI Integrations Specialist",
-    "subtitle": "A passionate software developer, willing to learn and adapt to any software environment. I am always striving to improve myself and my skills. I enjoy working with others and within a team.",
-    "cta_primary": "Get In Touch",
-    "cta_resume": "Resume",
-    "keyboard_label": "Follow the keyboard",
-    "keyboard_desc": "Scroll through the page to follow the keyboard, then hover the keys in the skills section"
-  },
-  "skills": {
-    "label": "Keyboard Skills",
-    "heading": "Skills &",
-    "heading_gradient": "Technologies",
-    "hint": "(hint: hover over a key)",
-    "idle_label": "Interaction",
-    "idle_title": "Tech Stack",
-    "idle_desc_desktop": "Move through this section, then hover a key to inspect the part of my stack it represents.",
-    "idle_desc_mobile": "Scroll into the section and hover a key to inspect the part of my stack it represents."
-  },
-  "services": {
-    "label": "What I Do",
-    "heading": "Services &",
-    "heading_gradient": "Expertise",
-    "subheading": "A full range of development services to bring your ideas to life with cutting-edge technology.",
-    "cta": "Start a Conversation",
-    "cta_sub": "Have a project in mind? Let's talk.",
-    "item_0_title": "Web Development",
-    "item_0_desc": "Building responsive, performant web applications using modern frameworks like React, Next.js, and Vue.js.",
-    "item_1_title": "Mobile Development",
-    "item_1_desc": "Creating cross-platform mobile apps with React Native and Flutter for iOS and Android.",
-    "item_2_title": "Cloud Solutions",
-    "item_2_desc": "Designing and deploying scalable cloud infrastructure on AWS, GCP, and Azure.",
-    "item_3_title": "AI Integrations",
-    "item_3_desc": "Integrating AI and machine learning capabilities into applications to automate workflows and deliver intelligent user experiences.",
-    "item_4_title": "Backend Development",
-    "item_4_desc": "Building robust APIs, microservices, and database architectures for enterprise applications.",
-    "item_5_title": "DevOps & CI/CD",
-    "item_5_desc": "Implementing automated pipelines, containerization, and infrastructure as code."
-  },
-  "newsletter": {
-    "badge": "Stay Updated",
-    "heading": "Subscribe to My Newsletter",
-    "subheading": "Get the latest updates on web development, tech insights, and exclusive content delivered straight to your inbox. No spam, unsubscribe anytime.",
-    "placeholder": "Enter your email",
-    "cta": "Subscribe",
-    "cta_loading": "Subscribing...",
-    "disclaimer": "By subscribing, you agree to receive emails from me. You can unsubscribe at any time.",
-    "toast_required_title": "Email required",
-    "toast_required_desc": "Please enter your email address.",
-    "toast_success_title": "Subscribed! 🎉",
-    "toast_success_desc": "Thank you for subscribing. Check your inbox to confirm.",
-    "toast_error_title": "Subscription failed",
-    "toast_error_desc": "Something went wrong. Please try again.",
-    "toast_network_title": "Network error",
-    "toast_network_desc": "Could not connect. Please check your connection and try again."
-  },
-  "contact": {
-    "heading": "Get In Touch",
-    "subheading": "Have a project in mind? Let's talk.",
-    "name_label": "Name",
-    "email_label": "Email",
-    "message_label": "Message",
-    "submit": "Send Message"
-  },
-  "projects": {
-    "heading": "My Projects",
-    "subheading": "A collection of things I've built"
   }
 }

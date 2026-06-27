@@ -23,7 +23,8 @@
     "reset": "rm -rf node_modules/ pnpm-lock.yaml .next/",
     "test": "playwright test",
     "test:email": "playwright test email",
-    "ai_cache": "infisical run -- npx tsx scripts/generate-voice-cache.ts"
+    "ai_cache": "infisical run -- npx tsx scripts/generate-voice-cache.ts",
+    "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts"
   },
   "dependencies": {
     "@gradio/client": "^2.2.0",
@@ -106,6 +107,7 @@
     "next": "^16.2.6",
     "postcss": "^8.5.10",
     "pretty-quick": "^4.2.2",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1"

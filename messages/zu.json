@@ -114,7 +114,18 @@
     "chip_skills": "Izinto Zobuchwepheshe",
     "chip_projects": "Imisebenzi",
     "chip_contact": "Xhumana",
-    "chip_resume": "I-CV"
+    "chip_resume": "I-CV",
+    "chip_site_shortcuts": "Izinqamuleli zesayithi",
+    "chip_seo_guide": "Umhlahlandlela we-SEO",
+    "chip_keyboard_guide": "Umhlahlandlela wekhiybhodi",
+    "guide_section": "Imihlahlandlela yesayithi",
+    "guide_tip": "Cindezela ? ukuze uvule izinqamuleli zesayithi, noma uvule umhlahlandlela we-SEO nekhiybhodi lapha.",
+    "guide_tip_dismiss": "Vala",
+    "status_speaking": "Iyakhuluma...",
+    "status_guide": "Ivula umhlahlandlela...",
+    "open_site_shortcuts": "Vula izinqamuleli zekhiybhodi zesayithi",
+    "open_seo_guide": "Vula umhlahlandlela we-SEO",
+    "open_keyboard_guide": "Vula umhlahlandlela wekhiybhodi"
   },
   "shortcuts": {
     "title": "Izinqamuleli Zekhiybhodi",
@@ -125,75 +136,5 @@
     "nav_contact": "Yiya Ekuxhumaneni",
     "close": "Vala Umsizi Noma Imenyu",
     "show": "Bonisa Izinqamuleli Zekhiybhodi"
-  }
-}
-
-    "welcome_badge": "Wamukelekile ku-Portfolio Yami",
-    "name": "Nhlanhla Junior Malaza",
-    "title": "Unjiniyela Wesoftware, Unjiniyela we-DevOps & Inzexpert ye-AI Integrations",
-    "subtitle": "Unjiniyela wesoftware othanda umsebenzi wakhe, olungele ukufunda nokuzijwayeza kunoma yimuphi umuntu wesoftware. Ngihlale ngizama ukuzithuthukisa kanye namakhono ami. Ngiyajabula ukusebenza nabanye naseqenjini.",
-    "cta_primary": "Xhumana Nami",
-    "cta_resume": "I-CV",
-    "keyboard_label": "Landela ikhiybhodi",
-    "keyboard_desc": "Skrola ikhasi ulandele ikhiybhodi, bese usho phezu kwamakinobho esigabeni samakhono"
-  },
-  "skills": {
-    "label": "Amakhono Ekhiybhodi",
-    "heading": "Amakhono",
-    "heading_gradient": "Nobuchwepheshe",
-    "hint": "(Cebo: shweba phezu kwengcezu)",
-    "idle_label": "Ukusebenzisana",
-    "idle_title": "Izinto Zobuchwepheshe",
-    "idle_desc_desktop": "Hambela kulesi sigaba, bese usho phezu kwengcezu ukuze uhlole ingxenye yezinto zami.",
-    "idle_desc_mobile": "Skrola ungene kulesi sigaba, bese usho phezu kwengcezu ukuze uhlole ingxenye yezinto zami."
-  },
-  "services": {
-    "label": "Engikwenzayo",
-    "heading": "Izinsizakalo",
-    "heading_gradient": "Nobuchwepheshe",
-    "subheading": "Indawo ephelele yezinsizakalo zokuthuthukisa ukuze izimvo zakho zibe yiqiniso ngobuchwepheshe banamuhla.",
-    "cta": "Qala Ingxoxo",
-    "cta_sub": "Unephrojekthi engqondweni? Asisho.",
-    "item_0_title": "Ukuthuthukisa Iwebhusayithi",
-    "item_0_desc": "Ukwakha izinhlelo ze-web ezisetshenziswa ngendlela ekhethekile, ezisebenza kahle, kusetshenziswa izinsizakalo zanamuhla njengeReact, Next.js, neVue.js.",
-    "item_1_title": "Ukuthuthukisa Izinhlelo Zeselula",
-    "item_1_desc": "Ukwakha izinhlelo ze-mobile ezisebenza kuzo zombili izinhlelo ngeReact Native neFlutter ze-iOS ne-Android.",
-    "item_2_title": "Izisombululo Zefu",
-    "item_2_desc": "Ukwakha nokufaka isikhungo se-cloud esikhulayo ku-AWS, GCP, ne-Azure.",
-    "item_3_title": "Ukuhlanganisa i-AI",
-    "item_3_desc": "Ukufaka amakhono e-AI nokufunda kwezinto eziphilayo ezinhlelweni ukuze kuzenzeke imisebenzi ngokwayo nokuletha izimpendulo ezihlakanipha kubasebenzisi.",
-    "item_4_title": "Ukuthuthukisa Inhlangothi Yangemuva",
-    "item_4_desc": "Ukwakha ama-API anekhono, ama-microservice, nezakhiwo ze-database ezinkampanini ezinkulu.",
-    "item_5_title": "I-DevOps Nokuhlanganisa Okuqhubekayo",
-    "item_5_desc": "Ukufaka izinhlelo ze-CI/CD ezizenzakalayo, ukufaka izinto ezisezitsheni, nezakhiwo zemishini."
-  },
-  "newsletter": {
-    "badge": "Hlala Uzwile",
-    "heading": "Bhalisa Ku-Nuusletha Yami",
-    "subheading": "Thola izibuyekezo zakamuva ngemisebenzi ye-web, izindaba zobuchwepheshe, nokuqukethwe okukhethekile okufikiswa ngqo ku-inbox yakho. Akukho spam, hoxisa noma nini.",
-    "placeholder": "Faka i-imeyili yakho",
-    "cta": "Bhalisa",
-    "cta_loading": "Iyabhaliswa...",
-    "disclaimer": "Ngokubhalisa, uyavuma ukwamukelwa kwama-imeyili avela kimi. Ungahoxisa noma nini.",
-    "toast_required_title": "I-imeyili iyadingeka",
-    "toast_required_desc": "Sicela ufake ikheli le-imeyili yakho.",
-    "toast_success_title": "Ubhalisile! 🎉",
-    "toast_success_desc": "Siyabonga ngokubhalisa. Hlola i-inbox yakho ukuqinisekisa.",
-    "toast_error_title": "Ukubhalisa kwehlulekile",
-    "toast_error_desc": "Kukhona okungahambanga kahle. Sicela uzame futhi.",
-    "toast_network_title": "Iphutha lenethiwekhi",
-    "toast_network_desc": "Ayikwazanga ukuxhumeka. Sicela uhlole uxhumeko lwakho uzame futhi."
-  },
-  "contact": {
-    "heading": "Xhumana Nami",
-    "subheading": "Unephrojekthi engqondweni? Asisho.",
-    "name_label": "Igama",
-    "email_label": "I-imeyili",
-    "message_label": "Umlayezo",
-    "submit": "Thumela Umlayezo"
-  },
-  "projects": {
-    "heading": "Imisebenzi Yami",
-    "subheading": "Iqoqo lezinto engizakhile"
   }
 }
