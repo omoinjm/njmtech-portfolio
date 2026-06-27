@@ -35,6 +35,15 @@ export const Footer = ({ data }) => {
               >
                 {t("seo_guide")}
               </button>
+              <span className="text-muted-foreground/30 text-xs">·</span>
+              <Link
+                href="/llms.txt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+              >
+                {t("llms_txt")}
+              </Link>
             </div>
           </div>
 

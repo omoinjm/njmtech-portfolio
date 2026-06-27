@@ -7,7 +7,8 @@
   "footer": {
     "copyright": "All rights reserved.",
     "keyboard_shortcuts": "Keyboard Shortcuts",
-    "seo_guide": "SEO Guide"
+    "seo_guide": "SEO Guide",
+    "llms_txt": "llms.txt"
   },
   "hero": {
     "welcome_badge": "Welcome to my Portfolio",
