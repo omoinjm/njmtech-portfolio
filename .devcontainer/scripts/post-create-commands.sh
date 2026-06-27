@@ -1,25 +1,17 @@
-# Check for required environment variables
-: "${GIT_USER_EMAIL:?Need to set GIT_USER_EMAIL}"
-: "${GIT_USER_NAME:?Need to set GIT_USER_NAME}"
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Git config
-chmod 600 /root/.ssh/id_rsa
-eval $(ssh-agent -s)
-ssh-add /root/.ssh/id_rsa
+corepack enable
+corepack prepare pnpm@9.15.1 --activate
 
-echo "chmod 600 /root/.ssh/id_rsa" >> ~/.bashrc
-echo "eval \$(ssh-agent -s)" >> ~/.bashrc
-echo "ssh-add /root/.ssh/id_rsa" >> ~/.bashrc
+if [ -f .env.example ] && [ ! -f .env.local ]; then
+  cp .env.example .env.local
+  echo "Created .env.local from .env.example — update values before deploying."
+fi
 
-git config --global --add safe.directory /workspaces
+pnpm install
 
-git config --global user.email "$GIT_USER_EMAIL" && 
-git config --global user.name "$GIT_USER_NAME"
-
-# Angular config
-chmod -R 775 /usr/src/app
-chown -R root:root /usr/src/app
-
-rm -rf node_modules pnpm-lock.yaml package-lock.json
-
-pnpm install "$NODE_PROJECT_PATH" || { echo "pnpm install failed"; exit 1; }
+if [ -n "${GIT_USER_EMAIL:-}" ] && [ -n "${GIT_USER_NAME:-}" ]; then
+  git config --global user.email "$GIT_USER_EMAIL"
+  git config --global user.name "$GIT_USER_NAME"
+fi

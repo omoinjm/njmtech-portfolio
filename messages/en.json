@@ -6,6 +6,7 @@
   },
   "footer": {
     "copyright": "All rights reserved.",
+    "keyboard_guide": "Keyboard Guide",
     "keyboard_shortcuts": "Keyboard Shortcuts",
     "seo_guide": "SEO Guide",
     "llms_txt": "llms.txt"

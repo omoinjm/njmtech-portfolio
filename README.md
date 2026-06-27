@@ -1,221 +1,118 @@
 # NJMTECH Portfolio
 
-[https://njmtech.vercel.app/](https://njmtech.vercel.app/)
+[https://njmtech.co.za/](https://njmtech.co.za/) · [Vercel preview](https://njmtech.vercel.app/)
 
-A modern portfolio website built with **Next.js 16**, **React 18**, **Turbo**, **Tailwind CSS**, and **shadcn/ui**.
+A modern portfolio built with **Next.js 16**, **React 19**, **Tailwind CSS**, and **shadcn/ui**.
 
-## Tech Stack
+## Tech stack
 
-- **Framework**: Next.js 16.1 (App Router)
-- **Runtime**: Node.js 22.x
-- **Package Manager**: pnpm
-- **Build Tool**: Turbo
-- **Styling**: Tailwind CSS 3
-- **UI Components**: shadcn/ui with Radix UI
-- **Animation**: Framer Motion
-- **Form Handling**: React Hook Form + Zod
-- **HTTP Client**: TanStack React Query
-- **Icons**: Lucide React
-- **Notifications**: Sonner
+- **Framework**: Next.js 16 (App Router)
+- **Runtime**: Node.js 24.x
+- **Package manager**: pnpm
+- **Styling**: Tailwind CSS 3, shadcn/ui, Framer Motion
+- **i18n**: next-intl (`en`, `zu`)
+- **Database**: Cloudflare D1 (optional)
+- **Secrets**: Infisical (`pnpm dev`) or `.env.local` (`pnpm dev:local`)
+- **Testing**: Playwright E2E
+- **Deployment**: Vercel
 
-## Getting Started
+## Getting started
 
 ### Prerequisites
 
-- Node.js 22.x or higher
-- pnpm
+- Node.js 24.x
+- pnpm 9.x
 
 ### Installation
 
-1. Clone the repository:
-
 ```bash
-git clone https://github.com/yourusername/njmtech-portfolio.git
+git clone https://github.com/omoinjm/njmtech-portfolio.git
 cd njmtech-portfolio
-```
-
-2. Install dependencies:
-
-```bash
 pnpm install
-```
-
-3. Set up environment variables:
-
-```bash
 cp .env.example .env.local
-# Edit .env.local with your actual configuration
+# Edit .env.local with your values
+pnpm dev:local
 ```
 
-4. Run the development server:
+Open [http://localhost:3000](http://localhost:3000).
+
+For Infisical-backed development:
 
 ```bash
+pnpm init   # link Infisical workspace once
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Scripts
 
-### Available Scripts
+| Command | Purpose |
+|---------|---------|
+| `pnpm dev` | Dev server with Infisical secrets |
+| `pnpm dev:local` | Dev server with `.env.local` |
+| `pnpm build` | Production build |
+| `pnpm start:local` | Run production build locally |
+| `pnpm lint` | ESLint |
+| `pnpm test` | Playwright E2E |
+| `pnpm ai_cache` | Generate TTS voice cache |
 
-- `pnpm dev` - Start Next.js development server
-- `pnpm build` - Build for production with Turbo optimization
-- `pnpm start` - Start production server
-- `pnpm lint` - Run ESLint
-- `pnpm test` - Run tests with Vitest
-- `pnpm test:watch` - Run tests in watch mode
-- `npm start` - Run production server
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint errors
-- `npm run type-check` - Run TypeScript type checking
-- `npm run sitemap` - Generate sitemap
-
-## Project Structure
+## Project structure
 
 ```
-$PROJECT_ROOT
-├── src/
-│   ├── pages/                   # Next.js page routes
-│   │   ├── api/                # API endpoints
-│   │   └── *.tsx               # Page components
-│   ├── framework/
-│   │   ├── components/         # Reusable React components
-│   │   ├── services/           # Business logic services
-│   │   ├── utils/              # Utility functions
-│   │   ├── models/             # TypeScript interfaces
-│   │   ├── styles/             # Global styles
-│   │   └── lib/                # Library code
-│   └── tests/                  # Playwright E2E tests
-├── public/                     # Static assets
-├── node_modules/               # Dependencies
-├── .husky/                     # Git hooks
-├── .env.example               # Environment template
-├── docker-compose.yml         # Local development setup
-└── Dockerfile                 # Production Docker image
+src/
+├── app/[locale]/     # Pages (home, projects, contact, qr)
+├── app/api/          # Route handlers
+├── components/       # UI, layout, home, contact, projects
+├── lib/              # Config, D1 client, AI config
+├── services/         # Data, SQL, AI orchestrator, TTS
+├── i18n/             # Locale routing
+└── tests/            # Playwright specs
+public/               # Static assets, llms.txt, robots.txt
+docs/                 # Config, SEO, SQL guides
 ```
 
-## Tech Stack
+See **`AGENTS.md`** for agent/ contributor conventions.
 
-- **Frontend**: [Next.js 13](https://nextjs.org/) - React framework with SSR/SSG
-- **Styling**: [Bootstrap 5](https://getbootstrap.com/) + [Styled Components](https://styled-components.com/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Database**: [Cloudflare D1](https://developers.cloudflare.com/d1/) (SQLite) via the Cloudflare REST API
-- **Testing**: [Playwright](https://playwright.dev/) for E2E testing
-- **Code Quality**: ESLint, Prettier, Husky pre-commit hooks
-- **Deployment**: [Vercel](https://vercel.com/)
+## Environment variables
 
-## Environment Variables
+Copy `.env.example` to `.env.local`. Server-only secrets (email, D1, API keys) must **not** use the `NEXT_PUBLIC_` prefix. See `docs/CONFIG_QUICK_REF.md`.
 
-Copy `.env.example` to `.env.local` and fill in the required values:
+## Docker
+
+Local development with hot reload:
 
 ```bash
-# Site Configuration
-NEXT_PUBLIC_SITE_URL=https://njmtech.vercel.app
-
-# Email Configuration (for contact form)
-NEXT_PUBLIC_EMAIL_MAIL=your-email@example.com
-NEXT_PUBLIC_EMAIL_APP_PASS=your-app-specific-password
-NEXT_PUBLIC_EMAIL_USER=your-email@example.com
-
-# Mailchimp Newsletter Integration
-NEXT_PUBLIC_MAILCHIMP_URL=https://your-mailchimp-list...
-
-# Database Configuration (Cloudflare D1)
-D1_ACCOUNT_ID=your-cloudflare-account-id
-D1_DATABASE_ID=your-d1-database-id
-D1_API_TOKEN=your-cloudflare-api-token
+cp .env.example .env.local
+docker compose up --build
 ```
 
-**⚠️ SECURITY WARNING**: Never commit `.env.local` to Git. It's already in `.gitignore`. Use Vercel's environment variable management for production.
+Production image:
+
+```bash
+docker build --target production -t njmtech-portfolio .
+docker run -p 3000:3000 --env-file .env.local njmtech-portfolio
+```
 
 ## Testing
 
-### Run E2E Tests
-
-Start the development server first:
-
 ```bash
-npm run dev
+pnpm dev:local          # terminal 1
+pnpm test               # terminal 2
+pnpm exec playwright show-report
 ```
-
-In another terminal, run tests:
-
-```bash
-npx playwright test
-```
-
-View test reports:
-
-```bash
-npx playwright show-report
-```
-
-## Deployment
-
-The project is configured to deploy to [Vercel](https://vercel.com/):
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy automatically on push to main branch
-
-### Docker Deployment
-
-Build Docker image:
-
-```bash
-docker build -t njmtech-portfolio .
-```
-
-Run container:
-
-```bash
-docker run -p 3000:3000 \
-  -e D1_ACCOUNT_ID="your-cloudflare-account-id" \
-  -e D1_DATABASE_ID="your-d1-database-id" \
-  -e D1_API_TOKEN="your-cloudflare-api-token" \
-  njmtech-portfolio
-```
-
-## Best Practices
-
-### Code Quality
-
-- Code is automatically linted with ESLint
-- Pre-commit hooks ensure code quality
-- TypeScript provides type safety
-- Prettier formats code automatically
-
-### Security
-
-- Use Vercel environment variable management for secrets
-- Never commit `.env.local` to Git
-- CORS is restricted to specific origins
-- API endpoints have proper validation and error handling
-
-### Performance
-
-- Images optimized with Next.js Image component
-- Lazy loading for components
-- CSS-in-JS with styled-components for optimized styles
-- Static generation (SSG) where possible
 
 ## Contributing
 
-Feel free to fork this project and create your own portfolio. Please respect the license terms:
+See [CONTRIBUTING.md](./CONTRIBUTING.md). Agent conventions: [AGENTS.md](./AGENTS.md).
 
-- Add a link to [my homepage](https://njmtech.vercel.app/)
-- Do not use the 3D voxel dog
+Please respect the license terms:
+
+- Link back to [njmtech.co.za](https://njmtech.co.za/)
+- Do not reuse the 3D voxel dog asset
 
 ## License
 
-MIT License - See [LICENSE](./LICENSE) for details.
-
----
+MIT — see [LICENSE](./LICENSE).
 
 ## Tutorial
 
-Watch how I built this website on YouTube:
-
 [![YouTube thumbnail](./docs/images/thumb.png)](https://www.youtube.com/watch?v=hYv6BM2fWd8)
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).

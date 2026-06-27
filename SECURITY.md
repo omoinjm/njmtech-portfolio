@@ -315,7 +315,7 @@ Recommended additions:
 - ✅ Added error handling for API routes
 
 #### Previous Versions
-- See IMPROVEMENTS.md for full history
+- See git history for prior security and improvement notes
 
 ---
 
@@ -378,7 +378,7 @@ This project follows:
 If you have questions about security (that don't involve reporting a vulnerability):
 
 - 📖 Check the [README.md](./README.md)
-- 📋 See [IMPROVEMENTS.md](./IMPROVEMENTS.md) for recent changes
+- See git history for recent security-related changes
 - 💬 Open a GitHub Discussion
 - 📧 Contact us (non-security): contact@njmtech.vercel.app
 

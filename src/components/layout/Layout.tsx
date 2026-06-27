@@ -7,6 +7,7 @@ import { Navbar } from "./Navbar";
 import { RightSideNav } from "./RightSideNav";
 import { KeyboardShortcuts } from "./KeyboardShortcuts";
 import { SEOGuideDialog } from "./SEOGuideDialog";
+import { MechanicalKeyboardGuideDialog } from "./MechanicalKeyboardGuideDialog";
 import { MouseGlow } from "./MouseGlow";
 import { MenuModel, FooterModel, LinkModel } from "@/types";
 import DataService from "@/services/data.service";
@@ -59,6 +60,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <FloatingAssistant />
       <KeyboardShortcuts />
       <SEOGuideDialog />
+      <MechanicalKeyboardGuideDialog />
       <RightSideNav
         pages={nLinks.nav_menu ?? []}
         socialLinks={nLinks.nav_footer ?? []}

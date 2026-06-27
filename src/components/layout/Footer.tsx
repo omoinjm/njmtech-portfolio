@@ -23,6 +23,13 @@ export const Footer = ({ data }) => {
             </p>
             <div className="hidden md:flex items-center gap-3 mt-2">
               <button
+                onClick={() => window.dispatchEvent(new CustomEvent("open-keyboard-guide"))}
+                className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+              >
+                {t("keyboard_guide")}
+              </button>
+              <span className="text-muted-foreground/30 text-xs">·</span>
+              <button
                 onClick={() => window.dispatchEvent(new CustomEvent("open-shortcuts"))}
                 className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
               >

@@ -117,5 +117,5 @@ console.log('Site URL:', config.get('NEXT_PUBLIC_SITE_URL'))
 ## See Also
 
 - [`CONFIG_SERVICE.md`](./CONFIG_SERVICE.md) - Full setup guide
-- [`src/lib/CONFIG.md`](./src/lib/CONFIG.md) - Detailed reference
+- [`AGENTS.md`](../AGENTS.md) - Agent and contributor conventions
 - [Zod Docs](https://zod.dev) - Validation library

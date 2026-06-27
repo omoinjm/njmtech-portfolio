@@ -72,7 +72,7 @@ npm run dev
 
 ```bash
 # Using Docker Compose
-docker-compose up
+docker compose up --build
 
 # Or build Docker image
 docker build -t njmtech-portfolio .
@@ -316,7 +316,7 @@ src/
 ## Getting Help
 
 - 📖 Check [README.md](./README.md)
-- 📋 See [IMPROVEMENTS.md](./IMPROVEMENTS.md)
+- See git history for project improvement notes
 - 🔒 Security issues? See [SECURITY.md](./SECURITY.md)
 - 💬 Open a GitHub Discussion
 - 📧 Email: contact@njmtech.vercel.app

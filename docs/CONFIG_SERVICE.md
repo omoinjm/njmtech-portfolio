@@ -9,8 +9,8 @@ A type-safe configuration service for managing environment variables with automa
 ```
 src/lib/config.ts              # Server-side config service with validation
 src/lib/config.client.ts       # Client-safe config (public variables only)
-src/lib/CONFIG.md              # Detailed documentation
-app/api/config/route.ts        # Example API route using config service
+docs/CONFIG_QUICK_REF.md       # Quick reference
+docs/CONFIG_SERVICE.md         # Setup guide
 ```
 
 ## Quick Start
@@ -175,7 +175,7 @@ const url = publicConfig.RESUME_URL
 
 ## See Also
 
-- [`src/lib/CONFIG.md`](./CONFIG.md) - Detailed documentation
+- [`CONFIG_QUICK_REF.md`](./CONFIG_QUICK_REF.md) - Quick reference
 - [`next.config.js`](/next.config.js) - Next.js configuration
 - [`.env.example`](/.env.example) - Environment variable template
 - [Zod Documentation](https://zod.dev/) - Schema validation library
