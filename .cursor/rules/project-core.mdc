@@ -1,0 +1,15 @@
+---
+description: Core NJMTECH portfolio conventions
+alwaysApply: true
+---
+
+# Core conventions
+
+- Read `AGENTS.md` for project map, structure, and commands.
+- Use `@/` imports from `src/`.
+- **Server env**: `config.get('VAR')` from `@/lib/config` — not raw `process.env`.
+- **Client env**: `@/lib/config.client` for `NEXT_PUBLIC_*` values only.
+- **Package manager**: pnpm only. Node 24.x.
+- **Secrets**: Infisical via `pnpm dev`; local via `.env.local` + `pnpm dev:local`.
+- Minimize diff scope; match naming, formatting, and patterns in neighboring files.
+- Do not commit secrets or `.env.local`.

@@ -1,0 +1,15 @@
+---
+description: Next.js App Router and i18n patterns
+globs: src/app/**/*
+alwaysApply: false
+---
+
+# App Router
+
+- Pages live under `src/app/[locale]/` with next-intl (`en`, `zu`; default `en`).
+- Locale prefix: `as-needed` — English at `/`, Zulu at `/zu/...`.
+- API routes in `src/app/api/` (not under `[locale]`).
+- Prefer Server Components; add `'use client'` only for hooks, events, or browser APIs.
+- Co-locate `loading.tsx` where the project already uses it (e.g. contact, projects).
+- SEO metadata: follow patterns in `src/app/[locale]/layout.tsx` and `@/utils/seo`.
+- Root layout wraps with `NextIntlClientProvider`, `Providers`, and shared `Layout`.

@@ -1,0 +1,16 @@
+---
+description: API route conventions
+globs: src/app/api/**/*
+alwaysApply: false
+---
+
+# API routes
+
+- Export named HTTP handlers (`GET`, `POST`, …) from `route.ts` files.
+- Validate request bodies; prefer Zod or typed guards (see `src/app/api/contact/route.ts`).
+- Use `@/utils/logger` for server logging instead of bare `console.log` in new code.
+- Secrets via `config.get()` from `@/lib/config` where applicable.
+- Return `NextResponse.json()` with appropriate status codes.
+- CORS headers are set globally in `next.config.js` for `/api/*`.
+- AI chat: provider chain in `@/services/ai/orchestrator`; config in `@/lib/ai-config`.
+- TTS: orchestrator and providers under `@/services/tts/`.

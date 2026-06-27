@@ -1,0 +1,7 @@
+# NJMTECH LLM Context
+
+The standard AI context file for this site is available at:
+
+- https://njmtech.co.za/llms.txt
+
+This file exists for visitors and crawlers that check the singular `/llm.txt` path.
