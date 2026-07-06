@@ -21,5 +21,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			changeFrequency: 'monthly',
 			priority: 0.8,
 		},
+		{
+			url: `${siteConfig.url}/mail-service-policy`,
+			lastModified: new Date(),
+			changeFrequency: 'yearly',
+			priority: 0.3,
+		},
+		{
+			url: `${siteConfig.url}/mail-service-terms`,
+			lastModified: new Date(),
+			changeFrequency: 'yearly',
+			priority: 0.3,
+		},
 	];
 }

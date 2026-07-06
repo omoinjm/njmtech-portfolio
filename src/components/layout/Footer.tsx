@@ -51,6 +51,20 @@ export const Footer = ({ data }) => {
               >
                 {t("llms_txt")}
               </Link>
+              <span className="text-muted-foreground/30 text-xs">·</span>
+              <Link
+                href="/mail-service-policy"
+                className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+              >
+                {t("mail_service_policy")}
+              </Link>
+              <span className="text-muted-foreground/30 text-xs">·</span>
+              <Link
+                href="/mail-service-terms"
+                className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+              >
+                {t("mail_service_terms")}
+              </Link>
             </div>
           </div>
 

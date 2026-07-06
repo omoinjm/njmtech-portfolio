@@ -9,7 +9,9 @@
     "keyboard_guide": "Keyboard Guide",
     "keyboard_shortcuts": "Keyboard Shortcuts",
     "seo_guide": "SEO Guide",
-    "llms_txt": "llms.txt"
+    "llms_txt": "llms.txt",
+    "mail_service_policy": "Mail Service Policy",
+    "mail_service_terms": "Mail Service Terms"
   },
   "hero": {
     "welcome_badge": "Welcome to my Portfolio",
@@ -136,5 +138,117 @@
     "nav_contact": "Navigate to Contact",
     "close": "Close Assistant or Menus",
     "show": "Show Keyboard Shortcuts"
+  },
+  "mailServicePolicy": {
+    "label": "Legal",
+    "title": "Mail Service Policy",
+    "last_updated": "Last updated: 6 July 2026",
+    "intro": "This Mail Service Policy describes how {owner} ({siteName}) uses email services on {siteUrl}, including email sent through Google Gmail and related Google application credentials. This policy applies to visitors who submit the contact form, subscribe to updates, or otherwise communicate with us by email.",
+    "overview": {
+      "title": "1. Overview",
+      "body": "{siteName} operates a portfolio website at {siteUrl}. Email is used only to support legitimate site operations: responding to contact inquiries, sending transactional confirmations, and delivering newsletter content to subscribers who opt in. We do not use email for unsolicited bulk messaging or advertising on behalf of third parties."
+    },
+    "provider": {
+      "title": "2. Mail service provider",
+      "body": "Outbound and notification email for this website is delivered using Google Gmail through an authorized Google application (Gmail API / app credentials). Google processes message transmission on our behalf in accordance with Google's terms and privacy policies. {siteName} remains the data controller for information you submit through this site."
+    },
+    "purposes": {
+      "title": "3. Purposes of email use",
+      "body": "We use email to:\n• Notify {owner} when a visitor submits the contact form.\n• Send an automated confirmation to the sender after a contact form submission.\n• Send welcome and update messages to newsletter subscribers who provide consent.\n• Respond manually to inquiries when follow-up is required.\n\nWe do not use email data for unrelated profiling, resale, or third-party marketing."
+    },
+    "data_collected": {
+      "title": "4. Information collected",
+      "body": "Depending on how you interact with the site, we may process:\n• Your name and email address (contact form or newsletter signup).\n• Subject line and message content you provide.\n• Technical metadata necessary to deliver email (timestamps, delivery status).\n\nWe do not request or store Gmail mailbox contents beyond what you voluntarily submit through this website."
+    },
+    "data_use": {
+      "title": "5. How we use email information",
+      "body": "Information is used solely to operate the mail service described above, prevent abuse (including rate limiting), maintain service reliability, and comply with applicable law. We do not sell, rent, or trade your email address or message content to third parties."
+    },
+    "storage_security": {
+      "title": "6. Storage and security",
+      "body": "Contact and subscription records may be stored in secure application databases and email systems under our control. Access is limited to {owner} and systems required to operate the website. We apply reasonable technical and organizational measures to protect data, but no method of transmission or storage is completely secure."
+    },
+    "google_limited_use": {
+      "title": "7. Google API Services User Data Policy",
+      "body": "If Google user data is accessed through Google APIs, {siteName}'s use of that information complies with the Google API Services User Data Policy, including the Limited Use requirements. Google user data is used only to provide or improve user-facing features of this site, is not transferred to third parties except as necessary to provide the service, and is not used for serving advertisements."
+    },
+    "retention": {
+      "title": "8. Retention",
+      "body": "Contact form correspondence is retained only as long as needed to respond to inquiries and maintain reasonable business records. Newsletter subscriber records are kept until you unsubscribe or request deletion. You may request removal of your data at any time using the contact details below."
+    },
+    "your_rights": {
+      "title": "9. Your rights",
+      "body": "Under applicable data protection law, including the Protection of Personal Information Act (POPIA) in South Africa, you may request access to, correction of, or deletion of personal information we hold about you. Newsletter subscribers can stop receiving emails by using unsubscribe instructions in any message or by contacting us directly."
+    },
+    "changes": {
+      "title": "10. Changes to this policy",
+      "body": "We may update this Mail Service Policy from time to time. The \"Last updated\" date at the top of this page will reflect the most recent revision. Continued use of the site's email features after changes are posted constitutes acceptance of the updated policy."
+    },
+    "contact": {
+      "title": "11. Contact",
+      "body": "For questions about this Mail Service Policy or to exercise your data rights, contact:\n\n{owner}\nEmail: {email}\nWebsite: {siteUrl}"
+    }
+  },
+  "mailServiceTerms": {
+    "label": "Legal",
+    "title": "Mail Service Terms",
+    "last_updated": "Last updated: 6 July 2026",
+    "intro": "These Mail Service Terms govern your use of email-related features on {siteUrl} operated by {owner} ({siteName}). By submitting the contact form, subscribing to updates, or otherwise using our mail services, you agree to these terms in addition to our Mail Service Policy.",
+    "acceptance": {
+      "title": "1. Acceptance of terms",
+      "body": "By using any email feature on {siteUrl}, you confirm that you have read, understood, and agree to be bound by these Mail Service Terms. If you do not agree, do not submit the contact form or subscribe to email communications."
+    },
+    "service_description": {
+      "title": "2. Description of service",
+      "body": "{siteName} provides email functionality to facilitate contact inquiries, send transactional confirmations, and deliver newsletter content. Email is transmitted using Google Gmail through an authorized Google application. The service is provided for portfolio and professional communication purposes only."
+    },
+    "eligibility": {
+      "title": "3. Eligibility",
+      "body": "You must be at least 16 years old to use the mail services on this site. By submitting information, you represent that you are authorized to provide the contact details and message content you submit."
+    },
+    "acceptable_use": {
+      "title": "4. Acceptable use",
+      "body": "You agree to use the mail services only for lawful, good-faith communication related to {siteName}. You must provide accurate contact information and message content. You must not use the contact form or newsletter signup to impersonate others or misrepresent your affiliation."
+    },
+    "prohibited_conduct": {
+      "title": "5. Prohibited conduct",
+      "body": "You may not use the mail services to:\n• Send spam, bulk unsolicited messages, or automated submissions.\n• Transmit malware, phishing content, or harmful code.\n• Harass, threaten, defame, or abuse {owner} or any third party.\n• Attempt to bypass rate limits, security controls, or access restrictions.\n• Violate applicable laws, including anti-spam and data protection regulations.\n\nWe reserve the right to block submissions and report abuse where appropriate."
+    },
+    "newsletter": {
+      "title": "6. Newsletter subscriptions",
+      "body": "Newsletter subscriptions require your explicit consent. By subscribing, you agree to receive updates from {siteName}. You may unsubscribe at any time using instructions in any email or by contacting us. We do not guarantee a specific frequency or volume of newsletter messages."
+    },
+    "availability": {
+      "title": "7. Service availability",
+      "body": "We strive to keep mail services available and reliable but do not guarantee uninterrupted or error-free delivery. Email delivery may be delayed or fail due to third-party providers (including Google), network issues, or maintenance. {siteName} is not responsible for failures outside our reasonable control."
+    },
+    "intellectual_property": {
+      "title": "8. Intellectual property",
+      "body": "Content you submit through the contact form remains yours. You grant {siteName} a limited license to use that content solely to respond to your inquiry and operate the mail service. Email templates, branding, and site content sent by {siteName} remain the property of {owner} unless otherwise stated."
+    },
+    "disclaimer": {
+      "title": "9. Disclaimer",
+      "body": "Mail services are provided on an \"as is\" and \"as available\" basis without warranties of any kind, whether express or implied, to the fullest extent permitted by law. We do not warrant that email will be delivered, read, or free from interception by third parties."
+    },
+    "limitation_liability": {
+      "title": "10. Limitation of liability",
+      "body": "To the maximum extent permitted by applicable law, {owner} and {siteName} shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the mail services, including lost data, missed communications, or reliance on automated confirmations."
+    },
+    "termination": {
+      "title": "11. Suspension and termination",
+      "body": "We may suspend or refuse mail service to any user who violates these terms, submits abusive content, or attempts to compromise the service. Newsletter subscriptions may be cancelled by us or by you at any time."
+    },
+    "governing_law": {
+      "title": "12. Governing law",
+      "body": "These Mail Service Terms are governed by the laws of the Republic of South Africa. Any disputes arising from use of the mail services shall be subject to the jurisdiction of the courts of South Africa, unless mandatory consumer protection law requires otherwise."
+    },
+    "changes": {
+      "title": "13. Changes to these terms",
+      "body": "We may revise these Mail Service Terms at any time. The \"Last updated\" date above indicates the latest version. Material changes will be posted on this page. Continued use of email features after updates constitutes acceptance of the revised terms."
+    },
+    "contact": {
+      "title": "14. Contact",
+      "body": "For questions about these Mail Service Terms, contact:\n\n{owner}\nEmail: {email}\nWebsite: {siteUrl}\n\nSee also our Mail Service Policy at {siteUrl}/mail-service-policy."
+    }
   }
 }

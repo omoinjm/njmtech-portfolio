@@ -132,6 +132,37 @@ export const pageConfig: Record<string, SEOProps> = {
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   },
 
+  "mail-service-policy": {
+    title: "Mail Service Policy",
+    description:
+      "How NJMTECH uses Google Gmail to send and receive email for contact form messages, transactional notifications, and newsletter communications on njmtech.co.za.",
+    canonical: `${siteConfig.url}/mail-service-policy`,
+    keywords: [
+      "mail service policy",
+      "email policy",
+      "NJMTECH email",
+      "Gmail app policy",
+      "transactional email policy",
+    ],
+    ogType: "website",
+    robots: "index, follow",
+  },
+
+  "mail-service-terms": {
+    title: "Mail Service Terms",
+    description:
+      "Terms of use for email services on NJMTECH, including contact form messaging, transactional notifications, and newsletter subscriptions sent via Google Gmail.",
+    canonical: `${siteConfig.url}/mail-service-terms`,
+    keywords: [
+      "mail service terms",
+      "email terms of service",
+      "NJMTECH email terms",
+      "Gmail app terms",
+    ],
+    ogType: "website",
+    robots: "index, follow",
+  },
+
   services: {
     title: "Services",
     description:
