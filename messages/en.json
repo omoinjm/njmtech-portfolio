@@ -6,6 +6,8 @@
   },
   "footer": {
     "copyright": "All rights reserved.",
+    "guides_category": "Guides",
+    "mail_category": "Mail Service",
     "keyboard_guide": "Keyboard Guide",
     "keyboard_shortcuts": "Keyboard Shortcuts",
     "seo_guide": "SEO Guide",
