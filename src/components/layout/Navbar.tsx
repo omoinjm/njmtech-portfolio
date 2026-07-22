@@ -46,6 +46,10 @@ export const Navbar = ({ data }) => {
       if (event.altKey && event.key === "3") {
         router.push("/contact");
       }
+      // Alt + 4: Blog
+      if (event.altKey && event.key === "4") {
+        router.push("/blog");
+      }
       // Esc: Close mobile menu
       if (event.key === "Escape" && isMobileMenuOpen) {
         setIsMobileMenuOpen(false);

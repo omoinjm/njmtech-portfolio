@@ -2,6 +2,7 @@
   "nav": {
     "projects": "Projects",
     "contact": "Contact",
+    "blog": "Blog",
     "links": "Links"
   },
   "footer": {
@@ -106,6 +107,22 @@
     "heading_gradient": "Projects",
     "subheading": "Here are some of my recent works. Each project represents unique challenges and creative solutions."
   },
+  "blog": {
+    "label": "Writing",
+    "heading": "Tech",
+    "heading_gradient": "Blog",
+    "subheading": "Notes on tech, experiments, and what I'm currently building.",
+    "empty": "No posts yet — check back soon.",
+    "read_more": "Read article",
+    "back_to_blog": "Back to blog",
+    "listen_title": "Listen to this article",
+    "listen_desc": "AI-narrated audio with a dedicated blog voice",
+    "listen": "Listen",
+    "pause": "Pause",
+    "stop": "Stop",
+    "reading": "Reading: {title}",
+    "progress": "Section {current} of {total}"
+  },
   "not_found": {
     "message": "Page not found",
     "go_home": "Go Home"
@@ -137,6 +154,7 @@
     "reset_ai": "Reset AI Assistant Chat",
     "nav_home": "Navigate to Home",
     "nav_projects": "Navigate to Projects",
+    "nav_blog": "Navigate to Blog",
     "nav_contact": "Navigate to Contact",
     "close": "Close Assistant or Menus",
     "show": "Show Keyboard Shortcuts"

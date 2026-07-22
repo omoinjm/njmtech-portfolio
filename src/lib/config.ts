@@ -16,6 +16,9 @@ const envSchema = z.object({
   D1_ACCOUNT_ID: z.string().optional(),
   D1_DATABASE_ID: z.string().optional(),
   D1_API_TOKEN: z.string().optional(),
+  BLOG_VOXCPM_REF_AUDIO: z.string().optional(),
+  BLOG_VOXCPM_VOICE_INSTRUCTION: z.string().optional(),
+  BLOG_EDGE_TTS_VOICE: z.string().optional(),
 });
 
 export type Config = z.infer<typeof envSchema>;
@@ -64,6 +67,10 @@ class ConfigService {
           D1_ACCOUNT_ID: process.env.D1_ACCOUNT_ID,
           D1_DATABASE_ID: process.env.D1_DATABASE_ID,
           D1_API_TOKEN: process.env.D1_API_TOKEN,
+          BLOG_VOXCPM_REF_AUDIO: process.env.BLOG_VOXCPM_REF_AUDIO,
+          BLOG_VOXCPM_VOICE_INSTRUCTION:
+            process.env.BLOG_VOXCPM_VOICE_INSTRUCTION,
+          BLOG_EDGE_TTS_VOICE: process.env.BLOG_EDGE_TTS_VOICE,
         };
       }
 

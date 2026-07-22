@@ -99,6 +99,11 @@ config.getSiteUrl()  // Removes trailing slash
 // Links
 publicConfig.RESUME_URL
 publicConfig.MAILCHIMP_URL
+
+// Blog TTS (server-only)
+config.get('BLOG_VOXCPM_VOICE_INSTRUCTION')
+config.get('BLOG_EDGE_TTS_VOICE')
+config.get('BLOG_VOXCPM_REF_AUDIO')
 ```
 
 ## Debugging

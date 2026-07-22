@@ -2,6 +2,7 @@
   "nav": {
     "projects": "Imisebenzi",
     "contact": "Xhumana",
+    "blog": "Ibhulogi",
     "links": "Izixhumanisi"
   },
   "footer": {
@@ -106,6 +107,22 @@
     "heading_gradient": "Eyakhethiwe",
     "subheading": "Nants'imisebenzi yami yakamuva. Iphrojekthi ngayinye ikhombisa izinselelo ezikhethekile nezisombululo ezikhuthazayo."
   },
+  "blog": {
+    "label": "Ukubhala",
+    "heading": "Ibhulogi",
+    "heading_gradient": "Yobuchwepheshe",
+    "subheading": "Amanothi obuchwepheshe, izivivinyo, nokho engikwenzayo njengamanje.",
+    "empty": "Awekho okuthunyelwe okwamanje — buya maduze.",
+    "read_more": "Funda indatshana",
+    "back_to_blog": "Buyela ebhulogini",
+    "listen_title": "Lalela le ndatshana",
+    "listen_desc": "Umsindo we-AI onolwazi oluhlukile lwebhulogi",
+    "listen": "Lalela",
+    "pause": "Misa isikhashana",
+    "stop": "Misa",
+    "reading": "Iyafunda: {title}",
+    "progress": "Isigaba {current} kwe-{total}"
+  },
   "not_found": {
     "message": "Ikhasi alitholakalanga",
     "go_home": "Buyela Ekhaya"
@@ -137,6 +154,7 @@
     "reset_ai": "Setha Kabusha Ingxoxo Nomsizi we-AI",
     "nav_home": "Yiya Ekhaya",
     "nav_projects": "Yiya Emisebenzi",
+    "nav_blog": "Yiya Ebhulogini",
     "nav_contact": "Yiya Ekuxhumaneni",
     "close": "Vala Umsizi Noma Imenyu",
     "show": "Bonisa Izinqamuleli Zekhiybhodi"

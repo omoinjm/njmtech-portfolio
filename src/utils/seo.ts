@@ -132,6 +132,25 @@ export const pageConfig: Record<string, SEOProps> = {
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   },
 
+  blog: {
+    title: "Blog",
+    description:
+      "Tech notes, experiments, and things Nhlanhla Junior Malaza is currently building — Cloudflare, Next.js, AI integrations, and DevOps.",
+    canonical: `${siteConfig.url}/blog`,
+    keywords: [
+      "Nhlanhla Junior Malaza blog",
+      "NJMTech blog",
+      "tech blog South Africa",
+      "Next.js blog",
+      "Cloudflare D1",
+      "AI integrations",
+      "software development notes",
+    ],
+    ogType: "website",
+    robots:
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  },
+
   "mail-service-policy": {
     title: "Mail Service Policy",
     description:
@@ -422,6 +441,43 @@ export function generateBreadcrumbSchema(
 }
 
 /**
+ * Generate BlogPosting schema for article pages
+ */
+export function generateArticleSchema(post: {
+  title: string;
+  slug: string;
+  publishedAt: string;
+  excerpt: string;
+  tags: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    author: {
+      "@type": "Person",
+      name: "Nhlanhla Junior Malaza",
+      url: siteConfig.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteConfig.url}${siteConfig.logo}`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteConfig.url}/blog/${post.slug}`,
+    },
+    keywords: post.tags.join(", "),
+  };
+}
+
+/**
  * Generate default meta tags based on page config
  */
 export function generateMetaTags(config: SEOProps) {
@@ -540,6 +596,7 @@ export default {
   generateContactPageSchema,
   generatePortfolioPageSchema,
   generateBreadcrumbSchema,
+  generateArticleSchema,
   generateMetaTags,
   getPageSEO,
 };

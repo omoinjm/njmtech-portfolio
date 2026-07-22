@@ -1,7 +1,9 @@
 import { useCallback, useRef, useState, useEffect } from "react";
+import type { TtsProfile } from "@/lib/tts-profiles";
 
 interface UseSpeechOptions {
   isMuted: boolean;
+  profile?: TtsProfile;
   onStart?: () => void;
   onEnd?: () => void;
 }
@@ -10,7 +12,7 @@ interface UseSpeechOptions {
  * Hook for handling text-to-speech with high-quality fallback.
  * Adheres to SRP by isolating audio management logic.
  */
-export function useSpeech({ isMuted, onStart, onEnd }: UseSpeechOptions) {
+export function useSpeech({ isMuted, profile = "assistant", onStart, onEnd }: UseSpeechOptions) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -38,7 +40,7 @@ export function useSpeech({ isMuted, onStart, onEnd }: UseSpeechOptions) {
         const response = await fetch("/api/tts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text }),
+          body: JSON.stringify({ text, profile }),
         });
 
         if (!response.ok) throw new Error("TTS API failed");
@@ -99,7 +101,7 @@ export function useSpeech({ isMuted, onStart, onEnd }: UseSpeechOptions) {
         }
       }
     },
-    [isMuted, onStart, onEnd, stop]
+    [isMuted, profile, onStart, onEnd, stop]
   );
 
   // Cleanup on unmount

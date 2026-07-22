@@ -20,8 +20,9 @@ insert into nav_menu
 (name , icon, route_url, is_active, sort_order)
 values
 ('Projects', 'bi bi-window', '/projects', true, 1),
-('Contact', 'bi bi-telephone', '/contact', true, 2),
-('Subscribe', 'bi bi-pen', '/subscribe', true, 3);
+('Blog', 'bi bi-journal-text', '/blog', true, 2),
+('Contact', 'bi bi-telephone', '/contact', true, 3),
+('Subscribe', 'bi bi-pen', '/subscribe', true, 4);
 
 select * from nav_menu;
 ```
