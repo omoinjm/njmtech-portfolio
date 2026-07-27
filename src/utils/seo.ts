@@ -44,6 +44,7 @@ export const siteConfig = {
     "Technical Consulting",
   ],
   logo: "/logo.png",
+  ogImage: "/opengraph-image",
   locales: ["en_ZA", "en_US"],
   locale: "en_ZA",
 };
@@ -59,9 +60,9 @@ function getSameAsLinks() {
 
 export const pageConfig: Record<string, SEOProps> = {
   home: {
-    title: "Nhlanhla Junior Malaza | Software Developer, DevOps Engineer & AI Integrations Specialist",
+    title: "Nhlanhla Malaza | Software Developer, DevOps Engineer & AI Specialist — NJMTech",
     description:
-      "Portfolio of Nhlanhla Junior Malaza (NJMTech) — Software Developer, DevOps Engineer, and AI Integrations Specialist from South Africa. Expert in Next.js, React, TypeScript, Node.js, cloud infrastructure, and AI integrations.",
+      "Nhlanhla Malaza (Nhlanhla Junior Malaza, NJMTech) — Software Developer, DevOps Engineer, and AI Integrations Specialist based in Johannesburg, South Africa. Portfolio, projects, and contact.",
     canonical: `${siteConfig.url}/`,
     keywords: [
       "Nhlanhla",
@@ -84,6 +85,26 @@ export const pageConfig: Record<string, SEOProps> = {
       "web developer portfolio",
       "South Africa developer",
       "freelance developer",
+    ],
+    ogType: "profile",
+    robots:
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  },
+
+  about: {
+    title: "About Nhlanhla Malaza",
+    description:
+      "About Nhlanhla Malaza (Nhlanhla Junior Malaza, NJMTech) — a Johannesburg-based Software Developer, DevOps Engineer, and AI Integrations Specialist. Background, skills, and professional profile.",
+    canonical: `${siteConfig.url}/about`,
+    keywords: [
+      "Nhlanhla Malaza",
+      "Nhlanhla Junior Malaza",
+      "about Nhlanhla Malaza",
+      "NJMTech",
+      "software developer South Africa",
+      "devops engineer Johannesburg",
+      "full stack developer",
+      "AI integrations specialist",
     ],
     ogType: "profile",
     robots:
@@ -347,7 +368,11 @@ export function generateWebsiteSchema() {
     "@type": "WebSite",
     "@id": `${siteConfig.url}/#website`,
     name: siteConfig.name,
-    alternateName: "Nhlanhla Junior Malaza Portfolio",
+    alternateName: [
+      "Nhlanhla Junior Malaza Portfolio",
+      "Nhlanhla Malaza",
+      "NJMTech Portfolio",
+    ],
     url: siteConfig.url,
     description: siteConfig.description,
     inLanguage: "en-ZA",
@@ -356,6 +381,33 @@ export function generateWebsiteSchema() {
       "@id": `${siteConfig.url}/#person`,
       name: "Nhlanhla Junior Malaza",
     },
+    publisher: { "@id": `${siteConfig.url}/#organization` },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteConfig.url}/projects?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+/**
+ * Generate AboutPage schema
+ */
+export function generateAboutPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": `${siteConfig.url}/about#aboutpage`,
+    name: "About Nhlanhla Malaza",
+    url: `${siteConfig.url}/about`,
+    description:
+      "Professional background and profile of Nhlanhla Malaza (Nhlanhla Junior Malaza), a Software Developer, DevOps Engineer, and AI Integrations Specialist based in Johannesburg, South Africa.",
+    inLanguage: "en-ZA",
+    isPartOf: { "@id": `${siteConfig.url}/#website` },
+    mainEntity: { "@id": `${siteConfig.url}/#person` },
   };
 }
 
@@ -531,7 +583,7 @@ export function generateMetaTags(config: SEOProps) {
     },
     {
       property: "og:image",
-      content: config.ogImage || siteConfig.logo,
+      content: config.ogImage || siteConfig.ogImage || siteConfig.logo,
       key: "og:image",
     },
     {
@@ -556,7 +608,7 @@ export function generateMetaTags(config: SEOProps) {
     },
     {
       name: "twitter:image",
-      content: config.ogImage || siteConfig.logo,
+      content: config.ogImage || siteConfig.ogImage || siteConfig.logo,
       key: "twitter:image",
     },
     {
@@ -593,6 +645,7 @@ export default {
   generateProfessionalServiceSchema,
   generateWebsiteSchema,
   generateProfilePageSchema,
+  generateAboutPageSchema,
   generateContactPageSchema,
   generatePortfolioPageSchema,
   generateBreadcrumbSchema,

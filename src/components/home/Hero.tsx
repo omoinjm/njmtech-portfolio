@@ -59,10 +59,19 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-3"
           >
             <span className="gradient-text">{t("name")}</span>
           </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="text-base md:text-lg text-muted-foreground/80 mb-4"
+          >
+            {t("name_full")}
+          </motion.p>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}

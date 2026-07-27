@@ -1,0 +1,13 @@
+/* TEAM */
+Developer: Nhlanhla Malaza (Nhlanhla Junior Malaza)
+Site: https://njmtech.co.za/
+Contact: njmalaza@outlook.com
+Location: Johannesburg, Gauteng, South Africa
+
+/* SOCIAL */
+LinkedIn: https://www.linkedin.com/in/njmalaza
+GitHub: https://github.com/omoinjm
+X: https://twitter.com/nhlanhlamalaza_
+
+/* THANKS */
+Built with Next.js, React, TypeScript, and Tailwind CSS.

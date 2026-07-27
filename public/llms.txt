@@ -11,6 +11,7 @@ NJMTECH is the personal portfolio and professional services site for Nhlanhla Ju
 ## Key Pages
 
 - [Home](https://njmtech.co.za/): Profile, skills, services, newsletter, and professional overview.
+- [About](https://njmtech.co.za/about): Canonical public profile for Nhlanhla Malaza.
 - [Projects](https://njmtech.co.za/projects): Portfolio projects and technical work samples.
 - [Contact](https://njmtech.co.za/contact): Project inquiries, collaboration requests, and professional contact.
 - [Sitemap](https://njmtech.co.za/sitemap.xml): Complete crawlable URL list.
@@ -19,6 +20,7 @@ NJMTECH is the personal portfolio and professional services site for Nhlanhla Ju
 ## Primary Entity
 
 - Name: Nhlanhla Junior Malaza
+- Also known as: Nhlanhla Malaza, Junior Malaza
 - Brand: NJMTECH
 - Location: Johannesburg, Gauteng, South Africa
 - Roles: Software Developer, DevOps Engineer, Full Stack Developer, AI Integrations Specialist

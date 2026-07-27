@@ -18,9 +18,10 @@
   },
   "hero": {
     "welcome_badge": "Welcome to my Portfolio",
-    "name": "Nhlanhla Junior Malaza",
+    "name": "Nhlanhla Malaza",
+    "name_full": "Nhlanhla Junior Malaza · NJMTech",
     "title": "Software Developer, DevOps Engineer & AI Integrations Specialist",
-    "subtitle": "A passionate software developer, willing to learn and adapt to any software environment. I am always striving to improve myself and my skills. I enjoy working with others and within a team.",
+    "subtitle": "Nhlanhla Malaza (NJMTech) is a passionate software developer based in South Africa — always learning, adapting, and building with modern web technologies.",
     "cta_primary": "Get In Touch",
     "cta_resume": "Resume",
     "keyboard_label": "Follow the keyboard",

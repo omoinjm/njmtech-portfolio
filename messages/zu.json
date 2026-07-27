@@ -18,9 +18,10 @@
   },
   "hero": {
     "welcome_badge": "Wamukelekile ku-Portfolio Yami",
-    "name": "Nhlanhla Junior Malaza",
+    "name": "Nhlanhla Malaza",
+    "name_full": "Nhlanhla Junior Malaza · NJMTech",
     "title": "Unjiniyela Wesoftware, Unjiniyela we-DevOps & Inzexpert ye-AI Integrations",
-    "subtitle": "Unjiniyela wesoftware othanda umsebenzi wakhe, olungele ukufunda nokuzijwayeza kunoma yimuphi umuntu wesoftware. Ngihlale ngizama ukuzithuthukisa kanye namakhono ami. Ngiyajabula ukusebenza nabanye naseqenjini.",
+    "subtitle": "UNhlanhla Malaza (NJMTech) unjiniyela wesoftware oseNingizimu Afrika — uhlala efunda, uzijwayeza, futhi akha ngezobuchwepheshe bewebhu besimanje.",
     "cta_primary": "Xhumana Nami",
     "cta_resume": "I-CV",
     "keyboard_label": "Landela ikhiybhodi",

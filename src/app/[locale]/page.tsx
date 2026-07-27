@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     locale: 'en_ZA',
     images: [
       {
-        url: siteConfig.logo,
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'Nhlanhla Junior Malaza — Software Developer Portfolio',
+        alt: 'Nhlanhla Malaza — Software Developer Portfolio',
       },
     ],
   },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: pageConfig.home.title,
     description: pageConfig.home.description,
-    images: [siteConfig.logo],
+    images: [siteConfig.ogImage],
     creator: siteConfig.social.twitterHandle,
   },
   alternates: {

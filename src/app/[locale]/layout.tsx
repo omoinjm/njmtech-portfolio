@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   applicationName: siteConfig.name,
   title: {
-    default: "Nhlanhla Junior Malaza | Software Developer",
-    template: "%s | Nhlanhla Junior Malaza",
+    default: "Nhlanhla Malaza | Software Developer — NJMTech",
+    template: "%s | Nhlanhla Malaza",
   },
   description: siteConfig.description,
   keywords: pageConfig.home.keywords,
@@ -56,20 +56,26 @@ export const metadata: Metadata = {
     locale: "en_ZA",
     url: siteConfig.url,
     siteName: "NJMTECH Portfolio",
-    title: "Nhlanhla Junior Malaza | Software Developer",
+    title: "Nhlanhla Malaza | Software Developer — NJMTech",
     description: siteConfig.description,
-    images: [{ url: siteConfig.logo, width: 1200, height: 630, alt: "NJMTECH Portfolio" }],
+    images: [{ url: siteConfig.ogImage, width: 1200, height: 630, alt: "Nhlanhla Malaza — NJMTech Portfolio" }],
   },
   twitter: {
     card: "summary_large_image",
     site: siteConfig.social.twitterHandle,
     creator: siteConfig.social.twitterHandle,
-    title: "Nhlanhla Junior Malaza | Software Developer",
+    title: "Nhlanhla Malaza | Software Developer — NJMTech",
     description: siteConfig.description,
-    images: [siteConfig.logo],
+    images: [siteConfig.ogImage],
   },
   verification: { google: "uhCz2o1FOPTi4BlD_3yZ1Nw_ER4VAybFWURc5vBaIVo" },
-  alternates: { canonical: siteConfig.url },
+  alternates: {
+    canonical: siteConfig.url,
+    languages: {
+      en: siteConfig.url,
+      zu: `${siteConfig.url}/zu`,
+    },
+  },
   category: "technology",
 };
 
