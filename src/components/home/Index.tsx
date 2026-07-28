@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useCallback, useState } from "react";
 import { Hero } from "./Hero";
-import { AboutBio } from "./AboutBio";
 import { Newsletter } from "./Newsletter";
 import { Services } from "./Services";
 import { Skills } from "./Skills";
