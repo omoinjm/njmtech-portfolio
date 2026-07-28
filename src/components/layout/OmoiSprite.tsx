@@ -22,6 +22,8 @@ const sizeScale = {
   lg: 80 / OMOI_ATLAS.cellHeight,
 } as const;
 
+const OMOI_FLOAT_DURATION_SEC = 5;
+
 export function OmoiSprite({ state, size = "sm", className, float = false }: OmoiSpriteProps) {
   const reduceMotion = useReducedMotion();
   const animation = getOmoiSpriteAnimation(state);
@@ -44,7 +46,7 @@ export function OmoiSprite({ state, size = "sm", className, float = false }: Omo
       }
       transition={
         float && state === "idle" && !reduceMotion
-          ? { duration: 3, repeat: Infinity, ease: "easeInOut" }
+          ? { duration: OMOI_FLOAT_DURATION_SEC, repeat: Infinity, ease: "easeInOut" }
           : undefined
       }
     >
