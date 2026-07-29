@@ -28,7 +28,7 @@ export const siteConfig = {
     "Professional portfolio of Nhlanhla Junior Malaza — Software Developer, DevOps Engineer, and AI Integrations Specialist based in South Africa",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://njmtech.co.za",
   email: "njmalaza@outlook.com",
-  telephone: "+27 72 432 6766",
+  telephone: "+27 83 276 6443",
   social: {
     linkedin: "https://www.linkedin.com/in/njmalaza",
     github: "https://github.com/omoinjm",

@@ -52,7 +52,7 @@ export const OMOI_FALLBACK_KNOWLEDGE: FallbackRule[] = [
   {
     patterns: ["How can I get in touch?", "contact", "reach", "email", "phone"],
     cacheKey: OMOI_VOICE_CACHE_KEYS.contact,
-    response: "Oh, contacting him is easy, but... what if your message gets lost in cyberspace? No, no, let’s stay positive! *Nervously munches lollipop* You can email Nhlanhla at njmalaza@outlook.com or call him at +27 (72) 432-6766. He responds within 24 hours—unless something catastrophic happens, but that’s unlikely… right?",
+    response: "Oh, contacting him is easy, but... what if your message gets lost in cyberspace? No, no, let’s stay positive! *Nervously munches lollipop* You can email Nhlanhla at njmalaza@outlook.com or message him on WhatsApp at 083 276 6443. He responds within 24 hours—unless something catastrophic happens, but that’s unlikely… right?",
     cta: { href: "/contact", label: "Contact Nhlanhla" },
   },
   {

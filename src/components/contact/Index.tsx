@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion, useInView } from "framer-motion";
 import { Github, Linkedin, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
 import { useRef, useState } from "react";
+import { buildWhatsAppUrl, WHATSAPP_DISPLAY } from "@/lib/social-links";
 
 export const Contact = () => {
   const t = useTranslations("contact");
@@ -63,7 +64,13 @@ export const Contact = () => {
 
   const contactItems = [
     { icon: Mail, label: t("email_label"), value: "njmalaza@outlook.com", href: "mailto:njmalaza@outlook.com" },
-    { icon: Phone, label: t("phone_label"), value: "+27 (72) 432-6766", href: "tel:+27724326766" },
+    {
+      icon: Phone,
+      label: t("phone_label"),
+      value: WHATSAPP_DISPLAY,
+      href: buildWhatsAppUrl(t("whatsapp_prefill")),
+      external: true,
+    },
     { icon: MapPin, label: t("location_label"), value: "Johannesburg", href: "#" },
   ];
 
@@ -112,6 +119,8 @@ export const Contact = () => {
                 <motion.a
                   key={item.label}
                   href={item.href}
+                  target={"external" in item && item.external ? "_blank" : undefined}
+                  rel={"external" in item && item.external ? "noopener noreferrer" : undefined}
                   initial={{ opacity: 0, x: -20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
