@@ -8,7 +8,7 @@ Personal portfolio for Nhlanhla Junior Malaza (NJMTech). Canonical site: https:/
 - **Styling**: Tailwind CSS, shadcn/ui (Radix), Framer Motion
 - **i18n**: next-intl — locales `en` (default), `zu`
 - **Package manager**: pnpm (Node 24.x)
-- **Secrets**: Infisical in dev (`pnpm dev`); local fallback via `.env.local` (`pnpm dev:local`)
+- **Secrets**: Infisical (`pnpm dev`, script wrappers) — not `.env` files
 - **Data**: Cloudflare D1 (optional), services in `src/services/`
 - **AI / TTS**: Chat orchestrator, VoxCPM/Edge TTS providers
 - **Tests**: Playwright E2E in `src/tests/`
@@ -18,7 +18,7 @@ Personal portfolio for Nhlanhla Junior Malaza (NJMTech). Canonical site: https:/
 ```
 src/
 ├── app/
-│   ├── [locale]/          # i18n pages (home, projects, contact, qr)
+│   ├── [locale]/          # i18n pages (home, projects, contact, qr, blog)
 │   └── api/               # Route handlers (contact, chat, tts, projects, skills, …)
 ├── components/
 │   ├── ui/                # shadcn/ui primitives
@@ -46,7 +46,9 @@ docs/                      # Config, SEO, SQL setup guides
 
 ### Configuration
 
-Environment variables live in `src/lib/config.ts` with Zod validation. **Always** use `config.get('VAR')` on the server — not raw `process.env`. Client code uses `@/lib/config.client` for `NEXT_PUBLIC_*` values only.
+Environment variables are in **Infisical** (local/scripts) and **Vercel** (production). Validated in `src/lib/config.ts`. **Always** use `config.get('VAR')` on the server — not raw `process.env`. Client code uses `@/lib/config.client` for `NEXT_PUBLIC_*` only.
+
+**Priority:** P0 `EMAIL_*` + site URL → P1 D1/AI/TTS/blog → P2 public extras → P3 scripts. See `docs/CONFIG_QUICK_REF.md`.
 
 ### Data management
 
@@ -63,7 +65,7 @@ Environment variables live in `src/lib/config.ts` with Zod validation. **Always*
 ## Conventions
 
 - **Imports**: use `@/*` alias → `src/*`
-- **New env vars**: add to `.env.example`, `src/lib/config.ts` (and `config.client.ts` if public), update `docs/CONFIG_QUICK_REF.md`
+- **New env vars**: add to Infisical + `.env.example` (catalog), `src/lib/config.ts` (and `config.client.ts` if public), update `docs/CONFIG_QUICK_REF.md`
 - **UI**: extend shadcn components in `src/components/ui/`; page sections in feature folders (`home/`, `contact/`, …)
 - **Logging**: use `src/utils/logger.ts` instead of `console.log`
 - **Diff scope**: match neighboring file style; minimal focused changes
@@ -75,23 +77,24 @@ Environment variables live in `src/lib/config.ts` with Zod validation. **Always*
 | `pnpm install` | Install dependencies |
 | `pnpm init` | Link Infisical workspace |
 | `pnpm dev` | Dev server with Infisical secrets |
-| `pnpm dev:local` | Dev server with `.env.local` only |
 | `pnpm build` | Production build |
-| `pnpm start:local` | Production server (local env) |
+| `pnpm start:local` | Production server (env must be injected) |
 | `pnpm lint` | ESLint |
 | `pnpm test` | Playwright E2E |
-| `pnpm ai_cache` | Generate TTS voice cache |
+| `pnpm ai_cache` | Generate TTS voice cache (Infisical) |
+| `pnpm blog:upload` | Upload blog seed to R2 (Infisical) |
 
 ## Reference docs
 
-- `docs/CONFIG_QUICK_REF.md` — env/config quick reference
-- `docs/CONFIG_SERVICE.md` — full config setup guide
+- `docs/CONFIG_QUICK_REF.md` — env priority + quick reference
+- `docs/CONFIG_SERVICE.md` — Infisical + config setup
 - `docs/SEO_GUIDE.md` — SEO patterns
 - `public/llms.txt` — public site summary for external LLMs
 
 ## Do not
 
-- Commit `.env.local`, `.env`, or secrets
+- Commit secrets, `.env`, or `.env.local`
+- Copy `.env.example` into a local env file — use Infisical
 - Prefix server-only values (email, D1, API keys) with `NEXT_PUBLIC_`
 - Reuse the 3D voxel dog asset (license — see README)
 - Run `npm install` / `yarn` — use pnpm

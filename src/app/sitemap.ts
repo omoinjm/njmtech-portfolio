@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { siteConfig } from "@/utils/seo";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const posts = getAllPosts();
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPosts();
 
   return [
     {
@@ -40,7 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteConfig.url}/contact`,
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 0.8,
+      priority: 0.9,
     },
     {
       url: `${siteConfig.url}/mail-service-policy`,

@@ -7,7 +7,7 @@ tags: ["cloudflare", "nextjs", "d1"]
 draft: false
 ---
 
-This site runs on **Next.js 16** with optional **Cloudflare D1** for structured data: projects, skills, navigation, and TTS voice cache. There is no headless CMS — blog posts like this one live as Markdown in the repo.
+This site runs on **Next.js 16** with optional **Cloudflare D1** for structured data: projects, skills, navigation, and TTS voice cache. Blog posts like this one are stored as Markdown on Cloudflare R2 and fetched at build/runtime — not in the repo.
 
 ## Why D1 for portfolio data
 

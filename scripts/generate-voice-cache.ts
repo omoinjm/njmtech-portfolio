@@ -1,65 +1,95 @@
 import { OMOI_FALLBACK_KNOWLEDGE } from "../src/lib/ai-config";
+import {
+  OMOI_VOICE_CACHE_KEYS,
+  OMOI_WELCOME_MESSAGE,
+} from "../src/lib/omoi-voice-cache";
 import { VoxCpmProvider } from "../src/services/tts/voxcpm-provider";
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
-// Configuration
 const OUTPUT_DIR = path.join(process.cwd(), "public", "voice", "cache");
 const VOXCPM_REF_AUDIO = process.env.VOXCPM_REF_AUDIO || null;
-const VOXCPM_VOICE_INSTRUCTION = process.env.VOXCPM_VOICE_INSTRUCTION || "A young male voice with a clear but anxious and overthinking tone. Nervous energy.";
+const VOXCPM_VOICE_INSTRUCTION =
+  process.env.VOXCPM_VOICE_INSTRUCTION ||
+  "A young male voice with a clear but anxious and overthinking tone. Nervous energy.";
 const HF_TOKEN = process.env.HF_TOKEN || "";
+const S3_BASE_URL =
+  process.env.VOICE_CACHE_S3_BASE_URL ||
+  "https://s3.njmtech.co.za/njmtech-portfolio/voice/omoi/samples";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+type CacheEntry = {
+  cacheKey: string;
+  text: string;
+};
+
+function escapeSql(value: string): string {
+  return value.replace(/'/g, "''");
+}
 
 async function generate() {
-  console.log("🚀 Starting Voice Cache Generation...");
+  console.log("Starting voice cache generation...");
 
   if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
   const provider = new VoxCpmProvider(VOXCPM_REF_AUDIO, VOXCPM_VOICE_INSTRUCTION, HF_TOKEN);
-  const sqlStatements: string[] = [];
+  const sqlStatements: string[] = [
+    "-- Run scripts/migrate-voice-cache-keys.sql on D1 before importing rows.",
+    "",
+  ];
 
-  // Get unique responses from fallback knowledge
-  const uniqueResponses = Array.from(new Set(OMOI_FALLBACK_KNOWLEDGE.map(r => r.response)));
+  const entries: CacheEntry[] = [
+    { cacheKey: OMOI_WELCOME_MESSAGE.cacheKey, text: OMOI_WELCOME_MESSAGE.content },
+    ...OMOI_FALLBACK_KNOWLEDGE.map((rule) => ({
+      cacheKey: rule.cacheKey,
+      text: rule.response,
+    })),
+  ];
 
-  for (const text of uniqueResponses) {
-    const hash = crypto.createHash("sha256").update(text.trim()).digest("hex");
+  const seenKeys = new Set<string>();
+  for (const entry of entries) {
+    if (seenKeys.has(entry.cacheKey)) continue;
+    seenKeys.add(entry.cacheKey);
+
+    const hash = crypto.createHash("sha256").update(entry.text.trim()).digest("hex");
     const fileName = `${hash}.mp3`;
     const filePath = path.join(OUTPUT_DIR, fileName);
 
     if (fs.existsSync(filePath)) {
-      console.log(`⏩ Skipping existing: ${hash.substring(0, 8)}...`);
+      console.log(`Skipping existing: ${entry.cacheKey} (${hash.slice(0, 8)}...)`);
     } else {
       try {
-        console.log(`🎙️ Generating: "${text.substring(0, 30)}..."`);
-        const buffer = await provider.synthesize(text);
+        console.log(`Generating [${entry.cacheKey}]: "${entry.text.slice(0, 40)}..."`);
+        const buffer = await provider.synthesize(entry.text);
         fs.writeFileSync(filePath, Buffer.from(buffer));
-        console.log(`✅ Saved to ${fileName}`);
+        console.log(`Saved ${fileName}`);
       } catch (err) {
-        console.error(`❌ Failed for ${hash.substring(0, 8)}:`, err);
+        console.error(`Failed for ${entry.cacheKey}:`, err);
         continue;
       }
     }
 
-    // Prepare SQL (assuming user will host them in public/voice/cache/ for now)
-    // They can replace the domain later.
-    const publicUrl = `https://your-domain.com/voice/cache/${fileName}`;
+    const publicUrl = `${S3_BASE_URL}/${hash}.mp3`;
     sqlStatements.push(
-      `INSERT INTO ai_voice_cache (response_text_hash, response_text, audio_url, provider) VALUES ('${hash}', '${text.replace(/'/g, "''")}', '${publicUrl}', 'VoxCPM') ON CONFLICT (response_text_hash) DO NOTHING;`
+      `INSERT INTO ai_voice_cache (cache_key, response_text_hash, response_text, audio_url, provider) VALUES ('${entry.cacheKey}', '${hash}', '${escapeSql(entry.text)}', '${publicUrl}', 'VoxCPM') ON CONFLICT (cache_key) DO UPDATE SET response_text_hash = excluded.response_text_hash, response_text = excluded.response_text, audio_url = excluded.audio_url, provider = excluded.provider;`,
+    );
+  }
+
+  if (!seenKeys.has(OMOI_VOICE_CACHE_KEYS.default)) {
+    console.warn(
+      `No audio entry for cache key "${OMOI_VOICE_CACHE_KEYS.default}" — add one manually if needed.`,
     );
   }
 
   const sqlFile = path.join(process.cwd(), "scripts", "seed-voice-cache.sql");
   fs.writeFileSync(sqlFile, sqlStatements.join("\n"));
-  
-  console.log("\n✨ Done!");
-  console.log(`📁 Files saved in: public/voice/cache/`);
-  console.log(`📝 SQL seed file created: scripts/seed-voice-cache.sql`);
-  console.log("\nIMPORTANT: Update the 'https://your-domain.com' placeholder in the SQL file before importing!");
+
+  console.log("\nDone.");
+  console.log(`Files: ${OUTPUT_DIR}`);
+  console.log(`SQL seed: ${sqlFile}`);
+  console.log("Set VOICE_CACHE_S3_BASE_URL to override the default S3 prefix.");
 }
 
 generate().catch(console.error);

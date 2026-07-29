@@ -45,27 +45,26 @@ Be respectful, inclusive, and professional in all interactions. We're committed 
 ## Getting Started
 
 ### Prerequisites
-- Node.js 22.x or higher
-- npm or pnpm
-- PostgreSQL (for local development)
+- Node.js 24.x
+- pnpm 9.x
+- Access to the Infisical workspace
 - Git
 
 ### Setup Development Environment
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/njmtech-portfolio.git
+git clone https://github.com/omoinjm/njmtech-portfolio.git
 cd njmtech-portfolio
 
 # Install dependencies
-npm install
+pnpm install
 
-# Create environment file
-cp .env.example .env.local
-# Edit .env.local with your local values
+# Link Infisical (once per machine)
+pnpm init
 
 # Start development server
-npm run dev
+pnpm dev
 ```
 
 ### Docker Setup
@@ -170,9 +169,9 @@ export async function fetchUser(userId: string): Promise<User> {
 ### Secret Management
 - ❌ Never commit secrets to the repository
 - ❌ Never hardcode credentials in code
-- ✅ Use environment variables for secrets
-- ✅ Keep .env.local in .gitignore
-- ✅ Use .env.example as reference template
+- ✅ Store secrets in Infisical (local dev + script runs)
+- ✅ Mirror Infisical `prod` keys in Vercel for deployment
+- ✅ Use `.env.example` as a variable catalog only (not for copying)
 
 ### Input Validation
 - ✅ Validate all user inputs

@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "react-doctor": {
+      "enabled": true
+    },
+    "gitbook": {
+      "enabled": true
+    }
+  }
+}

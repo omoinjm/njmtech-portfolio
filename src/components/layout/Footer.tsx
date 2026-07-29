@@ -3,10 +3,12 @@
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
 import { useTranslations } from "next-intl";
+import { PRIMARY_SITE_NAV } from "@/lib/site-navigation";
 import { FooterModel } from "@/types";
 
 export const Footer = ({ data }) => {
   const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
   const currentYear = new Date().getFullYear();
 
   return (
@@ -21,6 +23,22 @@ export const Footer = ({ data }) => {
             <p className="text-muted-foreground text-sm mt-1">
               © {currentYear} {t("copyright")}
             </p>
+
+            <nav
+              aria-label="Site sections"
+              className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 mt-4"
+            >
+              {PRIMARY_SITE_NAV.map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className="text-sm font-medium text-foreground/80 hover:text-accent transition-colors"
+                >
+                  {tNav(item.name.toLowerCase() as "projects" | "contact" | "blog")}
+                </Link>
+              ))}
+            </nav>
+
             <div className="hidden md:flex flex-col gap-2.5 mt-3">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <span className="text-[0.65rem] font-semibold uppercase tracking-wider text-muted-foreground/45">

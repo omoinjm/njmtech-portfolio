@@ -14,41 +14,55 @@ function resolveProfile(value: unknown): TtsProfile {
   return "assistant";
 }
 
+function resolveCacheKey(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const text = body?.text;
     const profile = resolveProfile(body?.profile);
+    const cacheKey = resolveCacheKey(body?.cacheKey);
 
     if (!text || typeof text !== "string") {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
     const voiceProfile = getTtsProfile(profile);
-    const providers = [];
-
-    providers.push(new DatabaseTtsProvider());
-
+    const dbProvider = new DatabaseTtsProvider();
     const hfToken = process.env.HF_TOKEN || "";
-    providers.push(
+
+    const providers = [
+      dbProvider,
+      new EdgeTtsProvider(voiceProfile.edgeVoice),
       new VoxCpmProvider(
         voiceProfile.voxcpmRefAudio,
         voiceProfile.voxcpmInstruction,
         hfToken,
       ),
-    );
-    providers.push(new EdgeTtsProvider(voiceProfile.edgeVoice));
+    ];
 
     const orchestrator = new TtsOrchestrator(providers, 15000);
-    const { buffer, provider: usedProvider } = await orchestrator.getSpeech(text);
+    const { buffer, provider: usedProvider } = await orchestrator.getSpeech(text, {
+      cacheKey,
+    });
+
+    const contentType =
+      usedProvider === "DatabaseCache" && dbProvider.lastContentType
+        ? dbProvider.lastContentType
+        : "audio/mpeg";
 
     return new NextResponse(buffer, {
       headers: {
-        "Content-Type": "audio/mpeg",
+        "Content-Type": contentType,
         "Content-Length": String(buffer.byteLength),
         "Cache-Control": "public, max-age=3600",
         "X-Speech-Provider": usedProvider,
         "X-Speech-Profile": profile,
+        ...(cacheKey ? { "X-Speech-Cache-Key": cacheKey } : {}),
       },
     });
   } catch (error) {

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Github, Linkedin, Twitter } from "lucide-react";
 import type { FooterModel, MenuModel } from "@/types";
+import { PRIMARY_SITE_NAV } from "@/lib/site-navigation";
 
 const SOCIAL_LINKS = [
   { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/njmalaza", Icon: Linkedin },
@@ -22,7 +23,14 @@ export const RightSideNav = ({ pages, socialLinks }: Props) => {
   const pathname = usePathname();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const pageItems = pages.map((p) => ({ id: String(p.id), label: p.label, href: p.url }));
+  const pageItems =
+    pages.length > 0
+      ? pages.map((p) => ({ id: String(p.id), label: p.label, href: p.url }))
+      : PRIMARY_SITE_NAV.map((item, index) => ({
+          id: String(index),
+          label: item.name,
+          href: item.path,
+        }));
 
   return (
     <nav

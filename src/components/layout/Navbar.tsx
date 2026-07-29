@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FooterModel, MenuModel } from "@/types";
+import { PRIMARY_SITE_NAV } from "@/lib/site-navigation";
 import * as LucideIcons from "lucide-react";
 import { AccentThemePicker } from "@/components/layout/AccentThemePicker";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
@@ -18,7 +19,15 @@ export const Navbar = ({ data }) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const pages = data?.nav_menu ?? [];
+  const pages =
+    data?.nav_menu && data.nav_menu.length > 0
+      ? data.nav_menu
+      : PRIMARY_SITE_NAV.map((item, index) => ({
+          id: index,
+          label: item.name,
+          icon: "",
+          url: item.path,
+        }));
   const socialLinks: FooterModel[] = data?.nav_footer ?? [];
 
   // Keyboard navigation shortcuts

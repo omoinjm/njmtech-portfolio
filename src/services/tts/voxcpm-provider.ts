@@ -1,4 +1,4 @@
-import { ITtsProvider } from "./types";
+import { ITtsProvider, TtsSynthesisOptions } from "./types";
 import { Client } from "@gradio/client";
 
 const isHuggingFaceToken = (value: string): value is `hf_${string}` => value.startsWith("hf_");
@@ -12,7 +12,7 @@ export class VoxCpmProvider implements ITtsProvider {
     private readonly hfToken?: string
   ) {}
 
-  async synthesize(text: string): Promise<ArrayBuffer> {
+  async synthesize(text: string, _options?: TtsSynthesisOptions): Promise<ArrayBuffer> {
     const token = this.hfToken;
     let clientOptions: { token: `hf_${string}` } | undefined;
 

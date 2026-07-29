@@ -11,7 +11,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
 EXPOSE 3000
-CMD ["pnpm", "dev:local"]
+CMD ["pnpm", "dev"]
 
 FROM base AS build
 COPY package.json pnpm-lock.yaml ./

@@ -4,6 +4,7 @@ import {
   generatePersonSchema,
   generateProfessionalServiceSchema,
   generateProfilePageSchema,
+  generateSiteNavigationSchema,
   generateWebsiteSchema,
   pageConfig,
   siteConfig,
@@ -67,6 +68,12 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(generateWebsiteSchema()) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateSiteNavigationSchema()),
+        }}
       />
       <script
         type="application/ld+json"

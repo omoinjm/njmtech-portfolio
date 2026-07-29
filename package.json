@@ -24,6 +24,9 @@
     "test": "playwright test",
     "test:email": "playwright test email",
     "ai_cache": "infisical run -- npx tsx scripts/generate-voice-cache.ts",
+    "voice-cache:test": "npx tsx scripts/test-voice-cache.ts",
+    "voice-cache:test:d1": "infisical run -- npx tsx scripts/test-voice-cache.ts --d1",
+    "blog:upload": "infisical run -- npx tsx scripts/upload-blog-to-r2.ts",
     "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts"
   },
   "dependencies": {

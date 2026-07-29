@@ -5,11 +5,13 @@ Use **`AGENTS.md`** at the repo root as the single source of truth for architect
 Quick commands:
 
 ```bash
-pnpm dev          # Dev server with Infisical
-pnpm dev:local    # Dev server with .env.local
-pnpm build        # Production build
-pnpm lint         # ESLint
-pnpm test         # Playwright E2E
+pnpm init          # Link Infisical (once)
+pnpm dev           # Dev server with Infisical secrets
+pnpm build         # Production build
+pnpm lint          # ESLint
+pnpm test          # Playwright E2E
 ```
+
+Secrets live in **Infisical**, not `.env` files. See `docs/CONFIG_QUICK_REF.md` for variable priorities.
 
 Pre-commit hooks (Husky + lint-staged) run `next lint --fix` on staged `.ts`/`.tsx` files.

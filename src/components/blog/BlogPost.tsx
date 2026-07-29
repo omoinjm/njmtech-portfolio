@@ -47,7 +47,7 @@ export function BlogPostView({ post }: BlogPostViewProps) {
               ))}
             </div>
           )}
-          <BlogAudioPlayer content={post.content} title={post.title} />
+          <BlogAudioPlayer slug={post.slug} content={post.content} title={post.title} />
         </header>
 
         <div className="prose prose-invert prose-headings:gradient-text prose-a:text-accent max-w-none">

@@ -8,6 +8,10 @@ interface UseSpeechOptions {
   onEnd?: () => void;
 }
 
+export type SpeakOptions = {
+  cacheKey?: string;
+};
+
 /**
  * Hook for handling text-to-speech with high-quality fallback.
  * Adheres to SRP by isolating audio management logic.
@@ -28,7 +32,7 @@ export function useSpeech({ isMuted, profile = "assistant", onStart, onEnd }: Us
   }, []);
 
   const speak = useCallback(
-    async (text: string) => {
+    async (text: string, options?: SpeakOptions) => {
       if (isMuted || !text || typeof window === "undefined") return;
 
       stop();
@@ -40,7 +44,11 @@ export function useSpeech({ isMuted, profile = "assistant", onStart, onEnd }: Us
         const response = await fetch("/api/tts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text, profile }),
+          body: JSON.stringify({
+            text,
+            profile,
+            ...(options?.cacheKey ? { cacheKey: options.cacheKey } : {}),
+          }),
         });
 
         if (!response.ok) throw new Error("TTS API failed");

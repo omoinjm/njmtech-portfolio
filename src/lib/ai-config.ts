@@ -1,3 +1,5 @@
+import { OMOI_VOICE_CACHE_KEYS } from "@/lib/omoi-voice-cache";
+import type { OmoiVoiceCacheKey } from "@/lib/omoi-voice-cache";
 import { FallbackRule } from "@/services/ai/rule-provider";
 
 export const OMOI_SYSTEM_PROMPT = `You are Omoi, an AI assistant inspired by the Naruto character from Kumogakure. You help visitors navigate NJMTECH, the portfolio website of Nhlanhla Junior Malaza.
@@ -25,36 +27,47 @@ RESPONSE FORMAT:
 export const OMOI_FALLBACK_KNOWLEDGE: FallbackRule[] = [
   {
     patterns: ["Who is Nhlanhla?", "Who is Nhlanhla Junior Malaza?", "about nhlanhla", "bio", "background", "introduce"],
+    cacheKey: OMOI_VOICE_CACHE_KEYS.about,
     response: "Ah, Nhlanhla Junior Malaza—he’s an accomplished Software Developer, DevOps Engineer, and AI Integrations Specialist based in Johannesburg, South Africa. He wields a mighty arsenal of tech skills like React, Python, Azure, and Kubernetes. Oh no, what if I didn’t list all his talents? There’s so much more to know about him… *nervously crunches lollipop*",
     cta: { href: "/contact", label: "Contact Nhlanhla" },
   },
   {
     patterns: ["What services do you offer?", "services", "expertise", "help with", "offerings"],
+    cacheKey: OMOI_VOICE_CACHE_KEYS.services,
     response: "Web dev, mobile, cloud, AI... Nhlanhla does it all. *Munch*... This lollipop is the only thing keeping me calm. If he takes on too many projects, what if the servers overheat? Anyway, check the services section for the full list.",
     cta: { href: "/#services", label: "View services" },
   },
   {
     patterns: ["What technologies do you work with?", "tech stack", "technologies", "tools", "languages", "stack"],
+    cacheKey: OMOI_VOICE_CACHE_KEYS.skills,
     response: "Oh no, where do I begin? What if I miss something and it causes confusion?! *Crunches lollipop hurriedly* Nhlanhla’s tech stack includes React, Next.js, TypeScript, C#/.NET, Python, Azure, Docker, Kubernetes, and more. His skills might actually set the benchmark for versatility… Let me guide you to the full list!",
     cta: { href: "/#skills", label: "View skills" },
   },
   {
     patterns: ["Can I see the projects?", "projects", "portfolio", "featured work", "show me projects"],
+    cacheKey: OMOI_VOICE_CACHE_KEYS.projects,
     response: "Projects? Oh no, what if you don’t like what you see? Or worse, what if the page doesn’t load? *Munches lollipop anxiously* Nhlanhla’s portfolio showcases his incredible work—do check it out carefully!",
     cta: { href: "/projects", label: "View projects" },
   },
   {
     patterns: ["How can I get in touch?", "contact", "reach", "email", "phone"],
+    cacheKey: OMOI_VOICE_CACHE_KEYS.contact,
     response: "Oh, contacting him is easy, but... what if your message gets lost in cyberspace? No, no, let’s stay positive! *Nervously munches lollipop* You can email Nhlanhla at njmalaza@outlook.com or call him at +27 (72) 432-6766. He responds within 24 hours—unless something catastrophic happens, but that’s unlikely… right?",
     cta: { href: "/contact", label: "Contact Nhlanhla" },
   },
   {
     patterns: ["Can I view the resume?", "resume", "cv", "curriculum vitae", "download resume"],
+    cacheKey: OMOI_VOICE_CACHE_KEYS.resume,
     response: "Oh, the resume? Yes, of course! But what if the link doesn’t work or your browser crashes mid-download? *Frantically munches lollipop* Don’t worry, I’ve got you covered—just click below to access it carefully!",
     cta: { href: "https://snipuri.vercel.app/xNUfvM", label: "Open resume", external: true },
   },
   {
     patterns: ["hi", "hello", "hey"],
+    cacheKey: OMOI_VOICE_CACHE_KEYS.greeting,
     response: "H-Hello. I'm Omoi. I'm helping Nhlanhla, but I can't help but wonder... what if you're a spy from another village? No, that's silly. How can I assist you without causing a total system failure?",
   },
 ];
+
+export function getOmoiFallbackByCacheKey(cacheKey: OmoiVoiceCacheKey) {
+  return OMOI_FALLBACK_KNOWLEDGE.find((rule) => rule.cacheKey === cacheKey);
+}

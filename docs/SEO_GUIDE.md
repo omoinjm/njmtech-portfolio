@@ -628,27 +628,34 @@ This is the single most impactful action you can take. Without it, Google may no
 
 ---
 
-### Step 2: Get Sitelinks (Projects & Contact appearing under your result)
+### Step 2: Get Sitelinks (Projects, Contact & Blog under your result)
 
-Sitelinks are the sub-links that appear beneath your main search result — they look like this:
+Sitelinks are the sub-links beneath your main search result — like GoDaddy shows "Sign In", "Domain Names", etc. Target layout for **njmtech.co.za**:
 
 ```
 njmtech.co.za
-Nhlanhla Junior Malaza | Software Developer...
+NJMTECH Official Site | Software Developer Portfolio...
 
-  Projects          Contact
-  njmtech.co.za/projects    njmtech.co.za/contact
+  Projects          Contact          Blog
+  njmtech.co.za/projects    njmtech.co.za/contact    njmtech.co.za/blog
 ```
 
-Google generates sitelinks **automatically** — you cannot force them, but you can influence them:
+Google generates sitelinks **automatically** — you cannot force them, but the site now signals them via:
 
-| What Google looks for | Your site's status |
+| Signal | Implementation |
 |---|---|
-| Clear navigation links in HTML | ✅ Next.js `<Link>` renders real `<a>` tags |
-| Pages indexed and crawlable | ✅ robots.txt allows all |
-| Sitemap listing all pages | ✅ `/sitemap.xml` exists |
-| Consistent internal linking | ✅ Navbar links to `/projects` and `/contact` |
-| Page titles that describe the content | ✅ Each page has a unique `<title>` |
+| Footer nav (Projects, Contact, Blog) | ✅ `Footer.tsx` + `PRIMARY_SITE_NAV` |
+| `SiteNavigationElement` + `ItemList` JSON-LD | ✅ `generateSiteNavigationSchema()` on homepage |
+| `WebSite.hasPart` for each page | ✅ `generateWebsiteSchema()` |
+| Sitemap with high priority | ✅ `/sitemap.xml` — projects, blog, contact at 0.9 |
+| Short page titles | ✅ `Projects`, `Contact`, `Blog` |
+| Page-specific schemas | ✅ CollectionPage, ContactPage, Blog |
+
+**After deploy:** In Search Console → URL Inspection → Request Indexing for:
+- `https://njmtech.co.za/`
+- `https://njmtech.co.za/projects`
+- `https://njmtech.co.za/contact`
+- `https://njmtech.co.za/blog`
 
 **Timeline:** Sitelinks typically appear **2–6 weeks** after Google has indexed and understood your site structure.
 

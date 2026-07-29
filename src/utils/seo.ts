@@ -3,6 +3,11 @@
  * Handles meta tags, Open Graph, structured data, and more
  */
 
+import {
+  PRIMARY_SITE_NAV,
+  getPrimarySiteNavUrl,
+} from "@/lib/site-navigation";
+
 export interface SEOProps {
   title: string;
   description: string;
@@ -60,9 +65,10 @@ function getSameAsLinks() {
 
 export const pageConfig: Record<string, SEOProps> = {
   home: {
-    title: "Nhlanhla Malaza | Software Developer, DevOps Engineer & AI Specialist — NJMTech",
+    title:
+      "NJMTECH Official Site | Software Developer Portfolio — Nhlanhla Malaza",
     description:
-      "Nhlanhla Malaza (Nhlanhla Junior Malaza, NJMTech) — Software Developer, DevOps Engineer, and AI Integrations Specialist based in Johannesburg, South Africa. Portfolio, projects, and contact.",
+      "Official NJMTECH portfolio of Nhlanhla Junior Malaza (NJMTech) — Software Developer, DevOps Engineer, and AI Integrations Specialist. Explore projects, read the blog, or contact for collaborations.",
     canonical: `${siteConfig.url}/`,
     keywords: [
       "Nhlanhla",
@@ -372,6 +378,7 @@ export function generateWebsiteSchema() {
       "Nhlanhla Junior Malaza Portfolio",
       "Nhlanhla Malaza",
       "NJMTech Portfolio",
+      "NJMTECH Official Site",
     ],
     url: siteConfig.url,
     description: siteConfig.description,
@@ -382,6 +389,14 @@ export function generateWebsiteSchema() {
       name: "Nhlanhla Junior Malaza",
     },
     publisher: { "@id": `${siteConfig.url}/#organization` },
+    hasPart: PRIMARY_SITE_NAV.map((item) => ({
+      "@type": "WebPage",
+      "@id": `${getPrimarySiteNavUrl(item.path)}#webpage`,
+      name: item.name,
+      url: getPrimarySiteNavUrl(item.path),
+      description: item.description,
+      isPartOf: { "@id": `${siteConfig.url}/#website` },
+    })),
     potentialAction: {
       "@type": "SearchAction",
       target: {
@@ -390,6 +405,60 @@ export function generateWebsiteSchema() {
       },
       "query-input": "required name=search_term_string",
     },
+  };
+}
+
+/**
+ * ItemList + SiteNavigationElement for Google sitelink signals.
+ */
+export function generateSiteNavigationSchema() {
+  const navigationElements = PRIMARY_SITE_NAV.map((item, index) => ({
+    "@type": "SiteNavigationElement",
+    "@id": `${getPrimarySiteNavUrl(item.path)}#navigation`,
+    position: index + 1,
+    name: item.name,
+    description: item.description,
+    url: getPrimarySiteNavUrl(item.path),
+  }));
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ItemList",
+        "@id": `${siteConfig.url}/#primary-navigation`,
+        name: "Main site navigation",
+        itemListElement: PRIMARY_SITE_NAV.map((item, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: item.name,
+          item: getPrimarySiteNavUrl(item.path),
+        })),
+      },
+      ...navigationElements,
+    ],
+  };
+}
+
+/**
+ * Blog index / CollectionPage schema
+ */
+export function generateBlogPageSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${siteConfig.url}/blog#blog`,
+    name: "NJMTECH Blog",
+    url: `${siteConfig.url}/blog`,
+    description: pageConfig.blog.description,
+    inLanguage: "en-ZA",
+    isPartOf: { "@id": `${siteConfig.url}/#website` },
+    author: {
+      "@type": "Person",
+      "@id": `${siteConfig.url}/#person`,
+      name: "Nhlanhla Junior Malaza",
+    },
+    publisher: { "@id": `${siteConfig.url}/#organization` },
   };
 }
 
@@ -644,6 +713,8 @@ export default {
   generateOrganizationSchema,
   generateProfessionalServiceSchema,
   generateWebsiteSchema,
+  generateSiteNavigationSchema,
+  generateBlogPageSchema,
   generateProfilePageSchema,
   generateAboutPageSchema,
   generateContactPageSchema,

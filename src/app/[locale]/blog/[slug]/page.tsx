@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { BlogPostView } from "@/components/blog/BlogPost";
 import { getAllSlugs, getPostBySlug } from "@/lib/blog";
 import {
@@ -5,22 +7,23 @@ import {
   generateBreadcrumbSchema,
   siteConfig,
 } from "@/utils/seo";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+
+export const revalidate = 300;
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  const slugs = await getAllSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return { title: "Post not found" };
@@ -65,7 +68,7 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();

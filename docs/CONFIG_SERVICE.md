@@ -2,38 +2,47 @@
 
 ## Overview
 
-A type-safe configuration service for managing environment variables with automatic validation using Zod.
+Type-safe configuration via Zod-validated env vars. **Secrets are stored in Infisical**, not in repo `.env` files.
 
-## Files Created
+## Infisical setup
+
+```bash
+pnpm install
+pnpm init          # link Infisical project (once per machine)
+pnpm dev           # infisical run --env=dev -- next dev
+```
+
+Scripts that need secrets (`ai_cache`, `blog:upload`, `voice-cache:test:d1`) already wrap `infisical run`.
+
+**Production:** mirror Infisical `prod` keys in the Vercel project environment settings.
+
+## Files
 
 ```
-src/lib/config.ts              # Server-side config service with validation
-src/lib/config.client.ts       # Client-safe config (public variables only)
-docs/CONFIG_QUICK_REF.md       # Quick reference
-docs/CONFIG_SERVICE.md         # Setup guide
+src/lib/config.ts              # Server config + Zod validation
+src/lib/config.client.ts       # NEXT_PUBLIC_* only (browser-safe)
+.env.example                   # Variable catalog with priority tags (not for copying)
+docs/CONFIG_QUICK_REF.md       # Priority table + quick reference
 ```
 
-## Quick Start
+## Quick start
 
-### Server-Side Usage (API Routes, Server Components)
+### Server-side
 
 ```typescript
 import { config } from '@/lib/config'
 
-// Get a specific variable
 const siteUrl = config.get('NEXT_PUBLIC_SITE_URL')
 const d1AccountId = config.get('D1_ACCOUNT_ID')
 
-// Check environment
 if (config.isProduction()) {
-  // Production-specific logic
+  // production logic
 }
 
-// Get cleaned URL
-const url = config.getSiteUrl() // removes trailing slash
+const url = config.getSiteUrl() // no trailing slash
 ```
 
-### Client-Side Usage (React Components)
+### Client-side
 
 ```typescript
 'use client'
@@ -41,141 +50,78 @@ const url = config.getSiteUrl() // removes trailing slash
 import { publicConfig } from '@/lib/config.client'
 
 export function Component() {
-  const email = publicConfig.EMAIL_MAIL
-  const resumeUrl = publicConfig.RESUME_URL
-  
-  return <a href={resumeUrl}>Download Resume</a>
+  return <a href={publicConfig.RESUME_URL}>Download Resume</a>
 }
 ```
 
-## Environment Variables
+## Variable priority (summary)
 
-### Public Variables (Accessible in Browser)
+See [`CONFIG_QUICK_REF.md`](./CONFIG_QUICK_REF.md) for the full table.
 
-- `NEXT_PUBLIC_SITE_URL` - Website URL
-- `NEXT_PUBLIC_EMAIL_MAIL` - Contact email
-- `NEXT_PUBLIC_EMAIL_USER` - Email sender
-- `NEXT_PUBLIC_EMAIL_APP_PASS` - Email password
-- `NEXT_PUBLIC_MAILCHIMP_URL` - Newsletter URL
-- `NEXT_PUBLIC_RESUME_URL` - Resume download URL
+| Tier | Examples | If missing |
+|------|----------|------------|
+| **P0** | `EMAIL_*`, `NEXT_PUBLIC_SITE_URL` | Contact/subscribe broken; SEO defaults |
+| **P1** | `D1_*`, `GITHUB_TOKEN`, `HF_TOKEN`, `BLOG_*` | Fallbacks / degraded AI & TTS |
+| **P2** | `NEXT_PUBLIC_RESUME_URL`, Mailchimp | Hardcoded defaults in code |
+| **P3** | `R2_*`, script/test vars | Scripts fail; app unaffected |
 
-### Private Variables (Server-Only)
+## Validated schema (`config.ts`)
 
-- `D1_ACCOUNT_ID` - Cloudflare account identifier
-- `D1_DATABASE_ID` - Cloudflare D1 database identifier
-- `D1_API_TOKEN` - Cloudflare API token with D1 access
+**Public (also in `config.client.ts` where noted):**
 
-## Features
+- `NEXT_PUBLIC_SITE_URL` — site URL
+- `NEXT_PUBLIC_RESUME_URL` — optional resume link
 
-✅ **Type-Safe** - Full TypeScript support with inference
-✅ **Validated** - Zod schema validation on startup
-✅ **Error Reporting** - Clear error messages for missing vars
-✅ **Environment Detection** - Built-in `isProduction()` and `isDevelopment()` methods
-✅ **Singleton Pattern** - Single instance across app
-✅ **Client Safety** - Separate module for public variables
+**Server-only:**
 
-## Configuration
+- `EMAIL_MAIL`, `EMAIL_USER`, `EMAIL_APP_PASS` — required (P0)
+- `D1_ACCOUNT_ID`, `D1_DATABASE_ID`, `D1_API_TOKEN` — optional (P1)
+- `BLOG_VOXCPM_REF_AUDIO`, `BLOG_VOXCPM_VOICE_INSTRUCTION`, `BLOG_EDGE_TTS_VOICE` — optional (P1)
+- `BLOG_STORAGE_BASE_URL` — optional (P1, default in `blog-storage.ts`)
 
-### Add New Variables
+**Used via `process.env` in routes/scripts (add to Infisical + catalog when extending):**
 
-1. Add to `.env.example`:
-```bash
-MY_NEW_VAR="value"
-```
+- `GITHUB_TOKEN` — `/api/chat`
+- `HF_TOKEN`, `VOXCPM_*` — `/api/tts`, voice-cache scripts
+- `R2_BUCKET_NAME`, `BLOG_STORAGE_PREFIX` — `pnpm blog:upload`
 
-2. Update schema in `src/lib/config.ts`:
-```typescript
-const envSchema = z.object({
-  // ... existing
-  MY_NEW_VAR: z.string(),
-})
-```
+## Add a new variable
 
-3. Export from `src/lib/config.client.ts` if public:
-```typescript
-export const publicConfig = {
-  // ... existing
-  MY_NEW_VAR: process.env.NEXT_PUBLIC_MY_NEW_VAR ?? "",
-} as const
-```
+1. Create the key in Infisical (`dev` and `prod`).
+2. Document in `.env.example` with a priority comment (P0–P3).
+3. Add to `envSchema` in `src/lib/config.ts` (if the app reads it at runtime).
+4. Export from `config.client.ts` only if it is `NEXT_PUBLIC_*`.
+5. Update `docs/CONFIG_QUICK_REF.md`.
 
-## Example API Route
-
-```typescript
-// app/api/config/route.ts
-import { config } from '@/lib/config'
-
-export async function GET() {
-  return Response.json({
-    siteUrl: config.get('NEXT_PUBLIC_SITE_URL'),
-    environment: config.isDevelopment() ? 'dev' : 'prod',
-  })
-}
-```
-
-## Validation Rules
-
-Common Zod validators:
-
-```typescript
-z.string()              // Any string
-z.string().email()      // Valid email
-z.string().url()        // Valid URL
-z.string().optional()   // Optional string
-z.string().min(5)       # Minimum length
-z.string().default()    # Default value
-```
-
-## Error Handling
-
-If validation fails on startup:
+## Error handling
 
 ```
 ❌ Invalid environment variables:
-NEXT_PUBLIC_EMAIL_MAIL: Invalid email
-D1_ACCOUNT_ID: Required
+EMAIL_MAIL: Invalid email
 
-Please check your .env.local file.
+Verify keys in Infisical (dev) or Vercel (production). See .env.example for the catalog.
 ```
 
-## Best Practices
+During production build, missing optional secrets log a warning instead of aborting.
 
-✅ Use `NEXT_PUBLIC_` prefix for public variables
-✅ Add all variables to `.env.example`
-✅ Use the config service, not `process.env` directly
-✅ Add validation rules to schema
-✅ Never hardcode secrets
-✅ Never expose private variables in client code
+## Best practices
+
+- Use `config.get()` on the server — not raw `process.env`
+- Never prefix server secrets with `NEXT_PUBLIC_`
+- Never commit `.env`, `.env.local`, or secret values
+- Keep `.env.example` as documentation only
 
 ## Testing
 
 ```bash
-# Build with validation
-pnpm build
-
-# Test dev server
-pnpm dev
-
-# Check config in browser
+pnpm dev                              # Infisical dev env
 curl http://localhost:3000/api/config?endpoint=health
+pnpm build                            # Vercel injects prod env at build
 ```
 
-## Migration Path
+## See also
 
-If you have hardcoded URLs/values, replace with config:
-
-```typescript
-// Before
-const url = 'https://hardcoded.url/path'
-
-// After
-import { publicConfig } from '@/lib/config.client'
-const url = publicConfig.RESUME_URL
-```
-
-## See Also
-
-- [`CONFIG_QUICK_REF.md`](./CONFIG_QUICK_REF.md) - Quick reference
-- [`next.config.js`](/next.config.js) - Next.js configuration
-- [`.env.example`](/.env.example) - Environment variable template
-- [Zod Documentation](https://zod.dev/) - Schema validation library
+- [`CONFIG_QUICK_REF.md`](./CONFIG_QUICK_REF.md)
+- [`.env.example`](../.env.example) — Infisical variable catalog
+- [`AGENTS.md`](../AGENTS.md)
+- [Zod Documentation](https://zod.dev/)

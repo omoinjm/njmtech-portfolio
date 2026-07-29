@@ -1,126 +1,115 @@
 # Config Service - Quick Reference
 
-## Import & Use
+## Secrets source
 
-### Server-Side
+All environment variables are managed in **Infisical** (not `.env` files).
+
+| Context | How vars are loaded |
+|---------|---------------------|
+| Local dev | `pnpm init` (once) → `pnpm dev` (`infisical run --env=dev`) |
+| Scripts | `pnpm ai_cache`, `pnpm blog:upload`, etc. wrap `infisical run` |
+| Production | Vercel project env (mirror Infisical `prod` keys) |
+
+`.env.example` is a **catalog** of variable names and priorities — do not copy it to `.env.local`.
+
+## Variable priority
+
+### P0 — Required
+
+| Variable | Scope | Purpose |
+|----------|-------|---------|
+| `NEXT_PUBLIC_SITE_URL` | Public | Canonical URL (SEO, sitemap, OG) |
+| `EMAIL_MAIL` | Server | Inbox that receives contact submissions |
+| `EMAIL_USER` | Server | SMTP sender address |
+| `EMAIL_APP_PASS` | Server | SMTP app password |
+
+Without P0 email vars the contact form and subscribe flow fail at runtime.
+
+### P1 — Core production features
+
+| Variable | Scope | Purpose |
+|----------|-------|---------|
+| `D1_ACCOUNT_ID` | Server | Cloudflare account for D1 REST |
+| `D1_DATABASE_ID` | Server | D1 database (`njmtech-projects`) |
+| `D1_API_TOKEN` | Server | API token with D1 read/write |
+| `GITHUB_TOKEN` | Server | GitHub Models for Omoi chat (rule fallback if missing) |
+| `HF_TOKEN` | Server | VoxCPM TTS auth / rate limits |
+| `VOXCPM_REF_AUDIO` | Server | Omoi voice clone reference (optional if instruction set) |
+| `VOXCPM_VOICE_INSTRUCTION` | Server | Omoi voice description when no ref audio |
+| `BLOG_STORAGE_BASE_URL` | Server | R2 public URL for blog Markdown |
+| `BLOG_VOXCPM_*` / `BLOG_EDGE_TTS_VOICE` | Server | Blog article narration voice profile |
+
+Without D1, projects/skills load from fallbacks and Omoi TTS uses the in-code manifest. Without `GITHUB_TOKEN`, Omoi uses rule-based replies only.
+
+### P2 — Optional (defaults exist)
+
+| Variable | Scope | Purpose |
+|----------|-------|---------|
+| `NEXT_PUBLIC_RESUME_URL` | Public | CV download link |
+| `NEXT_PUBLIC_MAILCHIMP_URL` | Public | Newsletter embed |
+| `NEXT_PUBLIC_WS_CHAT_URL` | Public | Optional WebSocket chat endpoint |
+
+### P3 — Scripts & tests only
+
+| Variable | Used by |
+|----------|---------|
+| `R2_BUCKET_NAME`, `BLOG_STORAGE_PREFIX` | `pnpm blog:upload` |
+| `VOICE_CACHE_S3_BASE_URL` | `pnpm ai_cache` |
+| `TEST_EMAIL`, `BASE_URL`, `TEMPLATE_API_URL` | Playwright email tests |
+
+## Import & use
+
+### Server-side
+
 ```typescript
 import { config } from '@/lib/config'
 
-config.get('D1_ACCOUNT_ID')          // Get specific variable
-config.get('NEXT_PUBLIC_SITE_URL')   // Type-safe access
-config.isProduction()                // Check environment
-config.isDevelopment()               // Check environment
-config.getSiteUrl()                  // Get URL without trailing slash
-config.getAll()                      // Get all config (for logging)
+config.get('D1_ACCOUNT_ID')
+config.get('NEXT_PUBLIC_SITE_URL')
+config.isProduction()
+config.getSiteUrl()
+config.getAll()
 ```
 
-### Client-Side
+### Client-side
+
 ```typescript
 import { publicConfig } from '@/lib/config.client'
 
 publicConfig.SITE_URL
-publicConfig.EMAIL_MAIL
 publicConfig.RESUME_URL
-publicConfig.MAILCHIMP_URL
 ```
 
-## Add New Variable
+## Add a new variable
 
-### 1. Add to `.env.example` & `.env.local`
-```bash
-MY_NEW_VAR="some_value"
-# or for public:
-NEXT_PUBLIC_MY_VAR="some_value"
-```
+1. Add the key to Infisical (`dev` + `prod`) and document it in `.env.example` with a priority tag.
+2. Update `src/lib/config.ts` schema (and `config.client.ts` if `NEXT_PUBLIC_*`).
+3. Use `config.get('VAR')` on the server — not raw `process.env`.
 
-### 2. Update `src/lib/config.ts`
-```typescript
-const envSchema = z.object({
-  // ... existing vars
-  MY_NEW_VAR: z.string(),  // or z.string().optional()
-})
-```
+## Error handling
 
-### 3. If Public, Update `src/lib/config.client.ts`
-```typescript
-export const publicConfig = {
-  // ... existing vars
-  MY_VAR: process.env.NEXT_PUBLIC_MY_VAR ?? "",
-} as const
-```
+If validation fails on startup:
 
-## Validation Rules
-
-```typescript
-z.string()              # Any string
-z.string().email()      # Valid email
-z.string().url()        # Valid URL
-z.string().optional()   # Optional (can be undefined)
-z.string().default("x") # Default value
-z.string().min(5)       # Minimum length
-z.string().max(100)     # Maximum length
-```
-
-## Error Handling
-
-If validation fails on startup, Next.js will show:
 ```
 ❌ Invalid environment variables:
 EMAIL_MAIL: Invalid email
-D1_ACCOUNT_ID: Required
+
+Verify keys in Infisical (dev) or Vercel (production). See .env.example for the catalog.
 ```
 
-Check `.env.local` and make sure all required vars are set.
-
-## Best Practices
-
-✅ Always use config service instead of `process.env`
-✅ Use `NEXT_PUBLIC_` prefix for public variables
-✅ Add validation rules for new variables
-✅ Never hardcode secrets (use env vars)
-✅ Use `isProduction()` for environment-specific logic
-
-## Common Variables
-
-```typescript
-// Email
-config.get('NEXT_PUBLIC_EMAIL_MAIL')
-config.get('NEXT_PUBLIC_EMAIL_USER')
-config.get('NEXT_PUBLIC_EMAIL_APP_PASS')
-
-// Database (server-only)
-config.get('D1_ACCOUNT_ID')
-config.get('D1_DATABASE_ID')
-
-// Website
-config.get('NEXT_PUBLIC_SITE_URL')
-config.getSiteUrl()  // Removes trailing slash
-
-// Links
-publicConfig.RESUME_URL
-publicConfig.MAILCHIMP_URL
-
-// Blog TTS (server-only)
-config.get('BLOG_VOXCPM_VOICE_INSTRUCTION')
-config.get('BLOG_EDGE_TTS_VOICE')
-config.get('BLOG_VOXCPM_REF_AUDIO')
-```
+Build-time (`NEXT_PHASE=phase-production-build`) logs a warning instead of throwing so CI/Vercel builds can complete with partial env.
 
 ## Debugging
 
 ```typescript
-// Log all config (server-side only!)
 console.log(config.getAll())
-
-// Check environment
 console.log('Environment:', config.isDevelopment() ? 'dev' : 'prod')
-
-// Verify a single variable
-console.log('Site URL:', config.get('NEXT_PUBLIC_SITE_URL'))
 ```
 
-## See Also
+Health check: `GET /api/config?endpoint=health`
 
-- [`CONFIG_SERVICE.md`](./CONFIG_SERVICE.md) - Full setup guide
-- [`AGENTS.md`](../AGENTS.md) - Agent and contributor conventions
-- [Zod Docs](https://zod.dev) - Validation library
+## See also
+
+- [`CONFIG_SERVICE.md`](./CONFIG_SERVICE.md) — Infisical setup and full guide
+- [`AGENTS.md`](../AGENTS.md) — agent conventions
+- [Zod Docs](https://zod.dev) — validation library

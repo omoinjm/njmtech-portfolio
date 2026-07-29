@@ -1,13 +1,16 @@
+import type { Metadata } from "next";
 import { BlogList } from "@/components/blog/BlogList";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPostMeta, type BlogPostMeta } from "@/lib/blog";
 import {
+  generateBlogPageSchema,
   generateBreadcrumbSchema,
   pageConfig,
   siteConfig,
 } from "@/utils/seo";
-import type { Metadata } from "next";
+import { logger } from "@/utils/logger";
 
-export const dynamic = "force-static";
+/** ISR — must not use force-static (conflicts with dynamic locale layout on Vercel). */
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: pageConfig.blog.title,
@@ -48,8 +51,17 @@ const breadcrumbs = [
   { name: "Blog", url: `${siteConfig.url}/blog` },
 ];
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export default async function BlogPage() {
+  let posts: BlogPostMeta[] = [];
+
+  try {
+    posts = await getAllPostMeta();
+  } catch (error) {
+    logger.error(
+      "Blog index failed to load posts",
+      error instanceof Error ? error.message : error,
+    );
+  }
 
   return (
     <>
@@ -57,6 +69,12 @@ export default function BlogPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(generateBreadcrumbSchema(breadcrumbs)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateBlogPageSchema()),
         }}
       />
 

@@ -203,6 +203,23 @@ export async function getVoiceCache(textHash: string) {
   return row?.audio_url ?? null;
 }
 
+export async function getVoiceCacheByKey(cacheKey: string) {
+  if (!isD1Configured()) {
+    logger.warn("Database not configured, skipping voice cache lookup");
+    return null;
+  }
+
+  const row = await queryOneD1<{ audio_url: string }>(
+    `SELECT audio_url
+     FROM ai_voice_cache
+     WHERE cache_key = ?
+     LIMIT 1`,
+    [cacheKey],
+  );
+
+  return row?.audio_url ?? null;
+}
+
 export async function getSubscriberByEmail(email: string) {
   if (!isD1Configured()) {
     throw getUnconfiguredDatabaseError();

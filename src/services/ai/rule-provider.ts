@@ -1,8 +1,11 @@
+import type { OmoiVoiceCacheKey } from "@/lib/omoi-voice-cache";
+import { OMOI_VOICE_CACHE_KEYS } from "@/lib/omoi-voice-cache";
 import { ChatMessage, ChatResponse, IChatProvider } from "./types";
 
 export interface FallbackRule {
   patterns: string[];
   response: string;
+  cacheKey: OmoiVoiceCacheKey;
   cta?: { href: string; label: string; external?: boolean };
 }
 
@@ -30,6 +33,7 @@ export class RuleBasedChatProvider implements IChatProvider {
       return {
         content: "Ask me about Nhlanhla, his services, projects, skills, resume, contact details, or site navigation.",
         fallback: true,
+        voiceCacheKey: OMOI_VOICE_CACHE_KEYS.default,
       };
     }
 
@@ -55,12 +59,14 @@ export class RuleBasedChatProvider implements IChatProvider {
         content: bestMatch.response,
         cta: bestMatch.cta,
         fallback: true,
+        voiceCacheKey: bestMatch.cacheKey,
       };
     }
 
     return {
       content: 'I can help with Nhlanhla\'s background, skills, services, projects, resume, newsletter, contact details, socials, or general site navigation. Try asking something like "What services do you offer?" or "How can I get in touch?"',
       fallback: true,
+      voiceCacheKey: OMOI_VOICE_CACHE_KEYS.default,
     };
   }
 

@@ -11,6 +11,8 @@ export interface ChatResponse {
     external?: boolean;
   };
   fallback?: boolean;
+  /** Stable key for pre-generated TTS in D1 (`ai_voice_cache.cache_key`). */
+  voiceCacheKey?: string;
 }
 
 /**

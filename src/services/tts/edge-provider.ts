@@ -1,4 +1,4 @@
-import { ITtsProvider } from "./types";
+import { ITtsProvider, TtsSynthesisOptions } from "./types";
 import { EdgeTTS } from "edge-tts-universal";
 
 type ArrayBufferLikeSource = {
@@ -20,7 +20,7 @@ export class EdgeTtsProvider implements ITtsProvider {
 
   constructor(private readonly voice: string = "en-US-ChristopherNeural") {}
 
-  async synthesize(text: string): Promise<ArrayBuffer> {
+  async synthesize(text: string, _options?: TtsSynthesisOptions): Promise<ArrayBuffer> {
     const tts = new EdgeTTS(text, this.voice);
     const result = await tts.synthesize();
     

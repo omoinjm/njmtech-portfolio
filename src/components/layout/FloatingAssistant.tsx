@@ -21,6 +21,13 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import {
+  OMOI_WELCOME_MESSAGE,
+  OMOI_PROMPT_CHIPS,
+  getOmoiPromptChipLabelKey,
+  type OmoiPromptChipId,
+} from "@/lib/omoi-voice-cache";
+import { getOmoiFallbackByCacheKey } from "@/lib/ai-config";
 import { useSpeech } from "@/hooks/use-speech";
 import { useChat } from "@/hooks/use-chat";
 import { ChatResponse } from "@/services/ai/types";
@@ -43,10 +50,11 @@ type AssistantMessage = {
   role: "assistant" | "user";
   content: string;
   cta?: AssistantCta;
+  voiceCacheKey?: string;
 };
 
 type PromptChip = {
-  id: string;
+  id: OmoiPromptChipId;
   label: string;
   prompt: string;
 };
@@ -83,8 +91,8 @@ const initialMessages: AssistantMessage[] = [
   {
     id: "welcome",
     role: "assistant",
-    content:
-      "I-I'm Omoi. I've been assigned to protect Nhlanhla's portfolio... but what if I fail? What if a server explodes right now? *Munch*... This lollipop is the only thing keeping me sane. Ask me about his services, skills, or projects. I'll do my best to answer... if the world doesn't end first.",
+    content: OMOI_WELCOME_MESSAGE.content,
+    voiceCacheKey: OMOI_WELCOME_MESSAGE.cacheKey,
   },
 ];
 
@@ -95,14 +103,15 @@ const isDev = process.env.NODE_ENV === "development";
 export const FloatingAssistant = () => {
   const t = useTranslations("assistant");
 
-  const promptChips: PromptChip[] = [
-    { id: "about", label: t("chip_about"), prompt: "Who is Nhlanhla Junior Malaza?" },
-    { id: "services", label: t("chip_services"), prompt: "What services do you offer?" },
-    { id: "skills", label: t("chip_skills"), prompt: "What technologies do you work with?" },
-    { id: "projects", label: t("chip_projects"), prompt: "Can I see the projects?" },
-    { id: "contact", label: t("chip_contact"), prompt: "How can I get in touch?" },
-    { id: "resume", label: t("chip_resume"), prompt: "Can I view the resume?" },
-  ];
+  const promptChips = useMemo<PromptChip[]>(
+    () =>
+      OMOI_PROMPT_CHIPS.map((chip) => ({
+        id: chip.id,
+        prompt: chip.prompt,
+        label: t(getOmoiPromptChipLabelKey(chip.id)),
+      })),
+    [t],
+  );
 
   const guideChips: GuideChip[] = useMemo(
     () => [
@@ -178,10 +187,11 @@ export const FloatingAssistant = () => {
           role: "assistant",
           content,
           cta: response.cta,
+          voiceCacheKey: response.voiceCacheKey,
         },
       ]);
 
-      speak(content);
+      speak(content, { cacheKey: response.voiceCacheKey });
     },
     [speak],
   );
@@ -220,9 +230,35 @@ export const FloatingAssistant = () => {
     sendMessage([...messages, { role: "user", content: trimmed }]);
   };
 
-  const handleQuickPrompt = (nextPrompt: string, chipId: string) => {
-    setVisibleChips((prev) => prev.filter((c) => c.id !== chipId));
-    appendConversation(nextPrompt);
+  const handleQuickPrompt = (chip: PromptChip) => {
+    setVisibleChips((prev) => prev.filter((c) => c.id !== chip.id));
+    setPrompt("");
+    setIsOpen(true);
+
+    const rule = getOmoiFallbackByCacheKey(chip.id);
+    if (!rule) {
+      void appendConversation(chip.prompt);
+      return;
+    }
+
+    messageSequenceRef.current += 1;
+    const userMessageId = `user-${messageSequenceRef.current}`;
+    messageSequenceRef.current += 1;
+    const assistantMessageId = `assistant-${messageSequenceRef.current}`;
+
+    setMessages((prev) => [
+      ...prev,
+      { id: userMessageId, role: "user", content: chip.prompt },
+      {
+        id: assistantMessageId,
+        role: "assistant",
+        content: rule.response,
+        cta: rule.cta,
+        voiceCacheKey: rule.cacheKey,
+      },
+    ]);
+
+    speak(rule.response, { cacheKey: rule.cacheKey });
   };
 
   const resetConversation = () => {
@@ -513,7 +549,7 @@ export const FloatingAssistant = () => {
                   <button
                     key={chip.id}
                     type="button"
-                    onClick={() => handleQuickPrompt(chip.prompt, chip.id)}
+                    onClick={() => handleQuickPrompt(chip)}
                     disabled={activeLoading}
                     className="rounded-full border border-border bg-card px-3 py-2 text-sm text-foreground transition-colors hover:border-accent/50 hover:text-accent disabled:opacity-50"
                   >

@@ -27,14 +27,17 @@ export class TtsOrchestrator {
     private readonly providerTimeoutMs: number = 8000 // 8 second timeout per provider
   ) {}
 
-  async getSpeech(text: string): Promise<{ buffer: ArrayBuffer; provider: string }> {
+  async getSpeech(
+    text: string,
+    options?: { cacheKey?: string },
+  ): Promise<{ buffer: ArrayBuffer; provider: string }> {
     const errors: Error[] = [];
 
     for (const provider of this.providers) {
       try {
         // Race the provider against a timeout
         const buffer = await Promise.race([
-          provider.synthesize(text),
+          provider.synthesize(text, { cacheKey: options?.cacheKey }),
           new Promise<never>((_, reject) => 
             setTimeout(() => reject(new Error(`Timeout: ${provider.name} took too long`)), this.providerTimeoutMs)
           )

@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Headphones, Pause, Play, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { blogChunkCacheKey } from "@/lib/blog-voice-cache";
 import { useSpeech } from "@/hooks/use-speech";
 import {
   chunkSpeechText,
@@ -11,11 +12,12 @@ import {
 } from "@/utils/markdown-to-speech";
 
 interface BlogAudioPlayerProps {
+  slug: string;
   content: string;
   title: string;
 }
 
-export function BlogAudioPlayer({ content, title }: BlogAudioPlayerProps) {
+export function BlogAudioPlayer({ slug, content, title }: BlogAudioPlayerProps) {
   const t = useTranslations("blog");
   const [isPlaying, setIsPlaying] = useState(false);
   const [chunkIndex, setChunkIndex] = useState(0);
@@ -25,18 +27,6 @@ export function BlogAudioPlayer({ content, title }: BlogAudioPlayerProps) {
   const chunks = useMemo(
     () => chunkSpeechText(markdownToSpeechText(content)),
     [content],
-  );
-
-  const playFromIndex = useCallback(
-    (startIndex: number) => {
-      if (chunks.length === 0) return;
-
-      chunksRef.current = chunks;
-      indexRef.current = startIndex;
-      setChunkIndex(startIndex);
-      setIsPlaying(true);
-    },
-    [chunks],
   );
 
   const { speak, stop, isSpeaking } = useSpeech({
@@ -54,9 +44,21 @@ export function BlogAudioPlayer({ content, title }: BlogAudioPlayerProps) {
 
       indexRef.current = nextIndex;
       setChunkIndex(nextIndex);
-      void speak(chunksRef.current[nextIndex]);
+      void speak(chunksRef.current[nextIndex], {
+        cacheKey: blogChunkCacheKey(slug, nextIndex),
+      });
     },
   });
+
+  const speakChunk = useCallback(
+    (index: number) => {
+      const text = chunksRef.current[index] ?? chunks[index];
+      if (!text) return;
+
+      void speak(text, { cacheKey: blogChunkCacheKey(slug, index) });
+    },
+    [chunks, slug, speak],
+  );
 
   const handlePlay = useCallback(() => {
     if (isPlaying) {
@@ -65,10 +67,13 @@ export function BlogAudioPlayer({ content, title }: BlogAudioPlayerProps) {
       return;
     }
 
+    if (chunks.length === 0) return;
+
+    chunksRef.current = chunks;
     indexRef.current = chunkIndex;
-    playFromIndex(chunkIndex);
-    void speak(chunks[chunkIndex] ?? chunks[0]);
-  }, [chunkIndex, chunks, isPlaying, playFromIndex, speak, stop]);
+    setIsPlaying(true);
+    speakChunk(chunkIndex);
+  }, [chunkIndex, chunks, isPlaying, speakChunk, stop]);
 
   const handleStop = useCallback(() => {
     stop();
@@ -76,6 +81,8 @@ export function BlogAudioPlayer({ content, title }: BlogAudioPlayerProps) {
     indexRef.current = 0;
     setChunkIndex(0);
   }, [stop]);
+
+  useEffect(() => () => stop(), [stop]);
 
   if (chunks.length === 0) {
     return null;

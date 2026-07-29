@@ -133,10 +133,10 @@ Please provide as much detail as possible to help us understand and fix the issu
 
 ### Environment Variables
 
-Never commit `.env` files to version control:
-- ✅ `.env` is in `.gitignore`
-- ✅ Use `.env.example` for reference
-- ✅ Set environment variables in Vercel dashboard
+Never commit secrets to version control:
+- ✅ Secrets live in Infisical (local dev) and Vercel (production)
+- ✅ `.env.example` is a variable catalog only — do not copy to `.env.local`
+- ✅ Set production keys in the Vercel dashboard (mirror Infisical `prod`)
 - ❌ Never hardcode secrets in code
 
 ### API Security

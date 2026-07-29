@@ -19,6 +19,8 @@ const envSchema = z.object({
   BLOG_VOXCPM_REF_AUDIO: z.string().optional(),
   BLOG_VOXCPM_VOICE_INSTRUCTION: z.string().optional(),
   BLOG_EDGE_TTS_VOICE: z.string().optional(),
+  /** Public URL prefix for blog Markdown + index.json on R2/S3 */
+  BLOG_STORAGE_BASE_URL: z.string().url().optional(),
 });
 
 export type Config = z.infer<typeof envSchema>;
@@ -50,7 +52,7 @@ class ConfigService {
         .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
         .join("\n");
 
-      const errorMessage = `❌ Invalid environment variables:\n${missingVars}\n\nPlease check your .env.local file.`;
+      const errorMessage = `❌ Invalid environment variables:\n${missingVars}\n\nVerify keys in Infisical (pnpm dev) or Vercel (production). See .env.example for the catalog.`;
 
       // During build time, we might not have all environment variables (especially secrets)
       // We log a warning instead of throwing to allow the build to complete.
@@ -71,6 +73,7 @@ class ConfigService {
           BLOG_VOXCPM_VOICE_INSTRUCTION:
             process.env.BLOG_VOXCPM_VOICE_INSTRUCTION,
           BLOG_EDGE_TTS_VOICE: process.env.BLOG_EDGE_TTS_VOICE,
+          BLOG_STORAGE_BASE_URL: process.env.BLOG_STORAGE_BASE_URL,
         };
       }
 
