@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import * as LucideIcons from "lucide-react";
 import { useTranslations } from "next-intl";
 import { PRIMARY_SITE_NAV } from "@/lib/site-navigation";
-import { FooterModel } from "@/types";
+import { SOCIAL_LINKS } from "@/lib/social-links";
+import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
-export const Footer = ({ data }) => {
+export const Footer = ({ data: _data }) => {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
   const currentYear = new Date().getFullYear();
@@ -110,21 +110,9 @@ export const Footer = ({ data }) => {
 
           {/* Social Links */}
           <div className="flex gap-4">
-            {data.map((social: FooterModel) => {
-              const Icon = LucideIcons[social.label];
-              return (
-                <a
-                  key={social.label}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={social.label}
-                >
-                  {Icon ? <Icon size={20} /> : <span>{social.label}</span>}
-                </a>
-              );
-            })}
+            {SOCIAL_LINKS.map((social) => (
+              <SocialLinkIcon key={social.id} social={social} size={20} />
+            ))}
           </div>
         </div>
       </div>

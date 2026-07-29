@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FooterModel, MenuModel } from "@/types";
+import { MenuModel } from "@/types";
 import { PRIMARY_SITE_NAV } from "@/lib/site-navigation";
+import { SOCIAL_LINKS } from "@/lib/social-links";
 import * as LucideIcons from "lucide-react";
 import { AccentThemePicker } from "@/components/layout/AccentThemePicker";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
 
 export const Navbar = ({ data }) => {
@@ -28,7 +30,7 @@ export const Navbar = ({ data }) => {
           icon: "",
           url: item.path,
         }));
-  const socialLinks: FooterModel[] = data?.nav_footer ?? [];
+  const socialLinks = SOCIAL_LINKS;
 
   // Keyboard navigation shortcuts
   useEffect(() => {
@@ -100,13 +102,32 @@ export const Navbar = ({ data }) => {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="container mx-auto px-4 flex items-center justify-between">
-          {/* Desktop: logo left, theme picker + Links right — nav links live in RightSideNav */}
-          <Link href="/" className="text-2xl font-bold gradient-text">
+        <div className="container mx-auto px-4 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+          <Link href="/" className="text-2xl font-bold gradient-text justify-self-start">
             NJM<span className="text-foreground">TECH</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop: centered page links */}
+          <nav
+            aria-label="Main navigation"
+            className="hidden md:flex items-center justify-center gap-8"
+          >
+            {pages.map((link: MenuModel) => (
+              <Link
+                key={link.id}
+                href={link.url}
+                className={`text-sm font-semibold tracking-wide transition-colors ${
+                  isActive(link.url)
+                    ? "gradient-text"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="hidden md:flex items-center justify-end gap-4">
             <LanguageSwitcher />
             <AccentThemePicker />
             <Link
@@ -118,9 +139,9 @@ export const Navbar = ({ data }) => {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile menu button */}
           <button
-            className="md:hidden text-foreground z-50 relative"
+            className="md:hidden text-foreground z-50 relative justify-self-end col-start-3"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -169,21 +190,9 @@ export const Navbar = ({ data }) => {
               <AccentThemePicker />
               <LanguageSwitcher />
               <div className="flex items-center gap-8">
-                {socialLinks.map((social) => {
-                  const Icon = LucideIcons[social.icon as keyof typeof LucideIcons] as React.ElementType | undefined;
-                  return (
-                    <a
-                      key={social.id}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-foreground transition-colors"
-                      aria-label={social.label}
-                    >
-                      {Icon ? <Icon size={24} /> : <span>{social.label}</span>}
-                    </a>
-                  );
-                })}
+                {socialLinks.map((social) => (
+                  <SocialLinkIcon key={social.id} social={social} size={28} />
+                ))}
               </div>
               <Link
                 href="https://bio.njmtech.co.za/"
