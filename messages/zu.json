@@ -17,15 +17,17 @@
     "mail_service_terms": "Imigomo Yesevisi Yemeyili"
   },
   "hero": {
-    "welcome_badge": "Wamukelekile ku-Portfolio Yami",
+    "welcome_badge": "EJohannesburg · Ngiyatholakala",
     "name": "Nhlanhla Malaza",
-    "name_full": "Nhlanhla Junior Malaza · NJMTech",
-    "title": "Unjiniyela Wesoftware, Unjiniyela we-DevOps & Inzexpert ye-AI Integrations",
-    "subtitle": "UNhlanhla Malaza (NJMTech) unjiniyela wesoftware oseNingizimu Afrika — uhlala efunda, uzijwayeza, futhi akha ngezobuchwepheshe bewebhu besimanje.",
-    "cta_primary": "Xhumana Nami",
-    "cta_resume": "I-CV",
+    "headline": "Ngakha kusuka kubrowser kuya e-edge.",
+    "subtitle": "Unjiniyela we-full-stack oneDevOps — ngithumela ama-app e-Next.js, ingqalasizinda ye-Cloudflare, nokuhlanganiswa kwe-AI okuhlala kusebenza e-production. NgiseNingizimu Afrika, ngisebenza nawo wonke amathelo.",
+    "focus_web": "Next.js & React",
+    "focus_ops": "Cloudflare & DevOps",
+    "focus_ai": "Ukuhlanganiswa kwe-AI",
+    "cta_primary": "Qala iphrojekthi",
+    "cta_resume": "Buka i-CV",
     "keyboard_label": "Landela ikhiybhodi",
-    "keyboard_desc": "Skrola ikhasi ulandele ikhiybhodi, bese usho phezu kwamakinobho esigabeni samakhono"
+    "keyboard_desc": "Skrola ikhasi — amakinobho ayakhanya njengoba uhamba esigabeni ngasinye"
   },
   "skills": {
     "label": "Amakhono Ekhiybhodi",

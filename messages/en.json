@@ -17,15 +17,17 @@
     "mail_service_terms": "Mail Service Terms"
   },
   "hero": {
-    "welcome_badge": "Welcome to my Portfolio",
+    "welcome_badge": "Johannesburg · Open for work",
     "name": "Nhlanhla Malaza",
-    "name_full": "Nhlanhla Junior Malaza · NJMTech",
-    "title": "Software Developer, DevOps Engineer & AI Integrations Specialist",
-    "subtitle": "Nhlanhla Malaza (NJMTech) is a passionate software developer based in South Africa — always learning, adapting, and building with modern web technologies.",
-    "cta_primary": "Get In Touch",
-    "cta_resume": "Resume",
+    "headline": "I build from the browser to the edge.",
+    "subtitle": "Full-stack developer with a DevOps habit — shipping Next.js apps, Cloudflare infrastructure, and AI integrations that survive production. Based in South Africa, collaborating remotely.",
+    "focus_web": "Next.js & React",
+    "focus_ops": "Cloudflare & DevOps",
+    "focus_ai": "AI integrations",
+    "cta_primary": "Start a project",
+    "cta_resume": "View résumé",
     "keyboard_label": "Follow the keyboard",
-    "keyboard_desc": "Scroll through the page to follow the keyboard, then hover the keys in the skills section"
+    "keyboard_desc": "Scroll the page — the keys light up as you move through each section"
   },
   "skills": {
     "label": "Keyboard Skills",

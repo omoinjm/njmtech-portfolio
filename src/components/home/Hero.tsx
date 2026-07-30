@@ -1,12 +1,14 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { publicConfig } from "@/lib/config.client";
 import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
+
+const FOCUS_KEYS = ["focus_web", "focus_ops", "focus_ai"] as const;
 
 export const Hero = () => {
   const t = useTranslations("hero");
@@ -29,14 +31,12 @@ export const Hero = () => {
       data-keyboard-section="hero"
       className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
     >
-      {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden z-[1]">
         <div className="absolute top-[18%] -left-24 h-80 w-80 rounded-full bg-accent/18 blur-3xl animate-pulse-slow" />
         <div className="absolute bottom-[16%] right-0 h-96 w-96 rounded-full bg-primary/16 blur-3xl animate-pulse-slow" />
       </div>
 
       <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-        {/* Text Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -47,46 +47,39 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border mb-6"
+            className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-card/60 border border-border/80 mb-8"
           >
-            <Sparkles className="w-4 h-4 text-accent" />
-            <span className="text-sm text-muted-foreground">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+            </span>
+            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
               {t("welcome_badge")}
             </span>
           </motion.div>
 
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-3"
+            className="mb-6"
           >
-            <span className="gradient-text">{t("name")}</span>
-          </motion.h1>
+            <p className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground/70 mb-3">
+              NJMTech
+            </p>
+            <h1 className="text-[2.75rem] md:text-6xl lg:text-[4.25rem] font-bold leading-[1.05] tracking-tight">
+              <span className="gradient-text block">{t("name")}</span>
+              <span className="block mt-3 text-foreground/95 font-semibold text-[1.65rem] md:text-3xl lg:text-[2.35rem] leading-snug">
+                {t("headline")}
+              </span>
+            </h1>
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-            className="text-base md:text-lg text-muted-foreground/80 mb-4"
-          >
-            {t("name_full")}
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-4"
-          >
-            {t("title")}
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-8"
+            transition={{ delay: 0.45 }}
+            className="text-base md:text-lg text-muted-foreground/90 max-w-xl mx-auto lg:mx-0 mb-7 leading-relaxed"
           >
             {t("subtitle")}
           </motion.p>
@@ -94,10 +87,28 @@ export const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.52 }}
+            className="flex flex-wrap gap-2 justify-center lg:justify-start mb-9"
+          >
+            {FOCUS_KEYS.map((key) => (
+              <span
+                key={key}
+                className="text-xs font-medium px-3 py-1.5 rounded-full border border-border/70 bg-background/40 text-muted-foreground"
+              >
+                {t(key)}
+              </span>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
-            <Link href="/contact" className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
+            <Link
+              href="/contact"
+              className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
               {t("cta_primary")}
             </Link>
@@ -108,14 +119,9 @@ export const Hero = () => {
               {t("cta_resume")}
               <ArrowRight className="w-4 h-4" />
             </button>
-
           </motion.div>
-
-          {/* Stats */}
-
         </motion.div>
 
-        {/* Animated Visual */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -152,7 +158,6 @@ export const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -168,7 +173,6 @@ export const Hero = () => {
         </motion.div>
       </motion.div>
 
-      {/* PDF Preview Dialog */}
       <PdfPreviewDialog
         open={isResumeOpen}
         onOpenChange={setIsResumeOpen}
@@ -177,4 +181,3 @@ export const Hero = () => {
     </section>
   );
 };
-
