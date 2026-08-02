@@ -83,12 +83,15 @@ Environment variables are in **Infisical** (local/scripts) and **Vercel** (produ
 | `pnpm test` | Playwright E2E |
 | `pnpm ai_cache` | Generate TTS voice cache (Infisical) |
 | `pnpm blog:upload` | Upload blog seed to R2 (Infisical) |
+| `pnpm projects:sync:migrate` | D1 migration for Vercel project sync columns/groups |
+| `pnpm projects:sync:deploy` | Deploy Cloudflare Worker that syncs Vercel → D1 |
 
 ## Reference docs
 
 - `docs/CONFIG_QUICK_REF.md` — env priority + quick reference
 - `docs/CONFIG_SERVICE.md` — Infisical + config setup
 - `docs/SEO_GUIDE.md` — SEO patterns
+- `docs/VERCEL_PROJECTS_SYNC.md` — Vercel → D1 projects Worker sync
 - `public/llms.txt` — public site summary for external LLMs
 
 ## Do not

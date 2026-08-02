@@ -27,7 +27,10 @@
     "voice-cache:test": "npx tsx scripts/test-voice-cache.ts",
     "voice-cache:test:d1": "infisical run -- npx tsx scripts/test-voice-cache.ts --d1",
     "blog:upload": "infisical run -- npx tsx scripts/upload-blog-to-r2.ts",
-    "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts"
+    "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts",
+    "projects:sync:migrate": "npx wrangler d1 execute njmtech-projects --remote --file=scripts/migrate-vercel-projects-sync.sql",
+    "projects:sync:deploy": "pnpm --dir workers/vercel-projects-sync install && pnpm --dir workers/vercel-projects-sync deploy",
+    "projects:sync:dev": "pnpm --dir workers/vercel-projects-sync dev"
   },
   "dependencies": {
     "@gradio/client": "^2.2.0",

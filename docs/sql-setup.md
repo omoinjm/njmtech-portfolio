@@ -99,6 +99,11 @@ values
 
 ### Projects
 
+> Live data is on Cloudflare D1. Vercel sync columns and category seed are in
+> [`scripts/migrate-vercel-projects-sync.sql`](../scripts/migrate-vercel-projects-sync.sql)
+> (`vercel_project_id`, `source`, `category_locked`, `synced_at`; groups `WEB` / `TOOL` / `ECOM`).
+> Ops guide: [`docs/VERCEL_PROJECTS_SYNC.md`](./VERCEL_PROJECTS_SYNC.md).
+
 ```sql
 # Project Table
 CREATE TABLE IF NOT EXISTS project

@@ -1,0 +1,5 @@
+# Local secrets for `pnpm dev` — copy to .dev.vars (gitignored)
+VERCEL_TOKEN=vercel_xxxxxxxx
+SYNC_SECRET=change-me
+# VERCEL_TEAM_ID=team_xxxxxxxx
+# PROJECT_CATEGORY_MAP={"my-shop":"ECOM","admin-tool":"TOOL"}
