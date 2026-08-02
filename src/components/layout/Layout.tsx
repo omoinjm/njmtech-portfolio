@@ -47,7 +47,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar data={nLinks} />
+      <div className="print:hidden">
+        <Navbar data={nLinks} />
+      </div>
 
       <main className="flex-grow">
         <AnimatePresence mode="wait">
@@ -55,12 +57,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </AnimatePresence>
       </main>
 
-      <Footer data={fLinks} />
-      <FloatingAssistant />
-      <KeyboardShortcuts />
-      <SEOGuideDialog />
-      <MechanicalKeyboardGuideDialog />
-      <MouseGlow />
+      <div className="print:hidden">
+        <Footer data={fLinks} />
+        <FloatingAssistant />
+        <KeyboardShortcuts />
+        <SEOGuideDialog />
+        <MechanicalKeyboardGuideDialog />
+        <MouseGlow />
+      </div>
     </div>
   );
 };
