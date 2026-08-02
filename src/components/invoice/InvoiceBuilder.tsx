@@ -4,14 +4,16 @@ import { useEffect, useState, useEffectEvent } from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
+  Copy,
   Download,
+  ExternalLink,
   FilePlus2,
   Loader2,
   Plus,
   Save,
   Trash2,
 } from "lucide-react";
-import { useRouter } from "@/navigation";
+import { Link, useRouter } from "@/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InvoicePreview } from "@/components/invoice/InvoicePreview";
@@ -25,6 +27,12 @@ import {
   setStoredAccessToken,
   computeInvoiceTotals,
 } from "@/lib/invoice";
+import {
+  downloadInvoicePdf,
+  getPublicInvoicePath,
+  getPublicInvoiceUrl,
+} from "@/lib/invoice-download";
+import { siteConfig } from "@/utils/seo";
 import type { Invoice, InvoiceListItem } from "@/types/invoice_model";
 
 interface InvoiceBuilderProps {
@@ -186,7 +194,7 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
         title: t("save_success_title"),
         description: t("save_success_body", { number: data.invoice.number }),
       });
-      router.replace(`/invoice/${data.invoice.id}`);
+      router.replace(`/invoice/edit/${data.invoice.id}`);
     } catch {
       toast({
         title: t("save_failed"),
@@ -262,49 +270,20 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
 
     setDownloading(true);
     try {
-      const response = await fetch(
-        `/api/invoice/pdf?id=${encodeURIComponent(persistedId)}`,
-      );
-
-      if (!response.ok) {
-        let message = t("pdf_failed");
-        try {
-          const data = (await response.json()) as {
-            message?: string;
-            code?: string;
-          };
-          if (
-            data.code === "STORAGE_NOT_CONFIGURED" ||
-            data.code === "TOKEN_NOT_CONFIGURED"
-          ) {
-            message = t("storage_not_configured");
-          } else if (data.message) {
-            message = data.message;
-          }
-        } catch {
-          // Non-JSON error body
-        }
+      const result = await downloadInvoicePdf(persistedId, invoice.number);
+      if (result.ok === false) {
+        const description =
+          result.code === "STORAGE_NOT_CONFIGURED" ||
+          result.code === "TOKEN_NOT_CONFIGURED"
+            ? t("storage_not_configured")
+            : result.message;
         toast({
           title: t("pdf_failed"),
-          description: message,
+          description,
           variant: "destructive",
         });
         return;
       }
-
-      const blob = await response.blob();
-      const disposition = response.headers.get("Content-Disposition") ?? "";
-      const match = /filename="([^"]+)"/i.exec(disposition);
-      const filename = match?.[1] || `${invoice.number || "invoice"}.pdf`;
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = filename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      URL.revokeObjectURL(url);
-
       toast({
         title: t("pdf_success_title"),
         description: t("pdf_success_body", { number: invoice.number }),
@@ -317,6 +296,32 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
       });
     } finally {
       setDownloading(false);
+    }
+  };
+
+  const handleCopyClientLink = async () => {
+    if (!persistedId) {
+      toast({
+        title: t("pdf_save_first_title"),
+        description: t("pdf_save_first_body"),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const url = getPublicInvoiceUrl(persistedId, siteConfig.url);
+    try {
+      await navigator.clipboard.writeText(url);
+      toast({
+        title: t("link_copied_title"),
+        description: t("link_copied_body"),
+      });
+    } catch {
+      toast({
+        title: t("copy_link_failed"),
+        description: url,
+        variant: "destructive",
+      });
     }
   };
 
@@ -366,6 +371,23 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
             )}
             {t("download_pdf")}
           </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCopyClientLink}
+            disabled={!persistedId}
+          >
+            <Copy className="h-4 w-4" />
+            {t("copy_link")}
+          </Button>
+          {persistedId ? (
+            <Button type="button" variant="ghost" asChild>
+              <Link href={getPublicInvoicePath(persistedId)} target="_blank">
+                <ExternalLink className="h-4 w-4" />
+                {t("public_title")}
+              </Link>
+            </Button>
+          ) : null}
           <Button type="button" variant="secondary" onClick={handleNew}>
             <FilePlus2 className="h-4 w-4" />
             {t("new")}
@@ -405,7 +427,7 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
                   <button
                     type="button"
                     className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-sm hover:bg-secondary"
-                    onClick={() => router.push(`/invoice/${item.id}`)}
+                    onClick={() => router.push(`/invoice/edit/${item.id}`)}
                   >
                     <span>
                       {item.number} · {item.toName}
