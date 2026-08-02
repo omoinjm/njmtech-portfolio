@@ -30,6 +30,7 @@
     "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1101.0",
     "@gradio/client": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
     "@infisical/sdk": "^5.0.1",
