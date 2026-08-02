@@ -8,9 +8,9 @@
   "invoice": {
     "badge": "Ithuluzi langaphakathi · Alikho kunav",
     "title": "I-invoice",
-    "subtitle": "Yakha i-invoice ye-NJMTECH, engeza izinto nomali ezengeziwe ezihlanganisela isamba, bese unyathelisa noma ulondoloze.",
+    "subtitle": "Yakha i-invoice ye-NJMTECH, buyekeza idokhumenti, ylondoloze, bese ulanda i-PDF eyakhiwe kuseva.",
     "save": "Londoloza",
-    "print": "Print / PDF",
+    "download_pdf": "Landa i-PDF",
     "new": "Entsha",
     "list_recent": "Zakamuva",
     "recent_heading": "Ama-invoice akamuva",
@@ -55,7 +55,12 @@
     "token_required_body": "Faka ithokheni yakho ukuze ulondoloze noma ubheke uhlu.",
     "client_required_title": "Igama leklayenti liyadingeka",
     "client_required_body": "Engeza igama leklayenti ngaphambi kokulondoloza.",
-    "storage_not_configured": "Isitoreji se-invoice asihleliwe kuseva (ama-R2 / ithokheni)."
+    "storage_not_configured": "Isitoreji se-invoice asihleliwe kuseva (ama-R2 / ithokheni).",
+    "pdf_save_first_title": "Londoloza ngaphambi kokulanda",
+    "pdf_save_first_body": "Londoloza i-invoice kuqala ukuze i-PDF yakhiwe kusuka ku-JSON elondoloziwe ku-R2.",
+    "pdf_failed": "Ayikwazanga ukulanda i-PDF",
+    "pdf_success_title": "I-PDF ilungile",
+    "pdf_success_body": "Kulandiwe u-{number} njenge-PDF enophawu."
   },
   "footer": {
     "copyright": "Wonke amalungelo agcinwe.",

@@ -8,9 +8,9 @@
   "invoice": {
     "badge": "Internal tool · Not listed in nav",
     "title": "Invoice",
-    "subtitle": "Compose an NJMTECH invoice, add line items and extras that sum to the total, then print or save to storage.",
+    "subtitle": "Compose an NJMTECH invoice, preview the branded document, save it, then download a server-generated PDF.",
     "save": "Save",
-    "print": "Print / PDF",
+    "download_pdf": "Download PDF",
     "new": "New",
     "list_recent": "Recent",
     "recent_heading": "Recent invoices",
@@ -55,7 +55,12 @@
     "token_required_body": "Enter your invoice access token to save or list invoices.",
     "client_required_title": "Client name required",
     "client_required_body": "Add a client name under Bill to before saving.",
-    "storage_not_configured": "Invoice storage is not configured on the server (R2 credentials / access token)."
+    "storage_not_configured": "Invoice storage is not configured on the server (R2 credentials / access token).",
+    "pdf_save_first_title": "Save before downloading",
+    "pdf_save_first_body": "Save the invoice first so the PDF is generated from the JSON stored in R2.",
+    "pdf_failed": "Could not download PDF",
+    "pdf_success_title": "PDF ready",
+    "pdf_success_body": "Downloaded {number} as a branded PDF."
   },
   "footer": {
     "copyright": "All rights reserved.",
