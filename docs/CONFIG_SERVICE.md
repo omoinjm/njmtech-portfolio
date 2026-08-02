@@ -61,9 +61,9 @@ See [`CONFIG_QUICK_REF.md`](./CONFIG_QUICK_REF.md) for the full table.
 | Tier | Examples | If missing |
 |------|----------|------------|
 | **P0** | `EMAIL_*`, `NEXT_PUBLIC_SITE_URL` | Contact/subscribe broken; SEO defaults |
-| **P1** | `D1_*`, `GITHUB_TOKEN`, `HF_TOKEN`, `BLOG_*` | Fallbacks / degraded AI & TTS |
+| **P1** | `D1_*`, `GITHUB_TOKEN`, `HF_TOKEN`, `BLOG_*`, `R2_*` (invoice), `INVOICE_*` | Fallbacks / degraded AI, TTS, invoice save |
 | **P2** | `NEXT_PUBLIC_RESUME_URL`, Mailchimp | Hardcoded defaults in code |
-| **P3** | `R2_*`, script/test vars | Scripts fail; app unaffected |
+| **P3** | Script/test vars (`BLOG_STORAGE_PREFIX`, `VOICE_CACHE_S3_BASE_URL`) | Scripts fail; app unaffected |
 
 ## Validated schema (`config.ts`)
 
@@ -78,12 +78,14 @@ See [`CONFIG_QUICK_REF.md`](./CONFIG_QUICK_REF.md) for the full table.
 - `D1_ACCOUNT_ID`, `D1_DATABASE_ID`, `D1_API_TOKEN` — optional (P1)
 - `BLOG_VOXCPM_REF_AUDIO`, `BLOG_VOXCPM_VOICE_INSTRUCTION`, `BLOG_EDGE_TTS_VOICE` — optional (P1)
 - `BLOG_STORAGE_BASE_URL` — optional (P1, default in `blog-storage.ts`)
+- `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME` — optional (P1, invoice R2)
+- `INVOICE_STORAGE_PREFIX`, `INVOICE_ACCESS_TOKEN` — optional (P1, `/invoice` save/list)
 
 **Used via `process.env` in routes/scripts (add to Infisical + catalog when extending):**
 
 - `GITHUB_TOKEN` — `/api/chat`
 - `HF_TOKEN`, `VOXCPM_*` — `/api/tts`, voice-cache scripts
-- `R2_BUCKET_NAME`, `BLOG_STORAGE_PREFIX` — `pnpm blog:upload`
+- `BLOG_STORAGE_PREFIX` — `pnpm blog:upload`
 
 ## Add a new variable
 

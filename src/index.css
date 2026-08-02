@@ -248,3 +248,36 @@
     }
   }
 }
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f2b30 !important;
+  }
+
+  .invoice-editor {
+    display: none !important;
+  }
+
+  #invoice-print-area,
+  .invoice-preview {
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #0f2b30 !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #invoice-print-area .text-muted-foreground,
+  .invoice-preview .text-muted-foreground {
+    color: #4a6670 !important;
+  }
+
+  #invoice-print-area .gradient-text,
+  .invoice-preview .gradient-text {
+    -webkit-text-fill-color: #0f2b30;
+    color: #0f2b30 !important;
+    background: none !important;
+  }
+}

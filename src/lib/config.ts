@@ -21,6 +21,14 @@ const envSchema = z.object({
   BLOG_EDGE_TTS_VOICE: z.string().optional(),
   /** Public URL prefix for blog Markdown + index.json on R2/S3 */
   BLOG_STORAGE_BASE_URL: z.string().url().optional(),
+
+  /** Cloudflare account for R2 S3 API (falls back to D1_ACCOUNT_ID) */
+  R2_ACCOUNT_ID: z.string().optional(),
+  R2_ACCESS_KEY_ID: z.string().optional(),
+  R2_SECRET_ACCESS_KEY: z.string().optional(),
+  R2_BUCKET_NAME: z.string().optional(),
+  INVOICE_STORAGE_PREFIX: z.string().optional(),
+  INVOICE_ACCESS_TOKEN: z.string().optional(),
 });
 
 export type Config = z.infer<typeof envSchema>;
@@ -74,6 +82,12 @@ class ConfigService {
             process.env.BLOG_VOXCPM_VOICE_INSTRUCTION,
           BLOG_EDGE_TTS_VOICE: process.env.BLOG_EDGE_TTS_VOICE,
           BLOG_STORAGE_BASE_URL: process.env.BLOG_STORAGE_BASE_URL,
+          R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
+          R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
+          R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
+          R2_BUCKET_NAME: process.env.R2_BUCKET_NAME,
+          INVOICE_STORAGE_PREFIX: process.env.INVOICE_STORAGE_PREFIX,
+          INVOICE_ACCESS_TOKEN: process.env.INVOICE_ACCESS_TOKEN,
         };
       }
 

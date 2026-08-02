@@ -38,8 +38,13 @@ Without P0 email vars the contact form and subscribe flow fail at runtime.
 | `VOXCPM_VOICE_INSTRUCTION` | Server | Omoi voice description when no ref audio |
 | `BLOG_STORAGE_BASE_URL` | Server | R2 public URL for blog Markdown |
 | `BLOG_VOXCPM_*` / `BLOG_EDGE_TTS_VOICE` | Server | Blog article narration voice profile |
+| `R2_ACCOUNT_ID` | Server | Cloudflare account for R2 S3 API (falls back to `D1_ACCOUNT_ID`) |
+| `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` | Server | R2 S3 API credentials for invoice save/list |
+| `R2_BUCKET_NAME` | Server | R2 bucket (default `njmtech-blob`) |
+| `INVOICE_STORAGE_PREFIX` | Server | Object key prefix (default `njmtech-portfolio/invoices`) |
+| `INVOICE_ACCESS_TOKEN` | Server | Shared secret for invoice save/list |
 
-Without D1, projects/skills load from fallbacks and Omoi TTS uses the in-code manifest. Without `GITHUB_TOKEN`, Omoi uses rule-based replies only.
+Without D1, projects/skills load from fallbacks and Omoi TTS uses the in-code manifest. Without `GITHUB_TOKEN`, Omoi uses rule-based replies only. Without R2 invoice keys, `/invoice` still composes/prints but Save returns 503.
 
 ### P2 — Optional (defaults exist)
 
@@ -53,7 +58,7 @@ Without D1, projects/skills load from fallbacks and Omoi TTS uses the in-code ma
 
 | Variable | Used by |
 |----------|---------|
-| `R2_BUCKET_NAME`, `BLOG_STORAGE_PREFIX` | `pnpm blog:upload` |
+| `BLOG_STORAGE_PREFIX` | `pnpm blog:upload` |
 | `VOICE_CACHE_S3_BASE_URL` | `pnpm ai_cache` |
 | `TEST_EMAIL`, `BASE_URL`, `TEMPLATE_API_URL` | Playwright email tests |
 | `VERCEL_TOKEN`, `VERCEL_TEAM_ID`, `SITE_URL`, `CRON_SECRET` | Cloudflare Worker `njmtech-vercel-project-sync` (wrangler secrets) |
