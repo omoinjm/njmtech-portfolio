@@ -4,10 +4,10 @@ import { useEffect, useState, useEffectEvent } from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import {
+  Download,
   FilePlus2,
   Loader2,
   Plus,
-  Printer,
   Save,
   Trash2,
 } from "lucide-react";
@@ -54,9 +54,11 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
   const [invoice, setInvoice] = useState<Invoice>(() => createEmptyInvoice());
   const [accessToken, setAccessToken] = useState("");
   const [saving, setSaving] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [loading, setLoading] = useState(Boolean(initialId));
   const [listing, setListing] = useState(false);
   const [recent, setRecent] = useState<InvoiceListItem[]>([]);
+  const [persistedId, setPersistedId] = useState<string | undefined>(initialId);
 
   const onLoadInvoice = useEffectEvent(async (id: string) => {
     setLoading(true);
@@ -78,6 +80,7 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
       }
 
       setInvoice(data.invoice);
+      setPersistedId(data.invoice.id);
     } catch {
       toast({
         title: t("load_failed"),
@@ -94,6 +97,7 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
   }, []);
 
   useEffect(() => {
+    setPersistedId(initialId);
     if (initialId) {
       void onLoadInvoice(initialId);
     }
@@ -177,6 +181,7 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
       }
 
       setInvoice(data.invoice);
+      setPersistedId(data.invoice.id);
       toast({
         title: t("save_success_title"),
         description: t("save_success_body", { number: data.invoice.number }),
@@ -245,12 +250,79 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
     }
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleDownloadPdf = async () => {
+    if (!persistedId) {
+      toast({
+        title: t("pdf_save_first_title"),
+        description: t("pdf_save_first_body"),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setDownloading(true);
+    try {
+      const response = await fetch(
+        `/api/invoice/pdf?id=${encodeURIComponent(persistedId)}`,
+      );
+
+      if (!response.ok) {
+        let message = t("pdf_failed");
+        try {
+          const data = (await response.json()) as {
+            message?: string;
+            code?: string;
+          };
+          if (
+            data.code === "STORAGE_NOT_CONFIGURED" ||
+            data.code === "TOKEN_NOT_CONFIGURED"
+          ) {
+            message = t("storage_not_configured");
+          } else if (data.message) {
+            message = data.message;
+          }
+        } catch {
+          // Non-JSON error body
+        }
+        toast({
+          title: t("pdf_failed"),
+          description: message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const blob = await response.blob();
+      const disposition = response.headers.get("Content-Disposition") ?? "";
+      const match = /filename="([^"]+)"/i.exec(disposition);
+      const filename = match?.[1] || `${invoice.number || "invoice"}.pdf`;
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = filename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: t("pdf_success_title"),
+        description: t("pdf_success_body", { number: invoice.number }),
+      });
+    } catch {
+      toast({
+        title: t("pdf_failed"),
+        description: t("network_error"),
+        variant: "destructive",
+      });
+    } finally {
+      setDownloading(false);
+    }
   };
 
   const handleNew = () => {
     setInvoice(createEmptyInvoice());
+    setPersistedId(undefined);
     setRecent([]);
     router.push("/invoice");
   };
@@ -281,9 +353,18 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
             )}
             {t("save")}
           </Button>
-          <Button type="button" variant="outline" onClick={handlePrint}>
-            <Printer className="h-4 w-4" />
-            {t("print")}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleDownloadPdf}
+            disabled={downloading}
+          >
+            {downloading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Download className="h-4 w-4" />
+            )}
+            {t("download_pdf")}
           </Button>
           <Button type="button" variant="secondary" onClick={handleNew}>
             <FilePlus2 className="h-4 w-4" />
