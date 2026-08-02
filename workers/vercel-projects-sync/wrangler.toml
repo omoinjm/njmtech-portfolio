@@ -1,0 +1,19 @@
+name = "vercel-projects-sync"
+main = "src/index.ts"
+compatibility_date = "2025-08-01"
+workers_dev = true
+
+# Bind to the portfolio D1 database (njmtech-projects)
+[[d1_databases]]
+binding = "DB"
+database_name = "njmtech-projects"
+database_id = "773865eb-1e3b-4ee3-9592-ffe658765d19"
+
+# Hourly sync
+[triggers]
+crons = ["0 * * * *"]
+
+# Non-secret config (override with `wrangler secret` / dashboard for secrets)
+# PROJECT_CATEGORY_MAP example: {"my-shop":"ECOM","admin-tool":"TOOL"}
+[vars]
+PROJECT_CATEGORY_MAP = "{}"

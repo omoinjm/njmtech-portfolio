@@ -55,6 +55,7 @@ Without D1, projects/skills load from fallbacks and Omoi TTS uses the in-code ma
 |----------|---------|
 | `R2_BUCKET_NAME`, `BLOG_STORAGE_PREFIX` | `pnpm blog:upload` |
 | `VOICE_CACHE_S3_BASE_URL` | `pnpm ai_cache` |
+| `VERCEL_TOKEN`, `VERCEL_TEAM_ID`, `SYNC_SECRET`, `PROJECT_CATEGORY_MAP` | Cloudflare Worker `vercel-projects-sync` (not Next.js `config.ts`) — see `docs/VERCEL_PROJECTS_SYNC.md` |
 | `TEST_EMAIL`, `BASE_URL`, `TEMPLATE_API_URL` | Playwright email tests |
 
 ## Import & use
