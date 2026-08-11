@@ -202,6 +202,7 @@ The portfolio `/projects` page uses a 1-hour cache on `/api/projects`. New rows 
 | Issue | Check |
 |-------|-------|
 | Cron keeps processing the same project | Screenshot: capture failed so `img_url` stayed empty — check GHA logs; run migration for `screenshot_attempted_at`; retry with `pnpm project:screenshots -- --id=N`. Sync: manual D1 row without `vercel_project_id` — redeploy worker (links orphans by live URL instead of re-inserting + AI). |
+| Sync `fetched: 1` but many Vercel projects | Redeploy worker — projects API paginates with `from` (not `until`). Old code re-read page 1 only. |
 | `No Website project_group row found` | Ensure D1 has an active group named Website (code `WEB`) |
 | Vercel API 403 | Token scope / team ID |
 | AI categorization always Website | Workers AI binding enabled; check `wrangler tail` logs |

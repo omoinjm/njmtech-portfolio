@@ -2,20 +2,22 @@ import type { VercelProject, VercelProjectsResponse } from "./types";
 
 const VERCEL_API_BASE = "https://api.vercel.com";
 
+/** Vercel projects list paginates with `from` (continuation token), not `until`. */
 export async function fetchAllVercelProjects(
   token: string,
   teamId: string,
 ): Promise<VercelProject[]> {
   const byId = new Map<string, VercelProject>();
-  let until: string | undefined;
+  let from: string | undefined;
+  const maxPages = 50;
 
-  for (;;) {
-    const url = new URL(`${VERCEL_API_BASE}/v9/projects`);
+  for (let page = 0; page < maxPages; page += 1) {
+    const url = new URL(`${VERCEL_API_BASE}/v10/projects`);
     url.searchParams.set("teamId", teamId);
     url.searchParams.set("limit", "100");
 
-    if (until) {
-      url.searchParams.set("until", until);
+    if (from) {
+      url.searchParams.set("from", from);
     }
 
     const response = await fetch(url.toString(), {
@@ -44,13 +46,17 @@ export async function fetchAllVercelProjects(
       batch.length === 0 ||
       next === undefined ||
       next === null ||
-      next === "" ||
-      String(next) === until
+      next === ""
     ) {
       break;
     }
 
-    until = String(next);
+    const nextFrom = String(next);
+    if (nextFrom === from) {
+      break;
+    }
+
+    from = nextFrom;
   }
 
   return Array.from(byId.values());
