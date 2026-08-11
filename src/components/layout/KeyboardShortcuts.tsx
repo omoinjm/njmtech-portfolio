@@ -21,9 +21,10 @@ export const KeyboardShortcuts = () => {
     { key: "Ctrl/Cmd + L", description: t("reset_ai") },
     { key: "Alt + 1", description: t("nav_home") },
     { key: "Alt + 2", description: t("nav_services") },
-    { key: "Alt + 3", description: t("nav_work") },
+    { key: "Alt + 3", description: t("nav_projects") },
     { key: "Alt + 4", description: t("nav_about") },
-    { key: "Alt + 5", description: t("nav_contact") },
+    { key: "Alt + 5", description: t("nav_blog") },
+    { key: "Alt + 6", description: t("nav_contact") },
     { key: "Esc", description: t("close") },
     { key: "?", description: t("show") },
   ];

@@ -8,10 +8,11 @@ import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
 const FOOTER_NAV_I18N: Record<string, string> = {
   "/services": "services",
-  "/work": "work",
+  "/work": "projects",
+  "/projects": "projects",
   "/about": "about",
-  "/contact": "contact",
   "/blog": "blog",
+  "/contact": "contact",
 };
 
 export const Footer = ({ data: _data }) => {
@@ -45,10 +46,10 @@ export const Footer = ({ data: _data }) => {
                   {tNav(
                     (FOOTER_NAV_I18N[item.path] ?? item.name.toLowerCase()) as
                       | "services"
-                      | "work"
+                      | "projects"
                       | "about"
-                      | "contact"
-                      | "blog",
+                      | "blog"
+                      | "contact",
                   )}
                 </Link>
               ))}

@@ -9,7 +9,7 @@ export const PRIMARY_SITE_NAV = [
       "Website design, hosting, SEO, social media, AI automation, and training for South African businesses.",
   },
   {
-    name: "Work",
+    name: "Projects",
     path: "/work",
     description:
       "Case studies and portfolio work — real projects with challenges, solutions, and results.",
@@ -40,7 +40,5 @@ export function getPrimarySiteNavUrl(path: string): string {
   return `${siteConfig.url.replace(/\/$/, "")}${path}`;
 }
 
-/** Main nav excludes Blog (footer-only per restructure). */
-export const MAIN_SITE_NAV = PRIMARY_SITE_NAV.filter(
-  (item) => item.path !== "/blog",
-);
+/** Primary nav items shown in the header (includes Blog and Projects). */
+export const MAIN_SITE_NAV = PRIMARY_SITE_NAV;

@@ -16,13 +16,23 @@ import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
 const NAV_I18N_KEYS: Record<string, string> = {
   "/services": "services",
-  "/work": "work",
+  "/work": "projects",
+  "/projects": "projects",
   "/about": "about",
+  "/blog": "blog",
   "/contact": "contact",
 };
 
-function getNavLabelKey(url: string): string {
-  return NAV_I18N_KEYS[url] ?? url.replace("/", "");
+type NavLabelKey = "services" | "projects" | "about" | "blog" | "contact";
+
+function normalizeNavUrl(url: string): string {
+  if (url === "/projects") return "/work";
+  return url;
+}
+
+function getNavLabelKey(url: string): NavLabelKey {
+  const normalized = normalizeNavUrl(url);
+  return (NAV_I18N_KEYS[normalized] ?? normalized.replace("/", "")) as NavLabelKey;
 }
 
 export const Navbar = ({ data }) => {
@@ -41,10 +51,10 @@ export const Navbar = ({ data }) => {
 
   const pages =
     data?.nav_menu && data.nav_menu.length > 0
-      ? data.nav_menu.filter(
-          (link: MenuModel) =>
-            !link.url.includes("/blog") && link.url !== "/projects",
-        )
+      ? data.nav_menu.map((link: MenuModel) => ({
+          ...link,
+          url: normalizeNavUrl(link.url),
+        }))
       : fallbackPages;
 
   const whatsappUrl = getGeneralQuoteUrl();
@@ -64,7 +74,8 @@ export const Navbar = ({ data }) => {
       if (event.altKey && event.key === "2") router.push("/services");
       if (event.altKey && event.key === "3") router.push("/work");
       if (event.altKey && event.key === "4") router.push("/about");
-      if (event.altKey && event.key === "5") router.push("/contact");
+      if (event.altKey && event.key === "5") router.push("/blog");
+      if (event.altKey && event.key === "6") router.push("/contact");
       if (event.key === "Escape" && isMobileMenuOpen) setIsMobileMenuOpen(false);
     };
 
@@ -72,7 +83,14 @@ export const Navbar = ({ data }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen, router]);
 
-  const isActive = (href: string) => pathname === href || pathname.endsWith(href);
+  const isActive = (href: string) => {
+    const normalized = normalizeNavUrl(href);
+    return (
+      pathname === normalized ||
+      pathname.endsWith(normalized) ||
+      (normalized === "/work" && pathname.endsWith("/projects"))
+    );
+  };
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -118,7 +136,7 @@ export const Navbar = ({ data }) => {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {t(getNavLabelKey(link.url) as "services" | "work" | "about" | "contact")}
+                {t(getNavLabelKey(link.url))}
               </Link>
             ))}
           </nav>
@@ -183,7 +201,7 @@ export const Navbar = ({ data }) => {
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {t(getNavLabelKey(link.url) as "services" | "work" | "about" | "contact")}
+                  {t(getNavLabelKey(link.url))}
                 </Link>
               ))}
             </div>
