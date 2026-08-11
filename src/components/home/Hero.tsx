@@ -5,14 +5,11 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { publicConfig } from "@/lib/config.client";
-import { PdfPreviewDialog } from "@/components/dialog/PdfPreviewDialog";
-
-const FOCUS_KEYS = ["focus_web", "focus_ops", "focus_ai"] as const;
+import { STARTING_PRICE } from "@/lib/business-content";
+import { ResponseTimePromise } from "@/components/business/ResponseTimePromise";
 
 export const Hero = () => {
   const t = useTranslations("hero");
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [showInteractionPrompt, setShowInteractionPrompt] = useState(true);
 
   useEffect(() => {
@@ -65,13 +62,10 @@ export const Hero = () => {
             className="mb-6"
           >
             <p className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground/70 mb-3">
-              NJMTech
+              NJMTECH
             </p>
-            <h1 className="text-[2.75rem] md:text-6xl lg:text-[4.25rem] font-bold leading-[1.05] tracking-tight">
-              <span className="gradient-text block">{t("name")}</span>
-              <span className="block mt-3 text-foreground/95 font-semibold text-[1.65rem] md:text-3xl lg:text-[2.35rem] leading-snug">
-                {t("headline")}
-              </span>
+            <h1 className="text-[2.25rem] md:text-5xl lg:text-[3.5rem] font-bold leading-[1.08] tracking-tight text-foreground">
+              {t("headline")}
             </h1>
           </motion.div>
 
@@ -79,25 +73,27 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45 }}
-            className="text-base md:text-lg text-muted-foreground/90 max-w-xl mx-auto lg:mx-0 mb-7 leading-relaxed"
+            className="text-base md:text-lg text-muted-foreground/90 max-w-xl mx-auto lg:mx-0 mb-5 leading-relaxed"
           >
             {t("subtitle")}
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="text-sm font-semibold text-accent mb-6"
+          >
+            {t("price_anchor", { price: STARTING_PRICE })}
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.52 }}
-            className="flex flex-wrap gap-2 justify-center lg:justify-start mb-9"
+            transition={{ delay: 0.55 }}
+            className="mb-8 flex justify-center lg:justify-start"
           >
-            {FOCUS_KEYS.map((key) => (
-              <span
-                key={key}
-                className="text-xs font-medium px-3 py-1.5 rounded-full border border-border/70 bg-background/40 text-muted-foreground"
-              >
-                {t(key)}
-              </span>
-            ))}
+            <ResponseTimePromise />
           </motion.div>
 
           <motion.div
@@ -108,17 +104,17 @@ export const Hero = () => {
           >
             <Link
               href="/contact"
-              className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
-            >
-              {t("cta_primary")}
-            </Link>
-            <button
-              onClick={() => setIsResumeOpen(true)}
               className="px-8 py-4 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
-              {t("cta_resume")}
+              {t("cta_primary")}
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
+            <Link
+              href="/work"
+              className="px-8 py-4 rounded-full border border-border bg-card/50 text-foreground font-semibold hover:bg-card transition-all hover:scale-105 flex items-center justify-center gap-2"
+            >
+              {t("cta_secondary")}
+            </Link>
           </motion.div>
         </motion.div>
 
@@ -172,12 +168,6 @@ export const Hero = () => {
           <div className="w-1 h-2 rounded-full bg-muted-foreground/50" />
         </motion.div>
       </motion.div>
-
-      <PdfPreviewDialog
-        open={isResumeOpen}
-        onOpenChange={setIsResumeOpen}
-        pdfUrl={publicConfig.RESUME_URL}
-      />
     </section>
   );
 };

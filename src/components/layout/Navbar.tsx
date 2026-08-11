@@ -1,18 +1,29 @@
 "use client";
 
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { MenuModel } from "@/types";
-import { PRIMARY_SITE_NAV } from "@/lib/site-navigation";
+import { MAIN_SITE_NAV } from "@/lib/site-navigation";
 import { SOCIAL_LINKS } from "@/lib/social-links";
+import { getGeneralQuoteUrl } from "@/lib/business-content";
 import * as LucideIcons from "lucide-react";
 import { AccentThemePicker } from "@/components/layout/AccentThemePicker";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
+const NAV_I18N_KEYS: Record<string, string> = {
+  "/services": "services",
+  "/work": "work",
+  "/about": "about",
+  "/contact": "contact",
+};
+
+function getNavLabelKey(url: string): string {
+  return NAV_I18N_KEYS[url] ?? url.replace("/", "");
+}
 
 export const Navbar = ({ data }) => {
   const t = useTranslations("nav");
@@ -21,21 +32,25 @@ export const Navbar = ({ data }) => {
   const pathname = usePathname();
   const router = useRouter();
 
+  const fallbackPages = MAIN_SITE_NAV.map((item, index) => ({
+    id: index,
+    label: item.name,
+    icon: "",
+    url: item.path,
+  }));
+
   const pages =
     data?.nav_menu && data.nav_menu.length > 0
-      ? data.nav_menu
-      : PRIMARY_SITE_NAV.map((item, index) => ({
-          id: index,
-          label: item.name,
-          icon: "",
-          url: item.path,
-        }));
-  const socialLinks = SOCIAL_LINKS;
+      ? data.nav_menu.filter(
+          (link: MenuModel) =>
+            !link.url.includes("/blog") && link.url !== "/projects",
+        )
+      : fallbackPages;
 
-  // Keyboard navigation shortcuts
+  const whatsappUrl = getGeneralQuoteUrl();
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Only trigger if no input/textarea is focused
       const target = event.target as HTMLElement;
       if (
         target.tagName === "INPUT" ||
@@ -45,44 +60,26 @@ export const Navbar = ({ data }) => {
         return;
       }
 
-      // Alt + 1: Home
-      if (event.altKey && event.key === "1") {
-        router.push("/");
-      }
-      // Alt + 2: Projects
-      if (event.altKey && event.key === "2") {
-        router.push("/projects");
-      }
-      // Alt + 3: Contact
-      if (event.altKey && event.key === "3") {
-        router.push("/contact");
-      }
-      // Alt + 4: Blog
-      if (event.altKey && event.key === "4") {
-        router.push("/blog");
-      }
-      // Esc: Close mobile menu
-      if (event.key === "Escape" && isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
-      }
+      if (event.altKey && event.key === "1") router.push("/");
+      if (event.altKey && event.key === "2") router.push("/services");
+      if (event.altKey && event.key === "3") router.push("/work");
+      if (event.altKey && event.key === "4") router.push("/about");
+      if (event.altKey && event.key === "5") router.push("/contact");
+      if (event.key === "Escape" && isMobileMenuOpen) setIsMobileMenuOpen(false);
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen, router]);
 
-  const isActive = (href: string) => pathname === href;
+  const isActive = (href: string) => pathname === href || pathname.endsWith(href);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => {
@@ -107,10 +104,9 @@ export const Navbar = ({ data }) => {
             NJM<span className="text-foreground">TECH</span>
           </Link>
 
-          {/* Desktop: centered page links */}
           <nav
             aria-label="Main navigation"
-            className="hidden md:flex items-center justify-center gap-8"
+            className="hidden md:flex items-center justify-center gap-6 lg:gap-8"
           >
             {pages.map((link: MenuModel) => (
               <Link
@@ -122,24 +118,25 @@ export const Navbar = ({ data }) => {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {link.label}
+                {t(getNavLabelKey(link.url) as "services" | "work" | "about" | "contact")}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center justify-end gap-4">
+          <div className="hidden md:flex items-center justify-end gap-3">
             <LanguageSwitcher />
             <AccentThemePicker />
-            <Link
-              href="https://bio.njmtech.co.za/"
+            <a
+              href={whatsappUrl}
               target="_blank"
-              className="ml-2 px-6 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
+              rel="noopener noreferrer"
+              className="ml-1 px-5 py-2 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2 text-sm"
             >
-              {t("links")}
-            </Link>
+              <LucideIcons.MessageCircle className="w-4 h-4" />
+              {t("whatsapp")}
+            </a>
           </div>
 
-          {/* Mobile menu button */}
           <button
             className="md:hidden text-foreground z-50 relative justify-self-end col-start-3"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -154,7 +151,16 @@ export const Navbar = ({ data }) => {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu — full-screen overlay, sibling to nav so fixed positioning works correctly */}
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="md:hidden fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full gradient-bg shadow-lg flex items-center justify-center hover:opacity-90 transition-opacity"
+        aria-label={t("whatsapp")}
+      >
+        <LucideIcons.MessageCircle className="w-6 h-6 text-foreground" />
+      </a>
+
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -164,10 +170,7 @@ export const Navbar = ({ data }) => {
             transition={{ type: "tween", duration: 0.3 }}
             className="fixed inset-0 z-40 bg-background flex flex-col md:hidden"
           >
-            {/* Spacer matching navbar height */}
             <div className="h-16" />
-
-            {/* Nav links — vertically centred in the remaining space */}
             <div className="flex-1 flex flex-col items-center justify-center gap-10 px-8">
               {pages.map((link: MenuModel) => (
                 <Link
@@ -180,28 +183,28 @@ export const Navbar = ({ data }) => {
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {link.label}
+                  {t(getNavLabelKey(link.url) as "services" | "work" | "about" | "contact")}
                 </Link>
               ))}
             </div>
-
-            {/* Bottom — social icons + connect button */}
             <div className="flex flex-col items-center gap-6 pb-12 pt-8 border-t border-border">
               <AccentThemePicker />
               <LanguageSwitcher />
               <div className="flex items-center gap-8">
-                {socialLinks.map((social) => (
+                {SOCIAL_LINKS.map((social) => (
                   <SocialLinkIcon key={social.id} social={social} size={28} />
                 ))}
               </div>
-              <Link
-                href="https://bio.njmtech.co.za/"
+              <a
+                href={whatsappUrl}
                 target="_blank"
-                className="px-8 py-3 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity"
+                rel="noopener noreferrer"
+                className="px-8 py-3 rounded-full gradient-bg text-foreground font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {t("links")}
-              </Link>
+                <LucideIcons.MessageCircle className="w-5 h-5" />
+                {t("whatsapp")}
+              </a>
             </div>
           </motion.div>
         )}

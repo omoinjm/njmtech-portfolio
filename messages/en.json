@@ -1,8 +1,12 @@
 {
   "nav": {
-    "projects": "Projects",
+    "services": "Services",
+    "work": "Work",
+    "about": "About",
     "contact": "Contact",
     "blog": "Blog",
+    "whatsapp": "WhatsApp",
+    "projects": "Projects",
     "links": "Links"
   },
   "footer": {
@@ -17,17 +21,79 @@
     "mail_service_terms": "Mail Service Terms"
   },
   "hero": {
-    "welcome_badge": "Johannesburg · Open for work",
+    "welcome_badge": "Johannesburg · Taking new clients",
     "name": "Nhlanhla Malaza",
-    "headline": "I build from the browser to the edge.",
-    "subtitle": "Full-stack developer with a DevOps habit — shipping Next.js apps, Cloudflare infrastructure, and AI integrations that survive production. Based in South Africa, collaborating remotely.",
+    "headline": "Professional Web Design & Development in South Africa",
+    "subtitle": "NJMTECH builds fast, mobile-first websites and digital tools for South African businesses — clear pricing, WhatsApp support, and delivery you can count on.",
+    "price_anchor": "Websites from {price}",
     "focus_web": "Next.js & React",
     "focus_ops": "Cloudflare & DevOps",
     "focus_ai": "AI integrations",
-    "cta_primary": "Start a project",
+    "cta_primary": "Get a Quote",
+    "cta_secondary": "See Our Work",
     "cta_resume": "View résumé",
     "keyboard_label": "Follow the keyboard",
     "keyboard_desc": "Scroll the page — the keys light up as you move through each section"
+  },
+  "business": {
+    "serviceTiles": {
+      "label": "What we do",
+      "heading": "Services for growing businesses",
+      "subheading": "From your first website to ongoing support — scoped clearly, priced upfront.",
+      "starting_from": "Packages from {price}",
+      "from_price": "From {price}",
+      "view_all": "View all services →"
+    },
+    "socialProof": {
+      "stat_0": "Projects delivered",
+      "stat_1": "Happy clients",
+      "stat_2": "Years experience"
+    },
+    "testimonials": {
+      "label": "Client feedback",
+      "heading": "Trusted by South African businesses"
+    },
+    "responseTime": {
+      "message": "We reply within {time} on business days"
+    },
+    "contactCta": {
+      "heading": "Ready to get started?",
+      "subheading": "Tell us about your project — we'll respond with a clear quote and timeline.",
+      "response_time": "Typical response: {time}",
+      "whatsapp": "Chat on WhatsApp",
+      "form_link": "Or use the contact form"
+    }
+  },
+  "servicesPage": {
+    "label": "Services",
+    "heading": "Pricing &",
+    "heading_gradient": "Packages",
+    "subheading": "Transparent starting prices for every service. Final quotes depend on scope — we'll confirm before any work begins.",
+    "from_price": "From {price}",
+    "quote_cta": "Get a quote on WhatsApp",
+    "not_sure": "Not sure which service fits?",
+    "contact_link": "Contact us for a recommendation"
+  },
+  "work": {
+    "label": "Portfolio",
+    "heading": "Our",
+    "heading_gradient": "Work",
+    "subheading": "Real projects with challenges, solutions, and measurable results for South African clients.",
+    "industry": "Industry",
+    "challenge": "Challenge",
+    "solution": "Solution",
+    "result": "Result",
+    "live_link": "View live site",
+    "empty": "Case studies coming soon — check back shortly."
+  },
+  "aboutPage": {
+    "label": "About",
+    "heading": "About NJMTECH",
+    "founder_heading": "Founder",
+    "values_heading": "How we work",
+    "industries_heading": "Industries we serve",
+    "cta_services": "View services & pricing",
+    "cta_contact": "Get in touch"
   },
   "skills": {
     "label": "Keyboard Skills",
@@ -44,8 +110,8 @@
     "heading": "Services &",
     "heading_gradient": "Expertise",
     "subheading": "A full range of development services to bring your ideas to life with cutting-edge technology.",
-    "cta": "Start a Conversation",
-    "cta_sub": "Have a project in mind? Let's talk.",
+    "cta": "View services & pricing",
+    "cta_sub": "Get a quote",
     "item_0_title": "Web Development",
     "item_0_desc": "Building responsive, performant web applications using modern frameworks like React, Next.js, and Vue.js.",
     "item_1_title": "Mobile Development",
@@ -78,11 +144,15 @@
   },
   "contact": {
     "label": "Get In Touch",
-    "heading": "Let's Work",
-    "heading_gradient": "Together",
-    "subheading": "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.",
-    "info_heading": "Contact Information",
-    "info_desc": "Feel free to reach out through any of these channels. I typically respond within 24 hours.",
+    "heading": "Get a",
+    "heading_gradient": "Quote",
+    "subheading": "WhatsApp is the fastest way to reach us. Share your project brief and we'll reply with pricing and next steps.",
+    "whatsapp_cta": "Message us on WhatsApp",
+    "response_note": "We aim to reply within {time} on business days.",
+    "info_heading": "Other ways to reach us",
+    "info_desc": "Prefer email or the form below? We monitor all channels and respond within our SLA.",
+    "form_heading": "Send a message",
+    "form_desc": "We'll email you back — usually within the same business day.",
     "email_label": "Email",
     "phone_label": "WhatsApp",
     "whatsapp_prefill": "Hi, I just came from your website. I'd like to get in touch.",
@@ -99,7 +169,7 @@
     "submit": "Send Message",
     "submitting": "Sending...",
     "toast_success_title": "Message Sent! ✉️",
-    "toast_success_desc": "I'll get back to you within 24 hours.",
+    "toast_success_desc": "We'll get back to you within 4 business hours.",
     "toast_error_title": "Failed to send",
     "toast_error_desc": "Something went wrong. Please try again.",
     "toast_network_title": "Network error",
@@ -157,9 +227,12 @@
     "toggle_ai": "Toggle AI Assistant",
     "reset_ai": "Reset AI Assistant Chat",
     "nav_home": "Navigate to Home",
-    "nav_projects": "Navigate to Projects",
-    "nav_blog": "Navigate to Blog",
+    "nav_services": "Navigate to Services",
+    "nav_work": "Navigate to Work",
+    "nav_about": "Navigate to About",
     "nav_contact": "Navigate to Contact",
+    "nav_projects": "Navigate to Work",
+    "nav_blog": "Navigate to Blog",
     "close": "Close Assistant or Menus",
     "show": "Show Keyboard Shortcuts"
   },

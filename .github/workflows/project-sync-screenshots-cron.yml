@@ -1,0 +1,81 @@
+name: Project sync screenshots
+
+on:
+  schedule:
+    # 15 min after the Worker cron (0 */6 * * *) so new rows exist in D1
+    - cron: "15 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Re-capture all active projects (not only missing img_url)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-sync-screenshots
+  cancel-in-progress: false
+
+jobs:
+  screenshots:
+    name: Playwright hero screenshots → R2 → D1
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Trigger Vercel → D1 sync (optional)
+        env:
+          WORKER_SYNC_URL: ${{ secrets.WORKER_SYNC_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -n "$WORKER_SYNC_URL" ]; then
+            echo "POST $WORKER_SYNC_URL/sync"
+            curl -sf -X POST "$WORKER_SYNC_URL/sync" \
+              -H "Authorization: Bearer $CRON_SECRET" \
+              -H "Content-Type: application/json"
+          else
+            echo "WORKER_SYNC_URL not set — skipping remote sync (Worker cron may have already run)."
+          fi
+
+      - name: Capture project hero screenshots
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          D1_DATABASE_ID: "773865eb-1e3b-4ee3-9592-ffe658765d19"
+          D1_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          R2_BUCKET_NAME: njmtech-blob
+          PROJECT_SCREENSHOT_PREFIX: njmtech-portfolio/projects
+          PROJECT_SCREENSHOT_BASE_URL: https://s3.njmtech.co.za/njmtech-portfolio/projects
+        run: |
+          ARGS=""
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            ARGS="--force"
+          fi
+          npx tsx scripts/capture-project-screenshots.ts $ARGS

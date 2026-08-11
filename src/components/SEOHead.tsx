@@ -68,6 +68,10 @@ export function SEOHead({
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+        <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png" />
+        <link rel="mask-icon" href="/icon-512.png" color="#229c9a" />
+        <meta name="msapplication-TileImage" content="/icon-512.png" />
+        <meta name="msapplication-TileColor" content="#229c9a" />
         <link rel="manifest" href="/site.webmanifest" />
 
          {/* Preconnect to CDN */}

@@ -1,8 +1,12 @@
 {
   "nav": {
-    "projects": "Imisebenzi",
+    "services": "Amasevisi",
+    "work": "Umsebenzi",
+    "about": "Mayelana",
     "contact": "Xhumana",
     "blog": "Ibhulogi",
+    "whatsapp": "WhatsApp",
+    "projects": "Imisebenzi",
     "links": "Izixhumanisi"
   },
   "footer": {
@@ -17,17 +21,79 @@
     "mail_service_terms": "Imigomo Yesevisi Yemeyili"
   },
   "hero": {
-    "welcome_badge": "EJohannesburg · Ngiyatholakala",
+    "welcome_badge": "EJohannesburg · Ngamukela amaklayenti amasha",
     "name": "Nhlanhla Malaza",
-    "headline": "Ngakha kusuka kubrowser kuya e-edge.",
-    "subtitle": "Unjiniyela we-full-stack oneDevOps — ngithumela ama-app e-Next.js, ingqalasizinda ye-Cloudflare, nokuhlanganiswa kwe-AI okuhlala kusebenza e-production. NgiseNingizimu Afrika, ngisebenza nawo wonke amathelo.",
+    "headline": "Ukuklama Nokuthuthukisa Amawebhusayithi Okusezingeni E-Ningizimu Afrika",
+    "subtitle": "I-NJMTECH yakha amawebhusayithi asheshayo, afanele amafoni, nezinsiza zedijithali ezingosomabhizinisi e-Ningizimu Afrika — amanani acacile, ukwesekwa nge-WhatsApp, nokulethwa okuthembekile.",
+    "price_anchor": "Amawebhusayithi kusuka ku-{price}",
     "focus_web": "Next.js & React",
     "focus_ops": "Cloudflare & DevOps",
     "focus_ai": "Ukuhlanganiswa kwe-AI",
-    "cta_primary": "Qala iphrojekthi",
+    "cta_primary": "Thola Isilinganiso",
+    "cta_secondary": "Buka Umsebenzi Wethu",
     "cta_resume": "Buka i-CV",
     "keyboard_label": "Landela ikhiybhodi",
     "keyboard_desc": "Skrola ikhasi — amakinobho ayakhanya njengoba uhamba esigabeni ngasinye"
+  },
+  "business": {
+    "serviceTiles": {
+      "label": "Esikwenzayo",
+      "heading": "Amasevisi ebhizinisi elikhula",
+      "subheading": "Kusuka kuwebhusayithi yakho yokuqala kuya ekusekelweni okuqhubekayo — kuchazwe ngokucacile, amanani kuqala.",
+      "starting_from": "Amaphakheji kusuka ku-{price}",
+      "from_price": "Kusuka ku-{price}",
+      "view_all": "Buka wonke amasevisi →"
+    },
+    "socialProof": {
+      "stat_0": "Amaphrojekthi alethwe",
+      "stat_1": "Amaklayenti anelisekile",
+      "stat_2": "Iminyaka yolwazi"
+    },
+    "testimonials": {
+      "label": "Impendulo yamaklayenti",
+      "heading": "Ithembelwe ngosomabhizinisi baseNingizimu Afrika"
+    },
+    "responseTime": {
+      "message": "Siphendula phakathi kwe-{time} ngosuku lomsebenzi"
+    },
+    "contactCta": {
+      "heading": "Ukulungele ukuqala?",
+      "subheading": "Sitshele ngephrojekthi yakho — sizophendula ngesilinganiso esicacile nesikhathi.",
+      "response_time": "Isikhathi sokuphendula: {time}",
+      "whatsapp": "Xhumana nge-WhatsApp",
+      "form_link": "Noma sebenzisa ifomu lokuxhumana"
+    }
+  },
+  "servicesPage": {
+    "label": "Amasevisi",
+    "heading": "Amanani &",
+    "heading_gradient": "Amaphakheji",
+    "subheading": "Amanani akuqala acacile kusevisi ngayinye. Izilinganiso zokugcina zincike kobubanzi — sizoqinisekisa ngaphambi kokuqala umsebenzi.",
+    "from_price": "Kusuka ku-{price}",
+    "quote_cta": "Thola isilinganiso nge-WhatsApp",
+    "not_sure": "Awuqinisekile ukuthi yisiphi isevisi efanele?",
+    "contact_link": "Xhumana nathi ukuze uthole isincomo"
+  },
+  "work": {
+    "label": "Iphothifoliyo",
+    "heading": "Umsebenzi",
+    "heading_gradient": "Wethu",
+    "subheading": "Amaphrojekthi angempela nezinselelo, izixazululo, nemiphumela ebonakalayo eklanyelwe amaklayenti aseNingizimu Afrika.",
+    "industry": "Imboni",
+    "challenge": "Inselelo",
+    "solution": "Isixazululo",
+    "result": "Umphumela",
+    "live_link": "Buka isayithi ebukhoma",
+    "empty": "Izifundo zamacala ziyeza maduze."
+  },
+  "aboutPage": {
+    "label": "Mayelana",
+    "heading": "Mayelana ne-NJMTECH",
+    "founder_heading": "Umsunguli",
+    "values_heading": "Indlela esisebenza ngayo",
+    "industries_heading": "Izimboni esisebenzela zona",
+    "cta_services": "Buka amasevisi namanani",
+    "cta_contact": "Xhumana nathi"
   },
   "skills": {
     "label": "Amakhono Ekhiybhodi",
@@ -44,8 +110,8 @@
     "heading": "Izinsizakalo",
     "heading_gradient": "Nobuchwepheshe",
     "subheading": "Indawo ephelele yezinsizakalo zokuthuthukisa ukuze izimvo zakho zibe yiqiniso ngobuchwepheshe banamuhla.",
-    "cta": "Qala Ingxoxo",
-    "cta_sub": "Unephrojekthi engqondweni? Asisho.",
+    "cta": "Buka amasevisi namanani",
+    "cta_sub": "Thola isilinganiso",
     "item_0_title": "Ukuthuthukisa Iwebhusayithi",
     "item_0_desc": "Ukwakha izinhlelo ze-web ezisetshenziswa ngendlela ekhethekile, ezisebenza kahle, kusetshenziswa izinsizakalo zanamuhla njengeReact, Next.js, neVue.js.",
     "item_1_title": "Ukuthuthukisa Izinhlelo Zeselula",
@@ -78,11 +144,15 @@
   },
   "contact": {
     "label": "Xhumana",
-    "heading": "Asisebenzisane",
-    "heading_gradient": "Ndawonye",
-    "subheading": "Ngihlale ngiyimeme ukuxoxa ngamaphrojekthi amasha, imibono ekhuthazayo, noma amathuba okuba ingxenye yemibono yakho.",
-    "info_heading": "Ulwazi Lokuxhumana",
-    "info_desc": "Zizwa ukhululekile ukuxhumana nami ngawo noma muphi walamazindlela. Ngijwayele ukuphendula phakathi nehora lama-24.",
+    "heading": "Thola",
+    "heading_gradient": "Isilinganiso",
+    "subheading": "I-WhatsApp iyindlela esheshayo yokufinyelela kithi. Yabelana ngephrojekthi yakho sizophendula namanani nezinyathelo ezilandelayo.",
+    "whatsapp_cta": "Sithumelele umlayezo nge-WhatsApp",
+    "response_note": "Sihlose ukuphendula phakathi kwe-{time} ngosuku lomsebenzi.",
+    "info_heading": "Ezinye izindlela zokuxhumana",
+    "info_desc": "Ukhetha i-imeyili noma ifomu ngezansi? Silandelela zonke iziteshi futhi siphendula ngaphakathi kwesikhathi sethu.",
+    "form_heading": "Thumela umlayezo",
+    "form_desc": "Sizokuthumelela i-imeyili — ngokuvamile ngosuku lomsebenzi olufanayo.",
     "email_label": "I-imeyili",
     "phone_label": "WhatsApp",
     "whatsapp_prefill": "Sawubona, ngisanda kuvela kuwebhusayithi yakho. Ngingathanda ukuxhumana nawe.",
@@ -99,7 +169,7 @@
     "submit": "Thumela Umlayezo",
     "submitting": "Iyathunyelwa...",
     "toast_success_title": "Umlayezo Uthunyelwe! ✉️",
-    "toast_success_desc": "Ngizophendula phakathi nehora lama-24.",
+    "toast_success_desc": "Sizobuyela kuwe phakathi kwamahora ama-4 omsebenzi.",
     "toast_error_title": "Ukuthumela kwehlulekile",
     "toast_error_desc": "Kukhona okungahambanga kahle. Sicela uzame futhi.",
     "toast_network_title": "Iphutha lenethiwekhi",
@@ -157,9 +227,12 @@
     "toggle_ai": "Vula/Vala Umsizi we-AI",
     "reset_ai": "Setha Kabusha Ingxoxo Nomsizi we-AI",
     "nav_home": "Yiya Ekhaya",
-    "nav_projects": "Yiya Emisebenzi",
-    "nav_blog": "Yiya Ebhulogini",
+    "nav_services": "Yiya Emasevisini",
+    "nav_work": "Yiya Emsebenzini",
+    "nav_about": "Yiya Emayelana",
     "nav_contact": "Yiya Ekuxhumaneni",
+    "nav_projects": "Yiya Emsebenzini",
+    "nav_blog": "Yiya Ebhulogini",
     "close": "Vala Umsizi Noma Imenyu",
     "show": "Bonisa Izinqamuleli Zekhiybhodi"
   },

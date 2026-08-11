@@ -19,4 +19,8 @@ export type ProjectModel = {
 	code_url: string;
 	stack_json?: string[];
 	is_current_domain?: boolean;
+	industry?: string;
+	challenge?: string;
+	solution?: string;
+	result?: string;
 };

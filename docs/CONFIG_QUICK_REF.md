@@ -54,10 +54,13 @@ Without D1, projects/skills load from fallbacks and Omoi TTS uses the in-code ma
 | Variable | Used by |
 |----------|---------|
 | `R2_BUCKET_NAME`, `BLOG_STORAGE_PREFIX` | `pnpm blog:upload` |
+| `PROJECT_SCREENSHOT_PREFIX`, `PROJECT_SCREENSHOT_BASE_URL` | `pnpm project:screenshots` |
+| `WORKER_SYNC_URL`, `CRON_SECRET` | GitHub Actions `project-sync-screenshots-cron` (optional pre-sync) |
 | `VOICE_CACHE_S3_BASE_URL` | `pnpm ai_cache` |
 | `TEST_EMAIL`, `BASE_URL`, `TEMPLATE_API_URL` | Playwright email tests |
 | `VERCEL_TOKEN`, `VERCEL_TEAM_ID`, `SITE_URL`, `CRON_SECRET` | Cloudflare Worker `njmtech-vercel-project-sync` (wrangler secrets) |
 | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | GitHub Actions deploy for `njmtech-vercel-project-sync` (repo secrets) |
+| `WORKER_SYNC_URL`, `CRON_SECRET` | GitHub Actions project screenshot cron (optional) |
 
 Worker deploy: `pnpm worker:sync:deploy` · CI: `.github/workflows/deploy-vercel-sync-worker.yml` · see [`VERCEL_PROJECT_SYNC.md`](./VERCEL_PROJECT_SYNC.md).
 

@@ -25,7 +25,7 @@ export const siteConfig = {
   name: "NJMTECH",
   shortName: "NJMTECH",
   description:
-    "Professional portfolio of Nhlanhla Junior Malaza — Software Developer, DevOps Engineer, and AI Integrations Specialist based in South Africa",
+    "NJMTECH — professional web design, development, hosting, and digital services for South African businesses. Fast delivery, clear pricing, WhatsApp support.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://njmtech.co.za",
   email: "njmalaza@outlook.com",
   telephone: "+27 83 276 6443",
@@ -42,11 +42,12 @@ export const siteConfig = {
     countryCode: "ZA",
   },
   services: [
-    "Web Development",
-    "DevOps Engineering",
-    "AI Integrations",
-    "Cloud Infrastructure",
-    "Technical Consulting",
+    "Website Design & Development",
+    "Hosting & Maintenance",
+    "SEO & Digital Marketing",
+    "Social Media Management",
+    "AI Integration & Automation",
+    "Training & Support",
   ],
   logo: "/logo.png",
   ogImage: "/opengraph-image",
@@ -66,53 +67,61 @@ function getSameAsLinks() {
 export const pageConfig: Record<string, SEOProps> = {
   home: {
     title:
-      "NJMTECH Official Site | Software Developer Portfolio — Nhlanhla Malaza",
+      "NJMTECH | Professional Web Design & Development in South Africa",
     description:
-      "Official NJMTECH portfolio of Nhlanhla Junior Malaza (NJMTech) — Software Developer, DevOps Engineer, and AI Integrations Specialist. Explore projects, read the blog, or contact for collaborations.",
+      "NJMTECH builds fast, mobile-first websites and digital services for South African businesses. Website design from R4 999, hosting, SEO, AI automation, and WhatsApp support.",
     canonical: `${siteConfig.url}/`,
     keywords: [
-      "Nhlanhla",
-      "Nhlanhla Junior",
-      "Nhlanhla Junior Malaza",
-      "Nhlanhla Malaza",
-      "Junior Malaza",
+      "NJMTECH",
       "NJMTech",
-      "njmtech",
-      "NJM",
-      "njmalaza",
-      "software developer South Africa",
-      "devops engineer South Africa",
-      "AI integrations specialist",
-      "next.js developer",
-      "react developer",
-      "typescript developer",
-      "full stack developer",
-      "portfolio",
-      "web developer portfolio",
-      "South Africa developer",
-      "freelance developer",
+      "web design South Africa",
+      "website development Johannesburg",
+      "professional web design",
+      "small business website",
+      "website design South Africa",
+      "web developer Johannesburg",
+      "WhatsApp website quote",
+      "SEO South Africa",
+      "hosting South Africa",
+      "Nhlanhla Malaza",
+      "Nhlanhla Junior Malaza",
     ],
-    ogType: "profile",
+    ogType: "website",
     robots:
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   },
 
   about: {
-    title: "About Nhlanhla Malaza",
+    title: "About NJMTECH",
     description:
-      "About Nhlanhla Malaza (Nhlanhla Junior Malaza, NJMTech) — a Johannesburg-based Software Developer, DevOps Engineer, and AI Integrations Specialist. Background, skills, and professional profile.",
+      "NJMTECH is a Johannesburg-based web studio helping South African businesses get online with websites, hosting, and digital tools. Founded by full-stack developer Nhlanhla Junior Malaza.",
     canonical: `${siteConfig.url}/about`,
     keywords: [
+      "about NJMTECH",
+      "web studio Johannesburg",
+      "website design company South Africa",
       "Nhlanhla Malaza",
       "Nhlanhla Junior Malaza",
-      "about Nhlanhla Malaza",
-      "NJMTech",
-      "software developer South Africa",
-      "devops engineer Johannesburg",
-      "full stack developer",
-      "AI integrations specialist",
+      "small business web design",
     ],
-    ogType: "profile",
+    ogType: "website",
+    robots:
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  },
+
+  work: {
+    title: "Our Work — Case Studies",
+    description:
+      "NJMTECH portfolio case studies — real websites and digital projects for South African clients, with challenges, solutions, and measurable results.",
+    canonical: `${siteConfig.url}/work`,
+    keywords: [
+      "NJMTECH portfolio",
+      "web design case studies",
+      "website projects South Africa",
+      "NJMTECH work",
+      "client projects Johannesburg",
+    ],
+    ogType: "website",
     robots:
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   },
@@ -140,9 +149,9 @@ export const pageConfig: Record<string, SEOProps> = {
   },
 
   contact: {
-    title: "Contact",
+    title: "Contact NJMTECH — Get a Quote",
     description:
-      "Get in touch with Nhlanhla Junior Malaza for project inquiries, collaborations, or professional opportunities. South Africa-based software developer available for freelance and full-time work.",
+      "Contact NJMTECH for a website or digital services quote. WhatsApp-first support with replies within 4 business hours. Based in Johannesburg, serving South Africa.",
     canonical: `${siteConfig.url}/contact`,
     keywords: [
       "contact Nhlanhla Junior Malaza",
@@ -210,17 +219,17 @@ export const pageConfig: Record<string, SEOProps> = {
   },
 
   services: {
-    title: "Services",
+    title: "Services & Pricing",
     description:
-      "Professional services by Nhlanhla Junior Malaza — web development, DevOps engineering, and AI integrations tailored for modern businesses.",
+      "NJMTECH services and pricing — website design from R4 999, hosting, SEO, social media, AI automation, and training for South African businesses.",
     canonical: `${siteConfig.url}/services`,
     keywords: [
-      "services Nhlanhla Junior Malaza",
-      "web development services",
-      "devops services",
-      "AI integration services",
-      "consulting South Africa",
-      "NJMTech services",
+      "NJMTECH services",
+      "website design pricing South Africa",
+      "web development packages",
+      "SEO services Johannesburg",
+      "hosting South Africa",
+      "AI automation services",
     ],
     ogType: "website",
     robots: "index, follow",
@@ -401,7 +410,7 @@ export function generateWebsiteSchema() {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/projects?q={search_term_string}`,
+        urlTemplate: `${siteConfig.url}/work?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },

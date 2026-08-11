@@ -1,18 +1,30 @@
 import { siteConfig } from "@/utils/seo";
 
-/** Primary pages Google should surface as sitelinks (Projects, Contact, Blog). */
+/** Primary pages for nav, footer, and SEO sitelinks. */
 export const PRIMARY_SITE_NAV = [
   {
-    name: "Projects",
-    path: "/projects",
+    name: "Services",
+    path: "/services",
     description:
-      "Explore portfolio projects by Nhlanhla Junior Malaza — Next.js, React, TypeScript, and DevOps work.",
+      "Website design, hosting, SEO, social media, AI automation, and training for South African businesses.",
+  },
+  {
+    name: "Work",
+    path: "/work",
+    description:
+      "Case studies and portfolio work — real projects with challenges, solutions, and results.",
+  },
+  {
+    name: "About",
+    path: "/about",
+    description:
+      "About NJMTECH — a Johannesburg-based web studio helping businesses get online and grow.",
   },
   {
     name: "Contact",
     path: "/contact",
     description:
-      "Get in touch with Nhlanhla Junior Malaza for project inquiries, collaborations, and opportunities.",
+      "Get a quote via WhatsApp or email. NJMTECH replies within 4 business hours.",
   },
   {
     name: "Blog",
@@ -27,3 +39,8 @@ export type PrimarySiteNavItem = (typeof PRIMARY_SITE_NAV)[number];
 export function getPrimarySiteNavUrl(path: string): string {
   return `${siteConfig.url.replace(/\/$/, "")}${path}`;
 }
+
+/** Main nav excludes Blog (footer-only per restructure). */
+export const MAIN_SITE_NAV = PRIMARY_SITE_NAV.filter(
+  (item) => item.path !== "/blog",
+);

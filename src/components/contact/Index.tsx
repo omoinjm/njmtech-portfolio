@@ -3,9 +3,16 @@
 import { useTranslations } from "next-intl";
 import { useToast } from "@/hooks/use-toast";
 import { motion, useInView } from "framer-motion";
-import { Github, Linkedin, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, MessageCircle, Phone, Send, Twitter } from "lucide-react";
 import { useRef, useState } from "react";
 import { buildWhatsAppUrl, WHATSAPP_DISPLAY } from "@/lib/social-links";
+import {
+  BUSINESS_CONTACT,
+  RESPONSE_TIME,
+  getGeneralQuoteUrl,
+} from "@/lib/business-content";
+import { ResponseTimePromise } from "@/components/business/ResponseTimePromise";
+import { Button } from "@/components/ui/button";
 
 export const Contact = () => {
   const t = useTranslations("contact");
@@ -62,8 +69,15 @@ export const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const whatsappUrl = getGeneralQuoteUrl();
+
   const contactItems = [
-    { icon: Mail, label: t("email_label"), value: "njmalaza@outlook.com", href: "mailto:njmalaza@outlook.com" },
+    {
+      icon: Mail,
+      label: t("email_label"),
+      value: BUSINESS_CONTACT.email,
+      href: `mailto:${BUSINESS_CONTACT.email}`,
+    },
     {
       icon: Phone,
       label: t("phone_label"),
@@ -71,7 +85,7 @@ export const Contact = () => {
       href: buildWhatsAppUrl(t("whatsapp_prefill")),
       external: true,
     },
-    { icon: MapPin, label: t("location_label"), value: "Johannesburg", href: "#" },
+    { icon: MapPin, label: t("location_label"), value: BUSINESS_CONTACT.location, href: "#" },
   ];
 
   return (
@@ -82,26 +96,34 @@ export const Contact = () => {
       ref={ref}
     >
       <div className="container mx-auto px-4">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12 max-w-2xl mx-auto"
         >
           <span className="text-accent font-semibold text-sm tracking-wider uppercase">
             {t("label")}
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
             {t("heading")} <span className="gradient-text">{t("heading_gradient")}</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            {t("subheading")}
+          </h1>
+          <p className="text-muted-foreground mb-6">{t("subheading")}</p>
+          <div className="flex justify-center mb-8">
+            <ResponseTimePromise />
+          </div>
+          <Button asChild size="lg" className="rounded-full px-10">
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="w-5 h-5 mr-2" />
+              {t("whatsapp_cta")}
+            </a>
+          </Button>
+          <p className="text-sm text-muted-foreground mt-4">
+            {t("response_note", { time: RESPONSE_TIME })}
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -109,11 +131,10 @@ export const Contact = () => {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-6">{t("info_heading")}</h3>
+              <h2 className="text-2xl font-bold mb-6">{t("info_heading")}</h2>
               <p className="text-muted-foreground mb-8">{t("info_desc")}</p>
             </div>
 
-            {/* Contact Details */}
             <div className="space-y-6">
               {contactItems.map((item, index) => (
                 <motion.a
@@ -139,7 +160,6 @@ export const Contact = () => {
               ))}
             </div>
 
-            {/* Social Links */}
             <div className="pt-8 border-t border-border">
               <p className="text-sm text-muted-foreground mb-4">{t("follow")}</p>
               <div className="flex gap-4">
@@ -163,13 +183,14 @@ export const Contact = () => {
             </div>
           </motion.div>
 
-          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="p-8 rounded-2xl bg-card border border-border"
           >
+            <h2 className="text-xl font-bold mb-2">{t("form_heading")}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{t("form_desc")}</p>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
@@ -239,7 +260,7 @@ export const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full px-8 py-4 rounded-xl gradient-bg text-foreground font-semibold hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full px-8 py-4 rounded-xl border border-border bg-card/80 text-foreground font-semibold hover:bg-card transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   t("submitting")
@@ -257,4 +278,3 @@ export const Contact = () => {
     </section>
   );
 };
-
