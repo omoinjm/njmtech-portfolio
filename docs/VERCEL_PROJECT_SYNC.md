@@ -68,7 +68,7 @@ Create a Vercel token: [Vercel Account → Tokens](https://vercel.com/account/to
 
 ### GitHub Actions (recommended)
 
-Pushes to `main` or `development` that touch `workers/vercel-project-sync/` trigger [`.github/workflows/deploy-vercel-sync-worker.yml`](../.github/workflows/deploy-vercel-sync-worker.yml).
+Pushes to `main` or `development` that touch `workers/vercel-project-sync/` trigger [`.github/workflows/deploy-vercel-sync-worker.yml`](../.github/workflows/deploy-vercel-sync-worker.yml). The workflow installs deps with pnpm, then runs `pnpm exec wrangler deploy` (uses the repo's Wrangler version — do not pin a separate `wranglerVersion` in the action).
 
 Add these **repository secrets** (Settings → Secrets and variables → Actions):
 
