@@ -56,9 +56,9 @@ Secrets live in **Infisical**, not in the repo. `.env.example` is a **catalog** 
 | Priority | What | Examples |
 |----------|------|----------|
 | **P0** | Required | `EMAIL_*`, `NEXT_PUBLIC_SITE_URL` |
-| **P1** | Production features | `D1_*`, `GITHUB_TOKEN`, `HF_TOKEN`, `BLOG_*` |
+| **P1** | Production features | `D1_*`, `GITHUB_TOKEN`, `HF_TOKEN`, `BLOG_*`, invoice `R2_*` / `INVOICE_*` |
 | **P2** | Optional (defaults exist) | `NEXT_PUBLIC_RESUME_URL`, Mailchimp |
-| **P3** | Scripts/tests only | `R2_BUCKET_NAME`, `VOICE_CACHE_S3_BASE_URL` |
+| **P3** | Scripts/tests only | `BLOG_STORAGE_PREFIX`, `VOICE_CACHE_S3_BASE_URL` |
 
 Full list: [`docs/CONFIG_QUICK_REF.md`](docs/CONFIG_QUICK_REF.md)
 
@@ -66,11 +66,11 @@ Full list: [`docs/CONFIG_QUICK_REF.md`](docs/CONFIG_QUICK_REF.md)
 
 ```
 src/
-├── app/[locale]/     # Pages (home, projects, contact, qr, blog)
+├── app/[locale]/     # Pages (home, projects, contact, qr, blog, invoice)
 ├── app/api/          # Route handlers
-├── components/       # UI, layout, home, contact, projects
-├── lib/              # Config, D1 client, AI config, blog storage
-├── services/         # Data, SQL, AI orchestrator, TTS
+├── components/       # UI, layout, home, contact, projects, invoice
+├── lib/              # Config, D1 client, AI config, blog/R2 storage
+├── services/         # Data, SQL, AI orchestrator, TTS, invoices
 ├── i18n/             # Locale routing
 └── tests/            # Playwright specs
 public/               # Static assets, llms.txt, robots.txt
