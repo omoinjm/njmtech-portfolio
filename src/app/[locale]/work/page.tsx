@@ -1,4 +1,5 @@
 import { CaseStudies } from "@/components/work/CaseStudies";
+import { getProjects } from "@/services/sql.service";
 import {
   generateBreadcrumbSchema,
   generatePortfolioPageSchema,
@@ -7,7 +8,6 @@ import {
 } from "@/utils/seo";
 import type { Metadata } from "next";
 import { TabProjectModel } from "@/types";
-import DataService from "@/services/data.service";
 
 export const dynamic = "force-dynamic";
 
@@ -29,19 +29,20 @@ export const metadata: Metadata = {
   },
 };
 
-const fetchProjects = async (): Promise<TabProjectModel[]> => {
-  const result: { all_project_groups?: { project_groups?: TabProjectModel[] } } =
-    await DataService.get_call("projects", null);
-  return result?.all_project_groups?.project_groups || [];
-};
-
 const breadcrumbs = [
   { name: "Home", url: siteConfig.url },
   { name: "Work", url: `${siteConfig.url}/work` },
 ];
 
 export default async function WorkPage() {
-  const projects = await fetchProjects();
+  let projects: TabProjectModel[] = [];
+
+  try {
+    const result = await getProjects();
+    projects = result.all_project_groups?.project_groups ?? [];
+  } catch {
+    projects = [];
+  }
 
   return (
     <>

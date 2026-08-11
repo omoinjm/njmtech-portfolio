@@ -107,6 +107,7 @@ Response:
     "fetched": 12,
     "inserted": 3,
     "updated": 9,
+    "linked": 1,
     "deactivated": 0,
     "errors": []
   }
@@ -156,6 +157,14 @@ Cloudflare Workers cannot run Playwright/Chromium. Hero screenshots run on a **G
 2. Playwright opens each active project `live_url`, screenshots the hero / top viewport.
 3. WebP uploaded to R2: `njmtech-portfolio/projects/{id}.webp` (same bucket as blog assets).
 4. D1 `project.img_url` updated to the public URL (only when empty, unless `--force`).
+5. Failed captures set `screenshot_attempted_at` so the same project is not retried every 6 hours (24h cooldown).
+
+Run migration once:
+
+```bash
+npx wrangler d1 execute njmtech-projects --remote \
+  --file=scripts/migrations/add-screenshot-attempted-at.sql
+```
 
 **Local / manual run**
 
@@ -192,6 +201,7 @@ The portfolio `/projects` page uses a 1-hour cache on `/api/projects`. New rows 
 
 | Issue | Check |
 |-------|-------|
+| Cron keeps processing the same project | Screenshot: capture failed so `img_url` stayed empty — check GHA logs; run migration for `screenshot_attempted_at`; retry with `pnpm project:screenshots -- --id=N`. Sync: manual D1 row without `vercel_project_id` — redeploy worker (links orphans by live URL instead of re-inserting + AI). |
 | `No Website project_group row found` | Ensure D1 has an active group named Website (code `WEB`) |
 | Vercel API 403 | Token scope / team ID |
 | AI categorization always Website | Workers AI binding enabled; check `wrangler tail` logs |

@@ -29,6 +29,8 @@ const VIEWPORT = { width: 1280, height: 720 };
 const HERO_HEIGHT = 720;
 const NAVIGATION_TIMEOUT_MS = 60_000;
 const SETTLE_MS = 2_500;
+/** Skip re-capturing failed projects until this many hours have passed. */
+const SCREENSHOT_RETRY_HOURS = 24;
 
 /** Selectors commonly used for hero / above-the-fold on Vercel sites. */
 const HERO_SELECTORS = [
@@ -57,6 +59,10 @@ function parseArgs() {
   };
 }
 
+function screenshotRetryBeforeIso(): string {
+  return new Date(Date.now() - SCREENSHOT_RETRY_HOURS * 60 * 60 * 1000).toISOString();
+}
+
 async function loadProjects(force: boolean, idFilter?: string): Promise<ProjectRow[]> {
   if (idFilter) {
     const projectId = Number(idFilter);
@@ -79,15 +85,50 @@ async function loadProjects(force: boolean, idFilter?: string): Promise<ProjectR
     ? ""
     : `AND (img_url IS NULL OR TRIM(img_url) = '')`;
 
-  return queryD1<ProjectRow>(
-    `SELECT id, title, live_url, img_url
+  const baseSql = `SELECT id, title, live_url, img_url
      FROM project
      WHERE is_active = 1
        AND live_url IS NOT NULL
        AND TRIM(live_url) != ''
-       ${missingOnlyClause}
-     ORDER BY id ASC`,
-  );
+       ${missingOnlyClause}`;
+
+  if (force) {
+    return queryD1<ProjectRow>(`${baseSql} ORDER BY id ASC`);
+  }
+
+  try {
+    return await queryD1<ProjectRow>(
+      `${baseSql}
+       AND (screenshot_attempted_at IS NULL OR screenshot_attempted_at < ?)
+       ORDER BY id ASC`,
+      [screenshotRetryBeforeIso()],
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!/screenshot_attempted_at|no such column/i.test(message)) {
+      throw error;
+    }
+
+    console.warn(
+      "screenshot_attempted_at column missing — run scripts/migrations/add-screenshot-attempted-at.sql",
+    );
+    return queryD1<ProjectRow>(`${baseSql} ORDER BY id ASC`);
+  }
+}
+
+async function markScreenshotAttempt(projectId: number, attemptedAt: string) {
+  try {
+    await executeD1(`UPDATE project SET screenshot_attempted_at = ? WHERE id = ?`, [
+      attemptedAt,
+      projectId,
+    ]);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (/screenshot_attempted_at|no such column/i.test(message)) {
+      return;
+    }
+    throw error;
+  }
 }
 
 function normalizeLiveUrl(url: string): string {
@@ -173,6 +214,7 @@ async function main() {
 
   let captured = 0;
   let skipped = 0;
+  let deferred = 0;
   const errors: string[] = [];
 
   try {
@@ -188,6 +230,7 @@ async function main() {
       }
 
       try {
+        const attemptedAt = new Date().toISOString();
         const webpBuffer = await captureHeroScreenshot(page, project.live_url);
         const tmpFile = path.join(tmpDir, `${project.id}.webp`);
         fs.writeFileSync(tmpFile, webpBuffer);
@@ -196,17 +239,50 @@ async function main() {
         putR2Object(objectKey, tmpFile, "image/webp");
 
         const publicUrl = buildProjectScreenshotUrl(project.id);
-        await executeD1(`UPDATE project SET img_url = ? WHERE id = ?`, [
-          publicUrl,
-          project.id,
-        ]);
+        let changes = 0;
+
+        try {
+          changes = await executeD1(
+            `UPDATE project SET img_url = ?, screenshot_attempted_at = ? WHERE id = ?`,
+            [publicUrl, attemptedAt, project.id],
+          );
+        } catch (updateError) {
+          const updateMessage =
+            updateError instanceof Error ? updateError.message : String(updateError);
+          if (/screenshot_attempted_at|no such column/i.test(updateMessage)) {
+            changes = await executeD1(`UPDATE project SET img_url = ? WHERE id = ?`, [
+              publicUrl,
+              project.id,
+            ]);
+          } else {
+            throw updateError;
+          }
+        }
+
+        if (changes === 0) {
+          throw new Error("D1 update did not affect any rows — check project id");
+        }
 
         console.log(`  ✓ ${publicUrl}\n`);
         captured += 1;
       } catch (error) {
         const message = error instanceof Error ? error.message : "Unknown error";
         errors.push(`${label}: ${message}`);
-        console.error(`  ✗ ${message}\n`);
+        console.error(`  ✗ ${message}`);
+
+        if (!dryRun) {
+          try {
+            await markScreenshotAttempt(project.id, new Date().toISOString());
+            console.error(`  ↷ marked screenshot_attempted_at — will retry after ${SCREENSHOT_RETRY_HOURS}h\n`);
+            deferred += 1;
+          } catch (markError) {
+            const markMessage =
+              markError instanceof Error ? markError.message : "Unknown error";
+            console.error(`  ! could not record attempt: ${markMessage}\n`);
+          }
+        } else {
+          console.error("");
+        }
       }
     }
   } finally {
@@ -220,6 +296,7 @@ async function main() {
         processed: projects.length,
         captured,
         skipped,
+        deferred,
         errors,
       },
       null,

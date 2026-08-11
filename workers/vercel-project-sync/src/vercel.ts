@@ -6,7 +6,7 @@ export async function fetchAllVercelProjects(
   token: string,
   teamId: string,
 ): Promise<VercelProject[]> {
-  const projects: VercelProject[] = [];
+  const byId = new Map<string, VercelProject>();
   let until: string | undefined;
 
   for (;;) {
@@ -33,15 +33,25 @@ export async function fetchAllVercelProjects(
     }
 
     const payload = (await response.json()) as VercelProjectsResponse;
-    projects.push(...(payload.projects ?? []));
+    const batch = payload.projects ?? [];
+
+    for (const project of batch) {
+      byId.set(project.id, project);
+    }
 
     const next = payload.pagination?.next;
-    if (next === undefined || next === null || next === "") {
+    if (
+      batch.length === 0 ||
+      next === undefined ||
+      next === null ||
+      next === "" ||
+      String(next) === until
+    ) {
       break;
     }
 
     until = String(next);
   }
 
-  return projects;
+  return Array.from(byId.values());
 }

@@ -4,6 +4,17 @@ import type {
   ProjectGroupRow,
 } from "./types";
 
+function normalizeHostname(url: string): string | null {
+  try {
+    const normalized = url.trim().startsWith("http")
+      ? url.trim()
+      : `https://${url.trim()}`;
+    return new URL(normalized).hostname.replace(/^www\./, "").toLowerCase();
+  } catch {
+    return null;
+  }
+}
+
 export async function loadProjectGroups(
   db: D1Database,
 ): Promise<ProjectGroupRow[]> {
@@ -32,6 +43,36 @@ export async function findProjectByVercelId(
     )
     .bind(vercelProjectId)
     .first<ExistingProjectRow>();
+}
+
+/** Manual D1 rows (no vercel_project_id) matched by live URL hostname. */
+export async function findOrphanProjectByLiveUrl(
+  db: D1Database,
+  liveUrl: string,
+): Promise<ExistingProjectRow | null> {
+  const targetHost = normalizeHostname(liveUrl);
+  if (!targetHost) {
+    return null;
+  }
+
+  const result = await db
+    .prepare(
+      `SELECT id, project_group_id, description, is_code, code_url, img_url, live_url
+       FROM project
+       WHERE vercel_project_id IS NULL
+         AND is_active = 1
+         AND live_url IS NOT NULL
+         AND TRIM(live_url) != ''`,
+    )
+    .all<ExistingProjectRow & { live_url: string }>();
+
+  for (const row of result.results ?? []) {
+    if (normalizeHostname(row.live_url) === targetHost) {
+      return row;
+    }
+  }
+
+  return null;
 }
 
 export async function insertSyncedProject(
@@ -99,6 +140,39 @@ export async function updateSyncedProject(
     .run();
 }
 
+/** Attach vercel_project_id to an existing manual row without overwriting editorial fields. */
+export async function linkOrphanToVercelProject(
+  db: D1Database,
+  projectId: number,
+  vercelProjectId: string,
+  fields: MappedProjectFields,
+  syncedAt: string,
+): Promise<void> {
+  await db
+    .prepare(
+      `UPDATE project
+       SET vercel_project_id = ?,
+           title = ?,
+           live_url = ?,
+           stack_json = ?,
+           is_current_domain = ?,
+           is_active = 1,
+           synced_at = ?
+       WHERE id = ?
+         AND vercel_project_id IS NULL`,
+    )
+    .bind(
+      vercelProjectId,
+      fields.title,
+      fields.liveUrl,
+      fields.stackJson,
+      fields.isCurrentDomain,
+      syncedAt,
+      projectId,
+    )
+    .run();
+}
+
 export async function softDeleteMissingProjects(
   db: D1Database,
   activeVercelIds: string[],
@@ -132,3 +206,15 @@ export async function softDeleteMissingProjects(
 
   return result.meta.changes ?? 0;
 }
+
+function isUniqueConstraintError(error: unknown): boolean {
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : "";
+  return /unique|constraint|UNIQUE/i.test(message);
+}
+
+export { isUniqueConstraintError };

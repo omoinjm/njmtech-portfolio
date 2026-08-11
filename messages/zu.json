@@ -150,7 +150,10 @@
     "solution": "Isixazululo",
     "result": "Umphumela",
     "live_link": "Buka isayithi ebukhoma",
-    "empty": "Izifundo zamacala ziyeza maduze."
+    "code_link": "Buka ikhodi",
+    "empty": "Izifundo zamacala ziyeza maduze.",
+    "empty_category": "Awekho amaphrojekthi kule sigaba okwamanje.",
+    "categories_label": "Izigaba zamaphrojekthi"
   },
   "aboutPage": {
     "label": "Mayelana",

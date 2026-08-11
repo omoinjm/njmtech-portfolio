@@ -1,7 +1,10 @@
 import { categorizeNewProject, resolveGroupId } from "./categorize";
 import {
+  findOrphanProjectByLiveUrl,
   findProjectByVercelId,
   insertSyncedProject,
+  isUniqueConstraintError,
+  linkOrphanToVercelProject,
   loadProjectGroups,
   softDeleteMissingProjects,
   updateSyncedProject,
@@ -19,6 +22,7 @@ export async function syncVercelProjects(env: Env): Promise<SyncSummary> {
     fetched: 0,
     inserted: 0,
     updated: 0,
+    linked: 0,
     deactivated: 0,
     errors: [],
   };
@@ -42,7 +46,34 @@ export async function syncVercelProjects(env: Env): Promise<SyncSummary> {
     activeVercelIds.push(project.id);
 
     try {
-      const existing = await findProjectByVercelId(env.DB, project.id);
+      let existing = await findProjectByVercelId(env.DB, project.id);
+      const previewFields = mapVercelProject(
+        project,
+        env.SITE_URL,
+        existing?.description ?? "",
+      );
+
+      if (!existing) {
+        const orphan = await findOrphanProjectByLiveUrl(
+          env.DB,
+          previewFields.liveUrl,
+        );
+
+        if (orphan) {
+          await linkOrphanToVercelProject(
+            env.DB,
+            orphan.id,
+            project.id,
+            previewFields,
+            syncedAt,
+          );
+          summary.linked += 1;
+          console.log(
+            `Linked orphan D1 row #${orphan.id} to Vercel project ${project.name}`,
+          );
+          continue;
+        }
+      }
 
       if (existing) {
         const fields = mapVercelProject(
@@ -63,14 +94,28 @@ export async function syncVercelProjects(env: Env): Promise<SyncSummary> {
         categorization.description,
       );
 
-      await insertSyncedProject(
-        env.DB,
-        project.id,
-        projectGroupId,
-        fields,
-        syncedAt,
-      );
-      summary.inserted += 1;
+      try {
+        await insertSyncedProject(
+          env.DB,
+          project.id,
+          projectGroupId,
+          fields,
+          syncedAt,
+        );
+        summary.inserted += 1;
+      } catch (insertError) {
+        if (!isUniqueConstraintError(insertError)) {
+          throw insertError;
+        }
+
+        existing = await findProjectByVercelId(env.DB, project.id);
+        if (!existing) {
+          throw insertError;
+        }
+
+        await updateSyncedProject(env.DB, project.id, fields, syncedAt);
+        summary.updated += 1;
+      }
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Unknown sync error";

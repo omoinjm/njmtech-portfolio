@@ -34,6 +34,7 @@ interface ProjectQueryRow {
   live_url: string | null;
   is_code: number | null;
   code_url: string | null;
+  is_active: number | null;
   stack_json: string | null;
   is_current_domain: number | null;
   industry: string | null;
@@ -71,6 +72,113 @@ function parseProjectStack(stackJson: string | null, projectId: number): string[
   }
 
   return parsed;
+}
+
+const PROJECTS_FROM_CLAUSE = `
+     FROM project_group pg
+     LEFT JOIN project p
+       ON p.project_group_id = pg.id
+      AND p.is_active = 1
+     WHERE pg.is_active = 1
+     ORDER BY pg.id ASC, p.id ASC`;
+
+const PROJECTS_BASE_COLUMNS = `
+       pg.id AS project_group_id,
+       pg.code AS project_group_key,
+       pg.name AS project_group_name,
+       pg.code AS project_group_code,
+       pg.icon AS project_group_icon,
+       p.id AS project_id,
+       p.title AS project_title,
+       p.description AS project_description,
+       p.img_url,
+       p.live_url,
+       p.is_code,
+       p.code_url,
+       p.is_active,
+       p.stack_json,
+       p.is_current_domain`;
+
+const PROJECTS_CASE_STUDY_COLUMNS = `
+       p.industry,
+       p.challenge,
+       p.solution,
+       p.result`;
+
+async function fetchProjectRows(): Promise<ProjectQueryRow[]> {
+  try {
+    return await queryD1<ProjectQueryRow>(
+      `SELECT ${PROJECTS_BASE_COLUMNS}, ${PROJECTS_CASE_STUDY_COLUMNS} ${PROJECTS_FROM_CLAUSE}`,
+    );
+  } catch (error) {
+    logger.warn(
+      "Project query with case-study columns failed; using legacy columns",
+      error instanceof Error ? error.message : error,
+    );
+
+    const legacyRows = await queryD1<Omit<
+      ProjectQueryRow,
+      "industry" | "challenge" | "solution" | "result"
+    >>(`SELECT ${PROJECTS_BASE_COLUMNS} ${PROJECTS_FROM_CLAUSE}`);
+
+    return legacyRows.map((row) => ({
+      ...row,
+      industry: null,
+      challenge: null,
+      solution: null,
+      result: null,
+    }));
+  }
+}
+
+function mapProjectRows(rows: ProjectQueryRow[]): ProjectsResponse {
+  const projectGroups = new Map<number, TabProjectModel>();
+
+  for (const row of rows) {
+    if (!projectGroups.has(row.project_group_id)) {
+      projectGroups.set(row.project_group_id, {
+        project_group_id: row.project_group_id,
+        project_group_key: row.project_group_key ?? row.project_group_code,
+        project_group_name: row.project_group_name,
+        project_group_code: row.project_group_code,
+        project_group_icon: row.project_group_icon,
+        projects: [],
+      });
+    }
+
+    if (row.project_id === null || row.is_active !== 1) {
+      continue;
+    }
+
+    const group = projectGroups.get(row.project_group_id);
+
+    if (!group) {
+      throw new Error(`Project group ${row.project_group_id} was not initialized`);
+    }
+
+    group.projects?.push({
+      project_id: row.project_id,
+      project_group_id: row.project_group_id,
+      project_title: row.project_title ?? "",
+      project_description: row.project_description ?? "",
+      img_url: row.img_url ?? "",
+      live_url: row.live_url ?? "",
+      is_code: row.is_code === 1,
+      code_url: row.code_url ?? "",
+      stack_json: parseProjectStack(row.stack_json, row.project_id),
+      is_current_domain: row.is_current_domain === 1,
+      industry: row.industry ?? undefined,
+      challenge: row.challenge ?? undefined,
+      solution: row.solution ?? undefined,
+      result: row.result ?? undefined,
+    } satisfies ProjectModel);
+  }
+
+  return {
+    all_project_groups: {
+      project_groups: Array.from(projectGroups.values()),
+    },
+  };
 }
 
 export async function getSkills(): Promise<SkillModel[]> {
@@ -119,83 +227,8 @@ export async function getProjects(): Promise<ProjectsResponse> {
     return { all_project_groups: { project_groups: [] } };
   }
 
-  const rows = await queryD1<ProjectQueryRow>(
-    `SELECT
-       pg.id AS project_group_id,
-       pg."key" AS project_group_key,
-       pg.name AS project_group_name,
-       pg.code AS project_group_code,
-       pg.icon AS project_group_icon,
-       p.id AS project_id,
-       p.title AS project_title,
-       p.description AS project_description,
-       p.img_url,
-       p.live_url,
-       p.is_code,
-       p.code_url,
-       p.stack_json,
-       p.is_current_domain,
-       p.industry,
-       p.challenge,
-       p.solution,
-       p.result
-     FROM project_group pg
-     LEFT JOIN project p
-       ON p.project_group_id = pg.id
-      AND p.is_active = 1
-     WHERE pg.is_active = 1
-     ORDER BY pg.id ASC, p.id ASC`,
-  );
-
-  const projectGroups = new Map<number, TabProjectModel>();
-
-  for (const row of rows) {
-    const existingGroup = projectGroups.get(row.project_group_id);
-
-    if (!existingGroup) {
-      projectGroups.set(row.project_group_id, {
-        project_group_id: row.project_group_id,
-        project_group_key: row.project_group_key ?? row.project_group_code,
-        project_group_name: row.project_group_name,
-        project_group_code: row.project_group_code,
-        project_group_icon: row.project_group_icon,
-        projects: [],
-      });
-    }
-
-    if (row.project_id === null) {
-      continue;
-    }
-
-    const group = projectGroups.get(row.project_group_id);
-
-    if (!group) {
-      throw new Error(`Project group ${row.project_group_id} was not initialized`);
-    }
-
-    group.projects?.push({
-      project_id: row.project_id,
-      project_group_id: row.project_group_id,
-      project_title: row.project_title ?? "",
-      project_description: row.project_description ?? "",
-      img_url: row.img_url ?? "",
-      live_url: row.live_url ?? "",
-      is_code: row.is_code === 1,
-      code_url: row.code_url ?? "",
-      stack_json: parseProjectStack(row.stack_json, row.project_id),
-      is_current_domain: row.is_current_domain === 1,
-      industry: row.industry ?? undefined,
-      challenge: row.challenge ?? undefined,
-      solution: row.solution ?? undefined,
-      result: row.result ?? undefined,
-    } satisfies ProjectModel);
-  }
-
-  return {
-    all_project_groups: {
-      project_groups: Array.from(projectGroups.values()),
-    },
-  };
+  const rows = await fetchProjectRows();
+  return mapProjectRows(rows);
 }
 
 export async function getVoiceCache(textHash: string) {

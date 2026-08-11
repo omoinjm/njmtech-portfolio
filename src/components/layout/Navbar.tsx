@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
 import { MenuModel } from "@/types";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 import { getGeneralQuoteUrl } from "@/lib/business-content";
@@ -65,11 +64,7 @@ export const Navbar = ({ navMenu }: NavbarProps) => {
 
   const isActive = (href: string) => {
     const normalized = normalizeNavUrl(href);
-    return (
-      pathname === normalized ||
-      pathname.endsWith(normalized) ||
-      (normalized === "/work" && pathname.endsWith("/projects"))
-    );
+    return pathname === normalized || pathname === `${normalized}/`;
   };
 
   useEffect(() => {

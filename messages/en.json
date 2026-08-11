@@ -150,7 +150,10 @@
     "solution": "Solution",
     "result": "Result",
     "live_link": "View live site",
-    "empty": "Case studies coming soon — check back shortly."
+    "code_link": "View source code",
+    "empty": "Case studies coming soon — check back shortly.",
+    "empty_category": "No projects in this category yet.",
+    "categories_label": "Project categories"
   },
   "aboutPage": {
     "label": "About",

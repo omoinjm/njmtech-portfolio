@@ -2,12 +2,27 @@
 
 import { useTranslations } from "next-intl";
 import { motion, useInView } from "framer-motion";
-import { useMemo, useRef } from "react";
-import { ExternalLink, Folder } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { ExternalLink, Folder, Github } from "lucide-react";
 import { TabProjectModel, ProjectModel } from "@/types";
+
+/** Display order for D1 project_group rows (Vercel sync categories). */
+const CATEGORY_ORDER = ["Website", "Tools", "E-commerce"] as const;
 
 interface CaseStudiesProps {
   data: TabProjectModel[];
+}
+
+function sortCategories(groups: TabProjectModel[]): TabProjectModel[] {
+  return [...groups].sort((a, b) => {
+    const indexA = CATEGORY_ORDER.indexOf(
+      a.project_group_name as (typeof CATEGORY_ORDER)[number],
+    );
+    const indexB = CATEGORY_ORDER.indexOf(
+      b.project_group_name as (typeof CATEGORY_ORDER)[number],
+    );
+    return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
+  });
 }
 
 function CaseStudyCard({
@@ -104,16 +119,31 @@ function CaseStudyCard({
           </div>
         )}
 
-        {project.live_url && (
-          <a
-            href={project.live_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline underline-offset-4 pt-2"
-          >
-            {t("live_link")}
-            <ExternalLink className="w-4 h-4" />
-          </a>
+        {(project.live_url || (project.is_code && project.code_url)) && (
+          <div className="flex flex-wrap gap-4 pt-2">
+            {project.live_url && (
+              <a
+                href={project.live_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline underline-offset-4"
+              >
+                {t("live_link")}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+            {project.is_code && project.code_url && (
+              <a
+                href={project.code_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline underline-offset-4"
+              >
+                {t("code_link")}
+                <Github className="w-4 h-4" />
+              </a>
+            )}
+          </div>
         )}
       </div>
     </motion.article>
@@ -125,9 +155,34 @@ export function CaseStudies({ data }: CaseStudiesProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const allProjects = useMemo(() => {
-    return data.flatMap((group) => group.projects ?? []);
-  }, [data]);
+  const categories = useMemo(() => sortCategories(data), [data]);
+
+  const defaultCategoryId = useMemo(() => {
+    const website = categories.find(
+      (group) =>
+        group.project_group_code === "WEB" ||
+        group.project_group_name === "Website",
+    );
+    return website?.project_group_id ?? categories[0]?.project_group_id;
+  }, [categories]);
+
+  const [activeCategoryId, setActiveCategoryId] = useState<number | undefined>(
+    undefined,
+  );
+
+  const resolvedCategoryId = activeCategoryId ?? defaultCategoryId;
+
+  const activeProjects = useMemo(() => {
+    const group = categories.find(
+      (item) => item.project_group_id === resolvedCategoryId,
+    );
+    return group?.projects ?? [];
+  }, [categories, resolvedCategoryId]);
+
+  const totalProjects = useMemo(
+    () => categories.reduce((sum, group) => sum + (group.projects?.length ?? 0), 0),
+    [categories],
+  );
 
   return (
     <section id="work" className="py-24 bg-card/30" ref={ref}>
@@ -136,7 +191,7 @@ export function CaseStudies({ data }: CaseStudiesProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <span className="text-accent font-semibold text-sm tracking-wider uppercase">
             {t("label")}
@@ -148,19 +203,57 @@ export function CaseStudies({ data }: CaseStudiesProps) {
           <p className="text-muted-foreground max-w-2xl mx-auto">{t("subheading")}</p>
         </motion.div>
 
-        {allProjects.length === 0 ? (
+        {totalProjects === 0 ? (
           <p className="text-center text-muted-foreground">{t("empty")}</p>
         ) : (
-          <div className="grid lg:grid-cols-2 gap-8">
-            {allProjects.map((project, index) => (
-              <CaseStudyCard
-                key={project.project_id}
-                project={project}
-                index={index}
-                isInView={isInView}
-              />
-            ))}
-          </div>
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="flex flex-wrap justify-center gap-3 mb-12"
+              role="tablist"
+              aria-label={t("categories_label")}
+            >
+              {categories.map((category) => {
+                const count = category.projects?.length ?? 0;
+                const isActive = category.project_group_id === resolvedCategoryId;
+
+                return (
+                  <button
+                    key={category.project_group_id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActiveCategoryId(category.project_group_id)}
+                    className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+                      isActive
+                        ? "gradient-bg text-foreground"
+                        : "bg-card border border-border text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                    }`}
+                  >
+                    {category.project_group_name}
+                    <span className="ml-2 text-xs opacity-80">({count})</span>
+                  </button>
+                );
+              })}
+            </motion.div>
+
+            {activeProjects.length === 0 ? (
+              <p className="text-center text-muted-foreground">{t("empty_category")}</p>
+            ) : (
+              <div className="grid lg:grid-cols-2 gap-8">
+                {activeProjects.map((project, index) => (
+                  <CaseStudyCard
+                    key={project.project_id}
+                    project={project}
+                    index={index}
+                    isInView={isInView}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

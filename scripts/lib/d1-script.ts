@@ -75,6 +75,40 @@ export async function queryD1<T>(sql: string, params: D1Param[] = []) {
   return payload.result?.[0]?.results ?? [];
 }
 
+interface D1ExecuteMeta {
+  changes?: number;
+}
+
 export async function executeD1(sql: string, params: D1Param[] = []) {
-  await executeRequest<never>({ sql, params });
+  const { endpoint, apiToken } = getEndpoint();
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sql, params }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`D1 request failed (${response.status}): ${text}`);
+  }
+
+  const payload = (await response.json()) as D1Response<never> & {
+    result?: { meta?: D1ExecuteMeta; success?: boolean }[];
+  };
+
+  if (!payload.success) {
+    throw new Error(payload.errors?.[0]?.message ?? "D1 request failed.");
+  }
+
+  for (const result of payload.result ?? []) {
+    if (result.success === false) {
+      throw new Error(payload.errors?.[0]?.message ?? "D1 query failed.");
+    }
+  }
+
+  return payload.result?.[0]?.meta?.changes ?? 0;
 }

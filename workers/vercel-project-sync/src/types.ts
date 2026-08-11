@@ -68,6 +68,7 @@ export interface SyncSummary {
   fetched: number;
   inserted: number;
   updated: number;
+  linked: number;
   deactivated: number;
   errors: string[];
 }
