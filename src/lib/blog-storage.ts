@@ -1,4 +1,5 @@
 import { config } from "@/lib/config";
+import { loadLocalBlogIndex, loadLocalBlogPost } from "@/lib/blog-local-seed";
 import { logger } from "@/utils/logger";
 import {
   parseBlogMarkdown,
@@ -36,61 +37,76 @@ function sortByDateDesc(a: BlogPostMeta, b: BlogPostMeta): number {
 }
 
 async function fetchText(url: string): Promise<string | null> {
-  try {
-    const response = await fetch(url, { next: { revalidate: 300 } });
-    if (!response.ok) {
-      logger.warn(`Blog storage fetch failed: ${url} (${response.status})`);
-      return null;
+  const attempts: RequestInit[] = [
+    { next: { revalidate: 300 } },
+    { cache: "no-store" },
+  ];
+
+  for (const init of attempts) {
+    try {
+      const response = await fetch(url, init);
+      if (!response.ok) {
+        logger.warn(`Blog storage fetch failed: ${url} (${response.status})`);
+        continue;
+      }
+      return await response.text();
+    } catch (error) {
+      logger.warn(
+        `Blog storage fetch error: ${url}`,
+        error instanceof Error ? error.message : error,
+      );
     }
-    return await response.text();
-  } catch (error) {
-    logger.warn(
-      `Blog storage fetch error: ${url}`,
-      error instanceof Error ? error.message : error,
-    );
-    return null;
   }
+
+  return null;
 }
 
 export async function fetchBlogIndex(): Promise<BlogPostMeta[]> {
   const base = getBlogStorageBaseUrl();
   const raw = await fetchText(`${base}/index.json`);
 
-  if (!raw) {
-    return [];
-  }
-
-  try {
-    const index = JSON.parse(raw) as BlogIndexFile;
-    if (!Array.isArray(index.posts)) {
-      logger.warn("Blog index.json is missing a posts array");
-      return [];
+  if (raw) {
+    try {
+      const index = JSON.parse(raw) as BlogIndexFile;
+      if (Array.isArray(index.posts) && index.posts.length > 0) {
+        return index.posts.filter(isPublished).sort(sortByDateDesc);
+      }
+    } catch (error) {
+      logger.warn(
+        "Failed to parse blog index.json",
+        error instanceof Error ? error.message : error,
+      );
     }
-
-    return index.posts.filter(isPublished).sort(sortByDateDesc);
-  } catch (error) {
-    logger.warn(
-      "Failed to parse blog index.json",
-      error instanceof Error ? error.message : error,
-    );
-    return [];
   }
+
+  const local = loadLocalBlogIndex();
+  if (local.length > 0) {
+    logger.warn(
+      "Blog index unavailable on R2 — serving posts from scripts/blog-seed (run pnpm blog:upload for production)",
+    );
+    return local;
+  }
+
+  return [];
 }
 
 export async function fetchBlogPost(slug: string): Promise<BlogPost | null> {
   const base = getBlogStorageBaseUrl();
   const raw = await fetchText(`${base}/posts/${slug}.md`);
 
-  if (!raw) {
-    return null;
+  if (raw) {
+    const post = parseBlogMarkdown(raw, slug);
+    if (post && isPublished(post)) {
+      return post;
+    }
   }
 
-  const post = parseBlogMarkdown(raw, slug);
-  if (!post || !isPublished(post)) {
-    return null;
+  const local = loadLocalBlogPost(slug);
+  if (local) {
+    return local;
   }
 
-  return post;
+  return null;
 }
 
 export async function fetchAllBlogPosts(): Promise<BlogPost[]> {

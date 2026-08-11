@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { MenuModel } from "@/types";
-import { MAIN_SITE_NAV } from "@/lib/site-navigation";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 import { getGeneralQuoteUrl } from "@/lib/business-content";
 import * as LucideIcons from "lucide-react";
@@ -14,48 +13,26 @@ import { AccentThemePicker } from "@/components/layout/AccentThemePicker";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
-const NAV_I18N_KEYS: Record<string, string> = {
-  "/services": "services",
-  "/work": "projects",
-  "/projects": "projects",
-  "/about": "about",
-  "/blog": "blog",
-  "/contact": "contact",
-};
-
-type NavLabelKey = "services" | "projects" | "about" | "blog" | "contact";
-
 function normalizeNavUrl(url: string): string {
   if (url === "/projects") return "/work";
   return url;
 }
 
-function getNavLabelKey(url: string): NavLabelKey {
-  const normalized = normalizeNavUrl(url);
-  return (NAV_I18N_KEYS[normalized] ?? normalized.replace("/", "")) as NavLabelKey;
+interface NavbarProps {
+  navMenu: MenuModel[];
 }
 
-export const Navbar = ({ data }) => {
+export const Navbar = ({ navMenu }: NavbarProps) => {
   const t = useTranslations("nav");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
-  const fallbackPages = MAIN_SITE_NAV.map((item, index) => ({
-    id: index,
-    label: item.name,
-    icon: "",
-    url: item.path,
+  const pages = navMenu.map((link) => ({
+    ...link,
+    url: normalizeNavUrl(link.url),
   }));
-
-  const pages =
-    data?.nav_menu && data.nav_menu.length > 0
-      ? data.nav_menu.map((link: MenuModel) => ({
-          ...link,
-          url: normalizeNavUrl(link.url),
-        }))
-      : fallbackPages;
 
   const whatsappUrl = getGeneralQuoteUrl();
 
@@ -70,18 +47,21 @@ export const Navbar = ({ data }) => {
         return;
       }
 
+      const shortcuts: Record<string, string> = {};
+      pages.forEach((link, index) => {
+        if (index < 8) {
+          shortcuts[String(index + 2)] = link.url;
+        }
+      });
+
       if (event.altKey && event.key === "1") router.push("/");
-      if (event.altKey && event.key === "2") router.push("/services");
-      if (event.altKey && event.key === "3") router.push("/work");
-      if (event.altKey && event.key === "4") router.push("/about");
-      if (event.altKey && event.key === "5") router.push("/blog");
-      if (event.altKey && event.key === "6") router.push("/contact");
+      if (event.altKey && shortcuts[event.key]) router.push(shortcuts[event.key]);
       if (event.key === "Escape" && isMobileMenuOpen) setIsMobileMenuOpen(false);
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isMobileMenuOpen, router]);
+  }, [isMobileMenuOpen, pages, router]);
 
   const isActive = (href: string) => {
     const normalized = normalizeNavUrl(href);
@@ -124,19 +104,19 @@ export const Navbar = ({ data }) => {
 
           <nav
             aria-label="Main navigation"
-            className="hidden md:flex items-center justify-center gap-6 lg:gap-8"
+            className="hidden md:flex items-center justify-center gap-4 lg:gap-6 xl:gap-8"
           >
-            {pages.map((link: MenuModel) => (
+            {pages.map((link) => (
               <Link
                 key={link.id}
                 href={link.url}
-                className={`text-sm font-semibold tracking-wide transition-colors ${
+                className={`text-sm font-semibold tracking-wide transition-colors whitespace-nowrap ${
                   isActive(link.url)
                     ? "gradient-text"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {t(getNavLabelKey(link.url))}
+                {link.label}
               </Link>
             ))}
           </nav>
@@ -190,7 +170,7 @@ export const Navbar = ({ data }) => {
           >
             <div className="h-16" />
             <div className="flex-1 flex flex-col items-center justify-center gap-10 px-8">
-              {pages.map((link: MenuModel) => (
+              {pages.map((link) => (
                 <Link
                   key={link.id}
                   href={link.url}
@@ -201,7 +181,7 @@ export const Navbar = ({ data }) => {
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {t(getNavLabelKey(link.url))}
+                  {link.label}
                 </Link>
               ))}
             </div>

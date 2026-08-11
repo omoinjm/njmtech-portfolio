@@ -12,6 +12,7 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
+import { getMenuLinks } from "@/services/sql.service";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -109,6 +110,7 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
+  const menuLinks = await getMenuLinks();
 
   return (
     <NextIntlClientProvider messages={messages}>
@@ -117,7 +119,7 @@ export default async function LocaleLayout({
           <Analytics />
           <Toaster />
           <Sonner />
-          <Layout>{children}</Layout>
+          <Layout menuLinks={menuLinks}>{children}</Layout>
           <SpeedInsights />
         </TooltipProvider>
       </Providers>

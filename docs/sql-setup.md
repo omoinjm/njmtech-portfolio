@@ -1,31 +1,24 @@
 # Setup Postgres tables and data
 
-### Menu
+### Menu (D1 `nav_menu`)
 
-**MENU MODULE**
+Navbar labels and order come from the **`nav_menu`** table (`name`, `route_url`, `sort_order`, `is_active`).
 
-```sql
-drop table nav_menu;
+Apply or refresh rows:
 
-CREATE TABLE nav_menu (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    icon VARCHAR(255),
-    route_url VARCHAR(255) NOT NULL,
-    is_active BOOLEAN NOT NULL,
-    sort_order int not null
-);
-
-insert into nav_menu
-(name , icon, route_url, is_active, sort_order)
-values
-('Projects', 'bi bi-window', '/projects', true, 1),
-('Blog', 'bi bi-journal-text', '/blog', true, 2),
-('Contact', 'bi bi-telephone', '/contact', true, 3),
-('Subscribe', 'bi bi-pen', '/subscribe', true, 4);
-
-select * from nav_menu;
+```bash
+npx wrangler d1 execute njmtech-projects --remote \
+  --file=scripts/migrations/update-nav-menu.sql
 ```
+
+Verify:
+
+```bash
+npx wrangler d1 execute njmtech-projects --remote --command \
+  "SELECT id, name, route_url, sort_order FROM nav_menu WHERE is_active = 1 ORDER BY sort_order;"
+```
+
+Use `/work` for Projects (legacy `/projects` URLs are normalized in the app).
 
 **MENU ITEM**
 

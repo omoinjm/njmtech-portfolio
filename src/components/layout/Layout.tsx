@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Footer } from "./Footer";
 import { FloatingAssistant } from "./FloatingAssistant";
 import { Navbar } from "./Navbar";
@@ -8,57 +8,24 @@ import { KeyboardShortcuts } from "./KeyboardShortcuts";
 import { SEOGuideDialog } from "./SEOGuideDialog";
 import { MechanicalKeyboardGuideDialog } from "./MechanicalKeyboardGuideDialog";
 import { MouseGlow } from "./MouseGlow";
-import { MenuModel, FooterModel, LinkModel } from "@/types";
-import DataService from "@/services/data.service";
-import { PageLoader } from "@/components/ui/page-loader";
-import { AnimatePresence } from "framer-motion";
+import { FooterModel, LinkModel } from "@/types";
 
 interface LayoutProps {
   children: React.ReactNode;
+  menuLinks: LinkModel;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [nLinks, setNLinks] = useState<LinkModel>({});
-  const [fLinks, setFLinks] = useState<FooterModel[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchLinks = async () => {
-      try {
-        // Explicitly typing the response from the service
-        const response = (await DataService.get_call(
-          "menu",
-          null,
-        )) as LinkModel;
-
-        if (response) {
-          setNLinks(response || {});
-          setFLinks(response.nav_footer || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch menu data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLinks();
-  }, []);
-
+const Layout: React.FC<LayoutProps> = ({ children, menuLinks }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="print:hidden">
-        <Navbar data={nLinks} />
+        <Navbar navMenu={menuLinks.nav_menu ?? []} />
       </div>
 
-      <main className="flex-grow">
-        <AnimatePresence mode="wait">
-          {loading ? <PageLoader key="loader" /> : children}
-        </AnimatePresence>
-      </main>
+      <main className="flex-grow">{children}</main>
 
       <div className="print:hidden">
-        <Footer data={fLinks} />
+        <Footer data={menuLinks.nav_footer ?? []} />
         <FloatingAssistant />
         <KeyboardShortcuts />
         <SEOGuideDialog />
