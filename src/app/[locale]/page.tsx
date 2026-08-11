@@ -22,14 +22,14 @@ export const metadata: Metadata = {
     description: pageConfig.home.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
-    type: 'profile',
+    type: 'website',
     locale: 'en_ZA',
     images: [
       {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'Nhlanhla Malaza — Software Developer Portfolio',
+        alt: 'NJMTECH — Professional Web Design & Development in South Africa',
       },
     ],
   },
@@ -42,11 +42,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteConfig.url,
-  },
-  other: {
-    'profile:first_name': 'Nhlanhla',
-    'profile:last_name': 'Malaza',
-    'profile:username': 'njmalaza',
   },
 };
 

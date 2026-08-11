@@ -134,11 +134,50 @@ Use `wrangler dev --remote` if you need live D1 + Workers AI bindings during loc
 | `title`, `live_url`, `stack_json`, `is_current_domain` | Updated every run |
 | `project_group_id` | Set on **insert only** (AI); manual D1 edits preserved |
 | `description` | AI-generated on **insert only** |
-| `img_url` | Empty on insert; never overwritten by sync |
+| `img_url` | Empty on insert; never overwritten by sync. Set by Playwright screenshot cron (see below) |
 | `is_code`, `code_url` | `0` / empty on insert; never overwritten once you set them |
 | `is_active` | `1` when on Vercel; `0` when removed (sync-managed rows only) |
 
 Manually added projects (no `vercel_project_id`) are never soft-deleted by the worker.
+
+## Hero screenshots (Playwright → R2 → D1)
+
+Cloudflare Workers cannot run Playwright/Chromium. Hero screenshots run on a **GitHub Actions cron** aligned with the sync schedule:
+
+| Item | Value |
+|------|-------|
+| Workflow | [`.github/workflows/project-sync-screenshots-cron.yml`](../.github/workflows/project-sync-screenshots-cron.yml) |
+| Schedule | `15 */6 * * *` (15 min after the Worker cron) |
+| Script | `pnpm project:screenshots` → [`scripts/capture-project-screenshots.ts`](../scripts/capture-project-screenshots.ts) |
+
+**Pipeline**
+
+1. Optional: `POST /sync` on the Worker (when `WORKER_SYNC_URL` + `CRON_SECRET` repo secrets are set).
+2. Playwright opens each active project `live_url`, screenshots the hero / top viewport.
+3. WebP uploaded to R2: `njmtech-portfolio/projects/{id}.webp` (same bucket as blog assets).
+4. D1 `project.img_url` updated to the public URL (only when empty, unless `--force`).
+
+**Local / manual run**
+
+```bash
+pnpm project:screenshots              # missing img_url only
+pnpm project:screenshots -- --force   # refresh all
+pnpm project:screenshots -- --id=12     # single project
+pnpm project:screenshots -- --dry-run
+```
+
+**GitHub repo secrets** (Settings → Secrets → Actions):
+
+| Secret | Purpose |
+|--------|---------|
+| `CLOUDFLARE_API_TOKEN` | Wrangler R2 upload + D1 REST (same token as worker deploy) |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
+| `WORKER_SYNC_URL` | Optional — Worker base URL (no trailing slash) to run sync before screenshots |
+| `CRON_SECRET` | Optional — Bearer token for `POST /sync` |
+
+Public URLs: `https://s3.njmtech.co.za/njmtech-portfolio/projects/{id}.webp`
+
+Manual `img_url` values are preserved by the sync worker. Re-capture only with `--force` or workflow_dispatch **force=true**.
 
 ## Verify synced rows
 

@@ -36,6 +36,10 @@ interface ProjectQueryRow {
   code_url: string | null;
   stack_json: string | null;
   is_current_domain: number | null;
+  industry: string | null;
+  challenge: string | null;
+  solution: string | null;
+  result: string | null;
 }
 
 interface ProjectsResponse {
@@ -130,7 +134,11 @@ export async function getProjects(): Promise<ProjectsResponse> {
        p.is_code,
        p.code_url,
        p.stack_json,
-       p.is_current_domain
+       p.is_current_domain,
+       p.industry,
+       p.challenge,
+       p.solution,
+       p.result
      FROM project_group pg
      LEFT JOIN project p
        ON p.project_group_id = pg.id
@@ -176,6 +184,10 @@ export async function getProjects(): Promise<ProjectsResponse> {
       code_url: row.code_url ?? "",
       stack_json: parseProjectStack(row.stack_json, row.project_id),
       is_current_domain: row.is_current_domain === 1,
+      industry: row.industry ?? undefined,
+      challenge: row.challenge ?? undefined,
+      solution: row.solution ?? undefined,
+      result: row.result ?? undefined,
     } satisfies ProjectModel);
   }
 

@@ -27,6 +27,7 @@
     "voice-cache:test": "npx tsx scripts/test-voice-cache.ts",
     "voice-cache:test:d1": "infisical run -- npx tsx scripts/test-voice-cache.ts --d1",
     "blog:upload": "infisical run -- npx tsx scripts/upload-blog-to-r2.ts",
+    "project:screenshots": "infisical run -- npx tsx scripts/capture-project-screenshots.ts",
     "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts",
     "worker:sync:dev": "wrangler dev --config workers/vercel-project-sync/wrangler.jsonc --test-scheduled",
     "worker:sync:deploy": "wrangler deploy --config workers/vercel-project-sync/wrangler.jsonc"

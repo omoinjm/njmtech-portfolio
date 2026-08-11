@@ -6,6 +6,10 @@ import { Hero } from "./Hero";
 import { Newsletter } from "./Newsletter";
 import { Services } from "./Services";
 import { Skills } from "./Skills";
+import { ServiceTiles } from "@/components/business/ServiceTiles";
+import { SocialProofStrip } from "@/components/business/SocialProofStrip";
+import { Testimonials } from "@/components/business/Testimonials";
+import { ContactCTA } from "@/components/business/ContactCTA";
 import type { KeyboardSkill } from "./skills-keyboard-data";
 
 const SkillsKeyboardScene = dynamic(
@@ -35,10 +39,16 @@ export default function HomePage() {
       </div>
       <main className="relative z-10">
         <Hero />
+        <ServiceTiles />
+        <SocialProofStrip />
+        <Testimonials />
+        <section className="py-16 container mx-auto px-4">
+          <ContactCTA />
+        </section>
         <Skills activeSkill={activeSkill} />
         <Services />
         <Newsletter />
       </main>
     </div>
   );
-}
+};

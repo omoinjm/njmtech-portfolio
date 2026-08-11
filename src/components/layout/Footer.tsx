@@ -6,6 +6,14 @@ import { PRIMARY_SITE_NAV } from "@/lib/site-navigation";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
+const FOOTER_NAV_I18N: Record<string, string> = {
+  "/services": "services",
+  "/work": "work",
+  "/about": "about",
+  "/contact": "contact",
+  "/blog": "blog",
+};
+
 export const Footer = ({ data: _data }) => {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
@@ -34,7 +42,14 @@ export const Footer = ({ data: _data }) => {
                   href={item.path}
                   className="text-sm font-medium text-foreground/80 hover:text-accent transition-colors"
                 >
-                  {tNav(item.name.toLowerCase() as "projects" | "contact" | "blog")}
+                  {tNav(
+                    (FOOTER_NAV_I18N[item.path] ?? item.name.toLowerCase()) as
+                      | "services"
+                      | "work"
+                      | "about"
+                      | "contact"
+                      | "blog",
+                  )}
                 </Link>
               ))}
             </nav>
