@@ -56,6 +56,10 @@ Without D1, projects/skills load from fallbacks and Omoi TTS uses the in-code ma
 | `R2_BUCKET_NAME`, `BLOG_STORAGE_PREFIX` | `pnpm blog:upload` |
 | `VOICE_CACHE_S3_BASE_URL` | `pnpm ai_cache` |
 | `TEST_EMAIL`, `BASE_URL`, `TEMPLATE_API_URL` | Playwright email tests |
+| `VERCEL_TOKEN`, `VERCEL_TEAM_ID`, `SITE_URL`, `CRON_SECRET` | Cloudflare Worker `njmtech-vercel-project-sync` (wrangler secrets) |
+| `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | GitHub Actions deploy for `njmtech-vercel-project-sync` (repo secrets) |
+
+Worker deploy: `pnpm worker:sync:deploy` · CI: `.github/workflows/deploy-vercel-sync-worker.yml` · see [`VERCEL_PROJECT_SYNC.md`](./VERCEL_PROJECT_SYNC.md).
 
 ## Import & use
 

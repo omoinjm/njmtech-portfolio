@@ -16,8 +16,8 @@
     "build:prod": "infisical run --env=prod -- next build",
     "start": "infisical run --env=prod -- next start",
     "start:local": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "prepare": "husky install",
     "pretty-quick": "pretty-quick --staged",
     "reset": "rm -rf node_modules/ pnpm-lock.yaml .next/",
@@ -27,7 +27,9 @@
     "voice-cache:test": "npx tsx scripts/test-voice-cache.ts",
     "voice-cache:test:d1": "infisical run -- npx tsx scripts/test-voice-cache.ts --d1",
     "blog:upload": "infisical run -- npx tsx scripts/upload-blog-to-r2.ts",
-    "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts"
+    "omoi:spritesheet": "npx tsx scripts/build-omoi-spritesheet.ts",
+    "worker:sync:dev": "wrangler dev --config workers/vercel-project-sync/wrangler.jsonc --test-scheduled",
+    "worker:sync:deploy": "wrangler deploy --config workers/vercel-project-sync/wrangler.jsonc"
   },
   "dependencies": {
     "@gradio/client": "^2.2.0",
@@ -94,6 +96,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260804.1",
     "@eslint/js": "^10.0.1",
     "@infisical/cli": "^0.43.78",
     "@playwright/test": "^1.58.2",
@@ -116,7 +119,8 @@
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1"
+    "typescript-eslint": "^8.56.1",
+    "wrangler": "^4.69.0"
   },
   "pnpm": {
     "overrides": {

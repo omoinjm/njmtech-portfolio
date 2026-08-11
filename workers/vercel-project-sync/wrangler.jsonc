@@ -1,0 +1,20 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "njmtech-vercel-project-sync",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-02-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "triggers": {
+    "crons": ["0 */6 * * *"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "njmtech-projects",
+      "database_id": "773865eb-1e3b-4ee3-9592-ffe658765d19"
+    }
+  ],
+  "ai": {
+    "binding": "AI"
+  }
+}
