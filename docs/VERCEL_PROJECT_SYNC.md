@@ -58,7 +58,7 @@ wrangler secret put CRON_SECRET --config workers/vercel-project-sync/wrangler.js
 | Secret | Example | Purpose |
 |--------|---------|---------|
 | `VERCEL_TOKEN` | `vercel_…` | Bearer token for Vercel REST API |
-| `VERCEL_TEAM_ID` | `team_…` | Team scope for `GET /v9/projects` |
+| `VERCEL_TEAM_ID` | `team_…` or team slug | Optional — merges **team** projects with **personal-account** projects (default fetch is personal + team) |
 | `SITE_URL` | `https://njmtech.co.za` | Sets `is_current_domain` when live URL matches |
 | `CRON_SECRET` | random string | Protects manual sync endpoint |
 
@@ -98,6 +98,29 @@ curl -X POST "https://njmtech-vercel-project-sync.<your-subdomain>.workers.dev/s
   -H "Authorization: Bearer YOUR_CRON_SECRET"
 ```
 
+**Discover** (no D1 writes — shows what Vercel returns per scope):
+
+```bash
+curl "https://njmtech-vercel-project-sync.<your-subdomain>.workers.dev/sync/discover" \
+  -H "Authorization: Bearer YOUR_CRON_SECRET"
+```
+
+(`GET` or `POST` both work.)
+
+Example discover response when projects live on a personal account but `VERCEL_TEAM_ID` only had one team project:
+
+```json
+{
+  "ok": true,
+  "total": 12,
+  "scopes": [
+    { "scope": "personal", "count": 11, "pages": 1 },
+    { "scope": "team:team_abc", "count": 1, "pages": 1 }
+  ],
+  "projects": [{ "id": "prj_…", "name": "my-app", "framework": "nextjs" }]
+}
+```
+
 Response:
 
 ```json
@@ -106,9 +129,11 @@ Response:
   "summary": {
     "fetched": 12,
     "inserted": 3,
-    "updated": 9,
-    "linked": 1,
+    "linked": 0,
+    "reactivated": 0,
+    "skipped": 9,
     "deactivated": 0,
+    "updated": 0,
     "errors": []
   }
 }
@@ -132,12 +157,12 @@ Use `wrangler dev --remote` if you need live D1 + Workers AI bindings during loc
 
 | Field | Sync behaviour |
 |-------|----------------|
-| `title`, `live_url`, `stack_json`, `is_current_domain` | Updated every run |
+| `title`, `live_url`, `stack_json`, `is_current_domain` | Set on **insert** and orphan **link** only — not refreshed on later cron runs |
 | `project_group_id` | Set on **insert only** (AI); manual D1 edits preserved |
 | `description` | AI-generated on **insert only** |
 | `img_url` | Empty on insert; never overwritten by sync. Set by Playwright screenshot cron (see below) |
 | `is_code`, `code_url` | `0` / empty on insert; never overwritten once you set them |
-| `is_active` | `1` when on Vercel; `0` when removed (sync-managed rows only) |
+| `is_active` | `1` on insert/link/reactivate; `0` when removed from Vercel (sync-managed rows only) |
 
 Manually added projects (no `vercel_project_id`) are never soft-deleted by the worker.
 
@@ -202,7 +227,7 @@ The portfolio `/projects` page uses a 1-hour cache on `/api/projects`. New rows 
 | Issue | Check |
 |-------|-------|
 | Cron keeps processing the same project | Screenshot: capture failed so `img_url` stayed empty — check GHA logs; run migration for `screenshot_attempted_at`; retry with `pnpm project:screenshots -- --id=N`. Sync: manual D1 row without `vercel_project_id` — redeploy worker (links orphans by live URL instead of re-inserting + AI). |
-| Sync `fetched: 1` but many Vercel projects | Redeploy worker — projects API paginates with `from` (not `until`). Old code re-read page 1 only. |
+| Sync `fetched: 1` but many Vercel projects | Run `GET /sync/discover` — check `scopes`. If `personal` has the rest, redeploy latest worker (merges personal + team). Wrong `VERCEL_TEAM_ID`? Use `team_…` from Vercel team settings or omit the secret for personal-only. |
 | `No Website project_group row found` | Ensure D1 has an active group named Website (code `WEB`) |
 | Vercel API 403 | Token scope / team ID |
 | AI categorization always Website | Workers AI binding enabled; check `wrangler tail` logs |

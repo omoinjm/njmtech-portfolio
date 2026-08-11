@@ -36,7 +36,7 @@ export async function findProjectByVercelId(
 ): Promise<ExistingProjectRow | null> {
   return db
     .prepare(
-      `SELECT id, project_group_id, description, is_code, code_url, img_url
+      `SELECT id, project_group_id, description, is_code, code_url, img_url, is_active
        FROM project
        WHERE vercel_project_id = ?
        LIMIT 1`,
@@ -109,6 +109,23 @@ export async function insertSyncedProject(
       vercelProjectId,
       syncedAt,
     )
+    .run();
+}
+
+/** Re-enable a sync-managed row that was soft-deleted when the project returns on Vercel. */
+export async function reactivateSyncedProject(
+  db: D1Database,
+  vercelProjectId: string,
+  syncedAt: string,
+): Promise<void> {
+  await db
+    .prepare(
+      `UPDATE project
+       SET is_active = 1,
+           synced_at = ?
+       WHERE vercel_project_id = ?`,
+    )
+    .bind(syncedAt, vercelProjectId)
     .run();
 }
 

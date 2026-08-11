@@ -6,8 +6,8 @@ import {
   isUniqueConstraintError,
   linkOrphanToVercelProject,
   loadProjectGroups,
+  reactivateSyncedProject,
   softDeleteMissingProjects,
-  updateSyncedProject,
 } from "./d1";
 import { mapVercelProject } from "./map-project";
 import type { Env, SyncSummary } from "./types";
@@ -21,9 +21,11 @@ export async function syncVercelProjects(env: Env): Promise<SyncSummary> {
   const summary: SyncSummary = {
     fetched: 0,
     inserted: 0,
-    updated: 0,
     linked: 0,
+    reactivated: 0,
+    skipped: 0,
     deactivated: 0,
+    updated: 0,
     errors: [],
   };
 
@@ -34,11 +36,13 @@ export async function syncVercelProjects(env: Env): Promise<SyncSummary> {
     throw new Error("No active project_group rows found in D1");
   }
 
-  const vercelProjects = await fetchAllVercelProjects(
+  const fetchResult = await fetchAllVercelProjects(
     env.VERCEL_TOKEN,
     env.VERCEL_TEAM_ID,
   );
 
+  const vercelProjects = fetchResult.projects;
+  summary.scopes = fetchResult.scopes;
   summary.fetched = vercelProjects.length;
   const activeVercelIds: string[] = [];
 
@@ -47,42 +51,36 @@ export async function syncVercelProjects(env: Env): Promise<SyncSummary> {
 
     try {
       let existing = await findProjectByVercelId(env.DB, project.id);
-      const previewFields = mapVercelProject(
-        project,
-        env.SITE_URL,
-        existing?.description ?? "",
-      );
-
-      if (!existing) {
-        const orphan = await findOrphanProjectByLiveUrl(
-          env.DB,
-          previewFields.liveUrl,
-        );
-
-        if (orphan) {
-          await linkOrphanToVercelProject(
-            env.DB,
-            orphan.id,
-            project.id,
-            previewFields,
-            syncedAt,
-          );
-          summary.linked += 1;
-          console.log(
-            `Linked orphan D1 row #${orphan.id} to Vercel project ${project.name}`,
-          );
-          continue;
-        }
-      }
 
       if (existing) {
-        const fields = mapVercelProject(
-          project,
-          env.SITE_URL,
-          existing.description,
+        if (existing.is_active === 1) {
+          summary.skipped += 1;
+          continue;
+        }
+
+        await reactivateSyncedProject(env.DB, project.id, syncedAt);
+        summary.reactivated += 1;
+        continue;
+      }
+
+      const previewFields = mapVercelProject(project, env.SITE_URL, "");
+      const orphan = await findOrphanProjectByLiveUrl(
+        env.DB,
+        previewFields.liveUrl,
+      );
+
+      if (orphan) {
+        await linkOrphanToVercelProject(
+          env.DB,
+          orphan.id,
+          project.id,
+          previewFields,
+          syncedAt,
         );
-        await updateSyncedProject(env.DB, project.id, fields, syncedAt);
-        summary.updated += 1;
+        summary.linked += 1;
+        console.log(
+          `Linked orphan D1 row #${orphan.id} to Vercel project ${project.name}`,
+        );
         continue;
       }
 
@@ -113,8 +111,12 @@ export async function syncVercelProjects(env: Env): Promise<SyncSummary> {
           throw insertError;
         }
 
-        await updateSyncedProject(env.DB, project.id, fields, syncedAt);
-        summary.updated += 1;
+        if (existing.is_active === 1) {
+          summary.skipped += 1;
+        } else {
+          await reactivateSyncedProject(env.DB, project.id, syncedAt);
+          summary.reactivated += 1;
+        }
       }
     } catch (error) {
       const message =

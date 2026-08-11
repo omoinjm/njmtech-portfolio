@@ -2,7 +2,8 @@ export interface Env {
   DB: D1Database;
   AI: Ai;
   VERCEL_TOKEN: string;
-  VERCEL_TEAM_ID: string;
+  /** Optional — when set, team/slug projects are merged with personal-account projects. */
+  VERCEL_TEAM_ID?: string;
   CRON_SECRET?: string;
   SITE_URL: string;
 }
@@ -22,6 +23,7 @@ export interface ExistingProjectRow {
   is_code: number;
   code_url: string | null;
   img_url: string | null;
+  is_active: number;
 }
 
 export interface VercelDeployment {
@@ -67,8 +69,13 @@ export interface CategorizationResult {
 export interface SyncSummary {
   fetched: number;
   inserted: number;
-  updated: number;
   linked: number;
+  reactivated: number;
+  skipped: number;
   deactivated: number;
+  /** @deprecated Always 0 — existing rows are no longer refreshed each run. */
+  updated: number;
+  /** Per-scope Vercel API counts (personal vs team) for debugging. */
+  scopes?: Array<{ scope: string; count: number; pages: number }>;
   errors: string[];
 }
