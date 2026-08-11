@@ -88,6 +88,8 @@ Environment variables are in **Infisical** (local/scripts) and **Vercel** (produ
 
 - `docs/CONFIG_QUICK_REF.md` — env priority + quick reference
 - `docs/CONFIG_SERVICE.md` — Infisical + config setup
+- `docs/PROJECT_SCREENSHOTS.md` — GHA Playwright → R2 → D1 hero images
+- `docs/VERCEL_PROJECT_SYNC.md` — Cloudflare Worker Vercel → D1 sync
 - `docs/SEO_GUIDE.md` — SEO patterns
 - `public/llms.txt` — public site summary for external LLMs
 

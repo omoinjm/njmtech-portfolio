@@ -168,6 +168,8 @@ Manually added projects (no `vercel_project_id`) are never soft-deleted by the w
 
 ## Hero screenshots (Playwright → R2 → D1)
 
+**Canonical setup guide:** [`docs/PROJECT_SCREENSHOTS.md`](./PROJECT_SCREENSHOTS.md)
+
 Cloudflare Workers cannot run Playwright/Chromium. Hero screenshots run on a **GitHub Actions cron** aligned with the sync schedule:
 
 | Item | Value |
