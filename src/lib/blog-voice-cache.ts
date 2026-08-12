@@ -22,21 +22,53 @@ export function isBlogVoiceCacheKey(cacheKey: string): boolean {
   return cacheKey.startsWith(BLOG_VOICE_CACHE_PREFIX);
 }
 
+/** Parse `blog:{slug}` or `blog:{slug}:{chunkIndex}` into slug + optional chunk. */
+export function parseBlogVoiceCacheKey(
+  cacheKey: string,
+): { slug: string; chunkIndex?: number } | null {
+  if (!isBlogVoiceCacheKey(cacheKey)) {
+    return null;
+  }
+
+  const rest = cacheKey.slice(BLOG_VOICE_CACHE_PREFIX.length);
+  const separator = rest.lastIndexOf(":");
+  if (separator === -1) {
+    return { slug: rest };
+  }
+
+  const maybeIndex = rest.slice(separator + 1);
+  if (/^\d+$/.test(maybeIndex)) {
+    return {
+      slug: rest.slice(0, separator),
+      chunkIndex: Number(maybeIndex),
+    };
+  }
+
+  return { slug: rest };
+}
+
 /**
- * Local/dev manifest — add URLs after running `pnpm blog-voice:generate`.
- * Keys use blogChunkCacheKey(slug, index) or blogFullCacheKey(slug).
+ * Optional manifest overrides (e.g. non-default file extensions).
+ * When empty, chunk keys resolve to the standard S3 layout via {@link blogVoiceS3Url}.
  */
-export const BLOG_VOICE_CACHE_URLS: Record<string, string> = {
-  // Example after generation:
-  // "blog:cloudflare-d1-notes:0": `${S3_BLOG_VOICE_BASE}/cloudflare-d1-notes/0.wav`,
-};
+export const BLOG_VOICE_CACHE_URLS: Record<string, string> = {};
 
 export function getBlogVoiceCacheUrl(cacheKey: string): string | undefined {
   if (!isBlogVoiceCacheKey(cacheKey)) {
     return undefined;
   }
 
-  return BLOG_VOICE_CACHE_URLS[cacheKey];
+  const fromManifest = BLOG_VOICE_CACHE_URLS[cacheKey];
+  if (fromManifest) {
+    return fromManifest;
+  }
+
+  const parsed = parseBlogVoiceCacheKey(cacheKey);
+  if (!parsed || parsed.chunkIndex === undefined) {
+    return undefined;
+  }
+
+  return blogVoiceS3Url(parsed.slug, parsed.chunkIndex);
 }
 
 export function blogVoiceS3Url(slug: string, chunkIndex: number, ext = "wav"): string {

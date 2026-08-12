@@ -1,5 +1,5 @@
 /**
- * Verify Omoi voice cache URLs (S3 manifest + optional D1).
+ * Verify Omoi + blog voice cache URLs (S3 manifest + optional D1).
  * Does not load @/lib/config — no EMAIL_* required.
  *
  * Usage:
@@ -7,11 +7,18 @@
  *   pnpm voice-cache:test:d1           # manifest + D1 via Infisical
  */
 import {
+  blogChunkCacheKey,
+  getBlogVoiceCacheUrl,
+} from "../src/lib/blog-voice-cache";
+import {
   OMOI_PROMPT_CHIPS,
   OMOI_VOICE_CACHE_KEYS,
   OMOI_VOICE_CACHE_URLS,
   type OmoiVoiceCacheKey,
 } from "../src/lib/omoi-voice-cache";
+
+const BLOG_VOICE_TEST_SLUG = "cloudflare-d1-notes";
+const BLOG_VOICE_TEST_CHUNKS = 4;
 
 async function fetchD1AudioUrl(cacheKey: string): Promise<string | null> {
   const accountId = process.env.D1_ACCOUNT_ID;
@@ -53,7 +60,7 @@ async function fetchD1AudioUrl(cacheKey: string): Promise<string | null> {
 }
 
 async function resolveUrl(
-  cacheKey: OmoiVoiceCacheKey,
+  cacheKey: string,
   useD1: boolean,
 ): Promise<{ url: string | null; source: "d1" | "manifest" | "none" }> {
   if (useD1) {
@@ -63,9 +70,14 @@ async function resolveUrl(
     }
   }
 
-  const fromManifest = OMOI_VOICE_CACHE_URLS[cacheKey] ?? null;
-  return fromManifest
-    ? { url: fromManifest, source: "manifest" }
+  const fromOmoiManifest = OMOI_VOICE_CACHE_URLS[cacheKey as OmoiVoiceCacheKey];
+  if (fromOmoiManifest) {
+    return { url: fromOmoiManifest, source: "manifest" };
+  }
+
+  const fromBlogManifest = getBlogVoiceCacheUrl(cacheKey) ?? null;
+  return fromBlogManifest
+    ? { url: fromBlogManifest, source: "manifest" }
     : { url: null, source: "none" };
 }
 
@@ -91,19 +103,29 @@ async function main() {
   }
 
   for (const cacheKey of keys) {
-    const { url, source } = await resolveUrl(cacheKey, useD1);
-    if (!url) {
-      console.log(`  ✗ ${cacheKey.padEnd(10)} no URL`);
-      continue;
-    }
-
-    const response = await fetch(url, { method: "HEAD" }).catch(() => null);
-    const status = response?.status ?? "ERR";
-    console.log(
-      `  ${response?.ok ? "✓" : "✗"} ${cacheKey.padEnd(10)} HTTP ${status}  [${source}]`,
-    );
-    console.log(`    ${url}\n`);
+    await reportCacheKey(cacheKey, useD1);
   }
+
+  console.log("Blog voice cache:\n");
+  for (let index = 0; index < BLOG_VOICE_TEST_CHUNKS; index += 1) {
+    const cacheKey = blogChunkCacheKey(BLOG_VOICE_TEST_SLUG, index);
+    await reportCacheKey(cacheKey, useD1);
+  }
+}
+
+async function reportCacheKey(cacheKey: string, useD1: boolean) {
+  const { url, source } = await resolveUrl(cacheKey, useD1);
+  if (!url) {
+    console.log(`  ✗ ${cacheKey.padEnd(32)} no URL`);
+    return;
+  }
+
+  const response = await fetch(url, { method: "HEAD" }).catch(() => null);
+  const status = response?.status ?? "ERR";
+  console.log(
+    `  ${response?.ok ? "✓" : "✗"} ${cacheKey.padEnd(32)} HTTP ${status}  [${source}]`,
+  );
+  console.log(`    ${url}\n`);
 }
 
 main().catch((error) => {
