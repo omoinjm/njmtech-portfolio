@@ -30,8 +30,10 @@ import {
 import { getOmoiFallbackByCacheKey } from "@/lib/ai-config";
 import { useSpeech } from "@/hooks/use-speech";
 import { useChat } from "@/hooks/use-chat";
+import { useTurnstile } from "@/hooks/use-turnstile";
 import { ChatResponse } from "@/services/ai/types";
 import { OmoiSprite } from "@/components/layout/OmoiSprite";
+import { TurnstileWidget } from "@/components/TurnstileWidget";
 import {
   dispatchGuideDialog,
   GUIDE_DIALOG_EVENTS,
@@ -175,6 +177,8 @@ export const FloatingAssistant = () => {
     [markGuideTipSeen, pulseGuideState],
   );
 
+  const turnstile = useTurnstile("chat");
+
   const handleAssistantResponse = useCallback(
     (response: ChatResponse) => {
       messageSequenceRef.current += 1;
@@ -192,8 +196,9 @@ export const FloatingAssistant = () => {
       ]);
 
       speak(content, { cacheKey: response.voiceCacheKey });
+      turnstile.reset();
     },
-    [speak],
+    [speak, turnstile],
   );
 
   const handleChatError = useCallback((err: string) => {
@@ -208,7 +213,8 @@ export const FloatingAssistant = () => {
         cta: { href: "/contact", label: "Contact Nhlanhla" },
       },
     ]);
-  }, []);
+    turnstile.reset();
+  }, [turnstile]);
 
   const { sendMessage, isLoading } = useChat({
     mode: chatMode,
@@ -227,7 +233,7 @@ export const FloatingAssistant = () => {
     setPrompt("");
     setIsOpen(true);
 
-    sendMessage([...messages, { role: "user", content: trimmed }]);
+    sendMessage([...messages, { role: "user", content: trimmed }], turnstile.token);
   };
 
   const handleQuickPrompt = (chip: PromptChip) => {
@@ -499,6 +505,13 @@ export const FloatingAssistant = () => {
 
             <div className="border-t border-border bg-background px-4 py-4">
               <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">{t("ask_anything")}</p>
+              {chatMode === "copilot" && (
+                <TurnstileWidget
+                  containerRef={turnstile.containerRef}
+                  onReady={turnstile.handleReady}
+                  className="mb-3 flex justify-center"
+                />
+              )}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -516,7 +529,7 @@ export const FloatingAssistant = () => {
                 />
                 <button
                   type="submit"
-                  disabled={activeLoading || !prompt.trim()}
+                  disabled={activeLoading || !prompt.trim() || (chatMode === "copilot" && !turnstile.token)}
                   className="flex h-11 w-11 items-center justify-center rounded-full gradient-bg text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                   aria-label="Send assistant message"
                 >

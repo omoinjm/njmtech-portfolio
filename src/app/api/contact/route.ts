@@ -1,6 +1,8 @@
+import { config } from '@/lib/config';
+import { verifyTurnstile } from '@/lib/turnstile';
 import { logger } from '@/utils/logger';
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RATE_LIMIT_MS = 60 * 60 * 1000; // 1 hour per email address
@@ -39,17 +41,22 @@ function isRateLimited(email: string): boolean {
 	return false;
 }
 
-const transporter = nodemailer.createTransport({
-	service: 'gmail',
-	auth: {
-		user: process.env.EMAIL_USER,
-		pass: process.env.EMAIL_APP_PASS,
-	},
-});
+const resend = new Resend(config.get('RESEND_API_KEY'));
 
 export async function POST(request: Request) {
 	try {
 		const body = await request.json();
+
+		const remoteip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+		const turnstileOk = await verifyTurnstile(
+			(body as { turnstileToken?: unknown })?.turnstileToken,
+			'contact',
+			remoteip,
+		);
+		if (!turnstileOk) {
+			logger.warn('Contact form failed Turnstile verification');
+			return NextResponse.json({ message: 'Verification failed. Please try again.' }, { status: 403 });
+		}
 
 		if (!validateContactForm(body)) {
 			logger.warn('Invalid contact form submission', body);
@@ -67,10 +74,11 @@ export async function POST(request: Request) {
 			);
 		}
 
-		const ownerEmail = process.env.EMAIL_MAIL;
-		const senderEmail = process.env.EMAIL_USER;
+		const ownerEmail = config.get('EMAIL_MAIL');
+		const emailDomain = config.get('RESEND_EMAIL_DOMAIN');
+		const senderEmail = `contact@${emailDomain}`;
 
-		if (!ownerEmail || !senderEmail || !process.env.EMAIL_APP_PASS) {
+		if (!ownerEmail || !emailDomain || !config.get('RESEND_API_KEY')) {
 			logger.error('Email environment variables not configured');
 			return NextResponse.json({ message: 'Email service not configured.' }, { status: 500 });
 		}
@@ -82,8 +90,8 @@ export async function POST(request: Request) {
 		const firstName = safeName.split(' ')[0];
 
 		// Notification email to site owner
-		await transporter.sendMail({
-			from: `"Portfolio Contact" <${senderEmail}>`,
+		const ownerSend = await resend.emails.send({
+			from: `Portfolio Contact <${senderEmail}>`,
 			to: ownerEmail,
 			replyTo: email,
 			subject: `[Portfolio] ${safeSubject}`,
@@ -134,9 +142,13 @@ body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
 </html>`,
 		});
 
+		if (ownerSend.error) {
+			throw new Error(`Resend error (owner notification): ${JSON.stringify(ownerSend.error)}`);
+		}
+
 		// Confirmation email to the sender
-		await transporter.sendMail({
-			from: `"Nhlanhla Malaza" <${senderEmail}>`,
+		const confirmationSend = await resend.emails.send({
+			from: `Nhlanhla Malaza <${senderEmail}>`,
 			to: email,
 			subject: `Thanks for reaching out, ${firstName}!`,
 			html: `<!DOCTYPE html>
@@ -182,6 +194,10 @@ body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
 </body>
 </html>`,
 		});
+
+		if (confirmationSend.error) {
+			throw new Error(`Resend error (confirmation): ${JSON.stringify(confirmationSend.error)}`);
+		}
 
 		logger.info('Contact emails sent', { name, email, subject });
 

@@ -1,6 +1,5 @@
 {
   "nav": {
-    "services": "Services",
     "work": "Work",
     "about": "About",
     "contact": "Contact",
@@ -11,6 +10,7 @@
   },
   "footer": {
     "copyright": "All rights reserved.",
+    "ecosystem_note": "njmtech — Founder & Lead Engineer Portal for Open Akha Labs, Inc.",
     "guides_category": "Guides",
     "mail_category": "Mail Service",
     "keyboard_guide": "Keyboard Guide",
@@ -21,58 +21,34 @@
     "mail_service_terms": "Mail Service Terms"
   },
   "hero": {
-    "welcome_badge": "Johannesburg · Taking new clients",
+    "welcome_badge": "Johannesburg · Open for work",
     "name": "Nhlanhla Malaza",
-    "headline": "Professional Web Design & Development in South Africa",
-    "subtitle": "NJMTECH builds fast, mobile-first websites and digital tools for South African businesses — clear pricing, WhatsApp support, and delivery you can count on.",
-    "price_anchor": "Websites from {price}",
+    "headline": "I build from the browser to the edge.",
+    "subtitle": "Full-stack developer with a DevOps habit — shipping Next.js apps, Cloudflare infrastructure, and AI integrations that survive production. Based in South Africa, collaborating remotely.",
     "focus_web": "Next.js & React",
     "focus_ops": "Cloudflare & DevOps",
     "focus_ai": "AI integrations",
-    "cta_primary": "Get a Quote",
-    "cta_secondary": "See Our Work",
+    "cta_primary": "Start a project",
     "cta_resume": "View résumé",
     "keyboard_label": "Follow the keyboard",
     "keyboard_desc": "Scroll the page — the keys light up as you move through each section"
   },
+  "ecosystem": {
+    "eyebrow": "The Open Akha Ecosystem",
+    "heading": "The Evolution of njmtech",
+    "intro": "Originally my personal developer hub, njmtech now serves as the personal engineering hub and testing ground for Open Akha Labs."
+  },
   "business": {
-    "serviceTiles": {
-      "label": "What we do",
-      "heading": "Services for growing businesses",
-      "subheading": "From your first website to ongoing support — scoped clearly, priced upfront.",
-      "starting_from": "Packages from {price}",
-      "from_price": "From {price}",
-      "view_all": "View all services →"
-    },
-    "socialProof": {
-      "stat_0": "Projects delivered",
-      "stat_1": "Happy clients",
-      "stat_2": "Years experience"
-    },
-    "testimonials": {
-      "label": "Client feedback",
-      "heading": "Trusted by South African businesses"
-    },
     "responseTime": {
       "message": "We reply within {time} on business days"
     },
     "contactCta": {
       "heading": "Ready to get started?",
-      "subheading": "Tell us about your project — we'll respond with a clear quote and timeline.",
+      "subheading": "Tell us about your project — we'll get back to you soon.",
       "response_time": "Typical response: {time}",
       "whatsapp": "Chat on WhatsApp",
       "form_link": "Or use the contact form"
     }
-  },
-  "servicesPage": {
-    "label": "Services",
-    "heading": "Pricing &",
-    "heading_gradient": "Packages",
-    "subheading": "Transparent starting prices for every service. Final quotes depend on scope — we'll confirm before any work begins.",
-    "from_price": "From {price}",
-    "quote_cta": "Get a quote on WhatsApp",
-    "not_sure": "Not sure which service fits?",
-    "contact_link": "Contact us for a recommendation"
   },
   "work": {
     "label": "Portfolio",
@@ -84,15 +60,16 @@
     "solution": "Solution",
     "result": "Result",
     "live_link": "View live site",
-    "empty": "Case studies coming soon — check back shortly."
+    "empty": "Case studies coming soon — check back shortly.",
+    "ecosystem_note": "Selected builds and case studies by Open Akha Studio."
   },
   "aboutPage": {
     "label": "About",
     "heading": "About NJMTECH",
+    "role_badge": "Founder & Lead Engineer Portal",
     "founder_heading": "Founder",
     "values_heading": "How we work",
     "industries_heading": "Industries we serve",
-    "cta_services": "View services & pricing",
     "cta_contact": "Get in touch"
   },
   "skills": {
@@ -110,8 +87,8 @@
     "heading": "Services &",
     "heading_gradient": "Expertise",
     "subheading": "A full range of development services to bring your ideas to life with cutting-edge technology.",
-    "cta": "View services & pricing",
-    "cta_sub": "Get a quote",
+    "cta": "Start a Conversation",
+    "cta_sub": "Have a project in mind? Let's talk.",
     "item_0_title": "Web Development",
     "item_0_desc": "Building responsive, performant web applications using modern frameworks like React, Next.js, and Vue.js.",
     "item_1_title": "Mobile Development",
@@ -144,9 +121,9 @@
   },
   "contact": {
     "label": "Get In Touch",
-    "heading": "Get a",
-    "heading_gradient": "Quote",
-    "subheading": "WhatsApp is the fastest way to reach us. Share your project brief and we'll reply with pricing and next steps.",
+    "heading": "Let's",
+    "heading_gradient": "Connect",
+    "subheading": "WhatsApp is the fastest way to reach us. Send a message and we'll get back to you soon.",
     "whatsapp_cta": "Message us on WhatsApp",
     "response_note": "We aim to reply within {time} on business days.",
     "info_heading": "Other ways to reach us",
@@ -227,7 +204,6 @@
     "toggle_ai": "Toggle AI Assistant",
     "reset_ai": "Reset AI Assistant Chat",
     "nav_home": "Navigate to Home",
-    "nav_services": "Navigate to Services",
     "nav_work": "Navigate to Work",
     "nav_about": "Navigate to About",
     "nav_contact": "Navigate to Contact",

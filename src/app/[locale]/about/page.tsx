@@ -1,9 +1,16 @@
 import { AboutPageContent } from "@/components/about/Index";
 import {
+  generateAboutPageSchema,
   generateBreadcrumbSchema,
   pageConfig,
   siteConfig,
 } from "@/utils/seo";
+import {
+  getAboutContent,
+  getEcosystemDivisions,
+  getFounderContent,
+  type Locale,
+} from "@/sanity/lib/content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -29,7 +36,18 @@ const breadcrumbs = [
   { name: "About", url: `${siteConfig.url}/about` },
 ];
 
-export default function AboutPage() {
+interface AboutPageProps {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function AboutPage({ params }: AboutPageProps) {
+  const { locale } = await params;
+  const [founder, aboutContent, ecosystemDivisions] = await Promise.all([
+    getFounderContent(locale as Locale),
+    getAboutContent(locale as Locale),
+    getEcosystemDivisions(locale as Locale),
+  ]);
+
   return (
     <>
       <script
@@ -38,9 +56,19 @@ export default function AboutPage() {
           __html: JSON.stringify(generateBreadcrumbSchema(breadcrumbs)),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateAboutPageSchema()),
+        }}
+      />
       <div className="min-h-screen bg-background">
         <main className="pt-20">
-          <AboutPageContent />
+          <AboutPageContent
+            founder={founder}
+            aboutContent={aboutContent}
+            ecosystemDivisions={ecosystemDivisions}
+          />
         </main>
       </div>
     </>

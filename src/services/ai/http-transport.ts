@@ -11,14 +11,14 @@ export class HttpChatTransport implements IChatTransport {
 
   constructor(private readonly endpoint: string = "/api/chat") {}
 
-  async sendMessage(messages: ChatMessage[]): Promise<ChatResponse> {
+  async sendMessage(messages: ChatMessage[], turnstileToken?: string | null): Promise<ChatResponse> {
     try {
       this.eventCallback?.({ type: "status", data: "Connecting..." });
-      
+
       const response = await fetch(this.endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, turnstileToken }),
       });
 
       if (!response.ok) {

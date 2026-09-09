@@ -17,7 +17,7 @@ export class WebSocketChatTransport implements IChatTransport {
     private conversationId?: string
   ) {}
 
-  async sendMessage(messages: ChatMessage[]): Promise<ChatResponse> {
+  async sendMessage(messages: ChatMessage[], _turnstileToken?: string | null): Promise<ChatResponse> {
     // WebSockets typically send single messages in real-time.
     // For this generic interface, we send the latest user message.
     const lastMessage = messages[messages.length - 1];

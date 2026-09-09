@@ -13,6 +13,8 @@ import {
 } from "@/lib/business-content";
 import { ResponseTimePromise } from "@/components/business/ResponseTimePromise";
 import { Button } from "@/components/ui/button";
+import { TurnstileWidget } from "@/components/TurnstileWidget";
+import { useTurnstile } from "@/hooks/use-turnstile";
 
 export const Contact = () => {
   const t = useTranslations("contact");
@@ -27,6 +29,7 @@ export const Contact = () => {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const turnstile = useTurnstile("contact");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +39,7 @@ export const Contact = () => {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, turnstileToken: turnstile.token }),
       });
 
       const data = (await res.json()) as { message?: string };
@@ -62,6 +65,7 @@ export const Contact = () => {
       });
     } finally {
       setIsSubmitting(false);
+      turnstile.reset();
     }
   };
 
@@ -257,9 +261,15 @@ export const Contact = () => {
                 />
               </div>
 
+              <TurnstileWidget
+                containerRef={turnstile.containerRef}
+                onReady={turnstile.handleReady}
+                className="flex justify-center"
+              />
+
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !turnstile.token}
                 className="w-full px-8 py-4 rounded-xl border border-border bg-card/80 text-foreground font-semibold hover:bg-card transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (

@@ -1,37 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ChatOrchestrator } from "@/services/ai/orchestrator";
-import { GitHubModelsProvider } from "@/services/ai/github-provider";
+import { WorkersAIProvider } from "@/services/ai/workers-ai-provider";
 import { RuleBasedChatProvider } from "@/services/ai/rule-provider";
 import { OMOI_SYSTEM_PROMPT, OMOI_FALLBACK_KNOWLEDGE } from "@/lib/ai-config";
+import { verifyTurnstile } from "@/lib/turnstile";
+
+const WORKERS_AI_MODEL = "@cf/meta/llama-3.1-8b-instruct";
 
 export async function POST(request: NextRequest) {
-  const githubToken = process.env.GITHUB_TOKEN;
-  const { messages } = await request.json();
+  const cloudflareToken = process.env.CLOUDFLARE_API_TOKEN;
+  const cloudflareAccountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const { messages, turnstileToken } = await request.json();
+
+  const remoteip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const turnstileOk = await verifyTurnstile(turnstileToken, "chat", remoteip);
+  if (!turnstileOk) {
+    return NextResponse.json(
+      { content: "Verification failed. Please refresh and try again.", fallback: true },
+      { status: 403 }
+    );
+  }
 
   // Dependency Injection: Initialize providers and orchestrator
   const providers = [];
 
-  if (githubToken) {
-    // Add GitHub models to the chain (Reordered for speed: 0-multiplier GA model first)
-    const models =[
-  { name: "gpt-4o", maxTokens: 1000 },
-  { name: "gpt-5-mini", maxTokens: 2000 },
-  { name: "gpt-5.4-mini", maxTokens: 2000 },
-  { name: "claude-3-5-sonnet", maxTokens: 2000 },
-];
-
-    
-    for (const model of models) {
-     providers.push(
-    new GitHubModelsProvider(
-      githubToken,
-      model.name,
-      model.name,
-      OMOI_SYSTEM_PROMPT,
-      model.maxTokens
-    )
-  );
-    }
+  if (cloudflareToken && cloudflareAccountId) {
+    providers.push(
+      new WorkersAIProvider(
+        cloudflareToken,
+        cloudflareAccountId,
+        WORKERS_AI_MODEL,
+        WORKERS_AI_MODEL,
+        OMOI_SYSTEM_PROMPT,
+        1000
+      )
+    );
   }
 
   // Always add the rule-based fallback at the end of the chain

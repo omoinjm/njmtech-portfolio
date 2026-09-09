@@ -7,22 +7,16 @@ import {
 } from "@/services/sql.service";
 import { logger } from "@/utils/logger";
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RATE_LIMIT_HOURS = 48;
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: config.get("EMAIL_USER"),
-    pass: config.get("EMAIL_APP_PASS"),
-  },
-});
+const resend = new Resend(config.get("RESEND_API_KEY"));
 
-function sendWelcomeEmail(to: string, senderEmail: string) {
-  return transporter.sendMail({
-    from: `"Nhlanhla Malaza" <${senderEmail}>`,
+async function sendWelcomeEmail(to: string, senderEmail: string) {
+  const { error } = await resend.emails.send({
+    from: `Nhlanhla Malaza <${senderEmail}>`,
     to,
     subject: "You're on the list! \uD83C\uDF89",
     html: `<!DOCTYPE html>
@@ -65,6 +59,10 @@ body{font-family:'DM Sans',sans-serif;background:#f4f4f8;padding:40px 16px;}
 </body>
 </html>`,
   });
+
+  if (error) {
+    throw new Error(`Resend error (welcome email): ${JSON.stringify(error)}`);
+  }
 }
 
 function parseStoredTimestamp(value: string) {
@@ -91,10 +89,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const senderEmail = config.get("EMAIL_USER");
-  const appPass = config.get("EMAIL_APP_PASS");
+  const emailDomain = config.get("RESEND_EMAIL_DOMAIN");
+  const senderEmail = `hello@${emailDomain}`;
 
-  if (!senderEmail || !appPass || !isD1Configured()) {
+  if (!emailDomain || !config.get("RESEND_API_KEY") || !isD1Configured()) {
     return NextResponse.json(
       { error: "Newsletter is not configured." },
       { status: 500 },

@@ -33,8 +33,29 @@ export function BlogPostView({ post }: BlogPostViewProps) {
             <time dateTime={post.publishedAt}>
               {format(new Date(post.publishedAt), "MMMM d, yyyy")}
             </time>
+            {post.lastUpdated && post.lastUpdated !== post.publishedAt && (
+              <span>
+                · Updated{" "}
+                <time dateTime={post.lastUpdated}>
+                  {format(new Date(post.lastUpdated), "MMMM d, yyyy")}
+                </time>
+              </span>
+            )}
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
+          {post.author && (
+            <p className="text-sm text-muted-foreground mb-4">
+              By <span className="font-medium text-foreground">{post.author}</span>
+            </p>
+          )}
+          {post.coverImage && (
+            <img
+              src={post.coverImage}
+              alt={post.coverImageAlt ?? post.title}
+              className="w-full rounded-xl mb-6 aspect-[1200/630] object-cover"
+              loading="eager"
+            />
+          )}
           {post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags.map((tag) => (

@@ -30,34 +30,38 @@ export async function generateMetadata({
   }
 
   const url = `${siteConfig.url}/blog/${post.slug}`;
+  const authorName = post.author ?? "Nhlanhla Junior Malaza";
+  const description = post.description ?? post.excerpt;
+  const socialImage = post.ogImage ?? post.coverImage ?? siteConfig.logo;
 
   return {
     title: post.title,
-    description: post.excerpt,
+    description,
     keywords: post.tags,
-    authors: [{ name: "Nhlanhla Junior Malaza", url: siteConfig.url }],
+    authors: [{ name: authorName, url: siteConfig.url }],
     openGraph: {
-      title: `${post.title} | Nhlanhla Junior Malaza`,
-      description: post.excerpt,
+      title: `${post.title} | ${authorName}`,
+      description,
       url,
       siteName: siteConfig.name,
       type: "article",
       publishedTime: post.publishedAt,
+      modifiedTime: post.lastUpdated ?? post.publishedAt,
       locale: "en_ZA",
       images: [
         {
-          url: siteConfig.logo,
+          url: socialImage,
           width: 1200,
           height: 630,
-          alt: post.title,
+          alt: post.coverImageAlt ?? post.title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
-      images: [siteConfig.logo],
+      description,
+      images: [socialImage],
       creator: siteConfig.social.twitterHandle,
     },
     alternates: {

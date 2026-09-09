@@ -5,16 +5,26 @@ import { motion, useInView } from "framer-motion";
 import { Check } from "lucide-react";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
-import {
-  ABOUT_COMPANY_PARAGRAPHS,
-  ABOUT_VALUES,
-  CLIENT_INDUSTRIES,
-  FOUNDER_BIO,
-} from "@/lib/business-content";
 import { ContactCTA } from "@/components/business/ContactCTA";
+import { EcosystemBanner } from "@/components/business/EcosystemBanner";
 import { Button } from "@/components/ui/button";
+import type {
+  AboutContent,
+  EcosystemDivisionContent,
+  FounderContent,
+} from "@/sanity/lib/content";
 
-export function AboutPageContent() {
+interface AboutPageContentProps {
+  founder: FounderContent;
+  aboutContent: AboutContent;
+  ecosystemDivisions: EcosystemDivisionContent[];
+}
+
+export function AboutPageContent({
+  founder,
+  aboutContent,
+  ecosystemDivisions,
+}: AboutPageContentProps) {
   const t = useTranslations("aboutPage");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
@@ -30,8 +40,11 @@ export function AboutPageContent() {
           <span className="text-accent font-semibold text-sm tracking-wider uppercase">
             {t("label")}
           </span>
+          <p className="text-xs font-semibold tracking-wide uppercase text-muted-foreground/70 mt-1">
+            {t("role_badge")}
+          </p>
           <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-6">{t("heading")}</h1>
-          {ABOUT_COMPANY_PARAGRAPHS.map((paragraph) => (
+          {aboutContent.companyParagraphs.map((paragraph) => (
             <p key={paragraph.slice(0, 24)} className="text-muted-foreground leading-relaxed mb-4">
               {paragraph}
             </p>
@@ -45,8 +58,13 @@ export function AboutPageContent() {
           className="mb-12 p-6 rounded-2xl border border-border bg-card/40"
         >
           <h2 className="text-xl font-bold mb-3">{t("founder_heading")}</h2>
-          <p className="text-muted-foreground leading-relaxed">{FOUNDER_BIO}</p>
+          <p className="text-muted-foreground leading-relaxed">{founder.bio}</p>
+          <p className="text-muted-foreground leading-relaxed mt-3">{founder.extendedRole}</p>
         </motion.div>
+
+        <div className="mb-12">
+          <EcosystemBanner variant="compact" divisions={ecosystemDivisions} />
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,7 +74,7 @@ export function AboutPageContent() {
         >
           <h2 className="text-xl font-bold mb-4">{t("values_heading")}</h2>
           <ul className="space-y-3">
-            {ABOUT_VALUES.map((value) => (
+            {aboutContent.values.map((value) => (
               <li key={value} className="flex items-start gap-2 text-muted-foreground">
                 <Check className="w-4 h-4 text-accent shrink-0 mt-1" />
                 {value}
@@ -73,7 +91,7 @@ export function AboutPageContent() {
         >
           <h2 className="text-xl font-bold mb-3">{t("industries_heading")}</h2>
           <div className="flex flex-wrap gap-2">
-            {CLIENT_INDUSTRIES.map((industry) => (
+            {aboutContent.clientIndustries.map((industry) => (
               <span
                 key={industry}
                 className="text-sm px-3 py-1.5 rounded-full border border-border bg-card text-muted-foreground"
@@ -91,9 +109,6 @@ export function AboutPageContent() {
           className="flex flex-col sm:flex-row gap-4 mb-12"
         >
           <Button asChild className="rounded-full">
-            <Link href="/services">{t("cta_services")}</Link>
-          </Button>
-          <Button asChild variant="outline" className="rounded-full">
             <Link href="/contact">{t("cta_contact")}</Link>
           </Button>
         </motion.div>

@@ -63,12 +63,12 @@ export function useChat({ mode, wsUrl, onMessage, onError, onTyping }: UseChatOp
     return () => client.dispose();
   }, [mode, wsUrl]); // Removed callbacks from dependencies
 
-  const sendMessage = useCallback(async (messages: ChatMessage[]) => {
+  const sendMessage = useCallback(async (messages: ChatMessage[], turnstileToken?: string | null) => {
     if (!clientRef.current) return;
-    
+
     setIsLoading(true);
     try {
-      await clientRef.current.send(messages);
+      await clientRef.current.send(messages, turnstileToken);
     } catch (error) {
       setIsLoading(false);
       onError?.(error instanceof Error ? error.message : "Failed to send message");

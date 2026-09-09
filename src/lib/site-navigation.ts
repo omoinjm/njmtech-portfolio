@@ -3,16 +3,10 @@ import { siteConfig } from "@/utils/seo";
 /** Primary pages for nav, footer, and SEO sitelinks. */
 export const PRIMARY_SITE_NAV = [
   {
-    name: "Services",
-    path: "/services",
+    name: "Projects",
+    path: "/projects",
     description:
-      "Website design, hosting, SEO, social media, AI automation, and training for South African businesses.",
-  },
-  {
-    name: "Work",
-    path: "/work",
-    description:
-      "Case studies and portfolio work — real projects with challenges, solutions, and results.",
+      "Explore portfolio projects by Nhlanhla Junior Malaza — Next.js, React, TypeScript, and DevOps work.",
   },
   {
     name: "About",
@@ -24,7 +18,7 @@ export const PRIMARY_SITE_NAV = [
     name: "Contact",
     path: "/contact",
     description:
-      "Get a quote via WhatsApp or email. NJMTECH replies within 4 business hours.",
+      "Get in touch via WhatsApp or email. NJMTECH replies within 4 business hours.",
   },
   {
     name: "Blog",

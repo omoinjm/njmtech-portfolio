@@ -1,6 +1,5 @@
 {
   "nav": {
-    "services": "Amasevisi",
     "work": "Umsebenzi",
     "about": "Mayelana",
     "contact": "Xhumana",
@@ -11,6 +10,7 @@
   },
   "footer": {
     "copyright": "Wonke amalungelo agcinwe.",
+    "ecosystem_note": "njmtech — Founder & Lead Engineer Portal for Open Akha Labs, Inc.",
     "guides_category": "Imihlahlandlela",
     "mail_category": "Isevisi Yemeyili",
     "keyboard_guide": "Umhlahlandlela Wekhiybhodi",
@@ -21,58 +21,34 @@
     "mail_service_terms": "Imigomo Yesevisi Yemeyili"
   },
   "hero": {
-    "welcome_badge": "EJohannesburg · Ngamukela amaklayenti amasha",
+    "welcome_badge": "EJohannesburg · Ngiyatholakala",
     "name": "Nhlanhla Malaza",
-    "headline": "Ukuklama Nokuthuthukisa Amawebhusayithi Okusezingeni E-Ningizimu Afrika",
-    "subtitle": "I-NJMTECH yakha amawebhusayithi asheshayo, afanele amafoni, nezinsiza zedijithali ezingosomabhizinisi e-Ningizimu Afrika — amanani acacile, ukwesekwa nge-WhatsApp, nokulethwa okuthembekile.",
-    "price_anchor": "Amawebhusayithi kusuka ku-{price}",
+    "headline": "Ngakha kusuka kubrowser kuya e-edge.",
+    "subtitle": "Unjiniyela we-full-stack oneDevOps — ngithumela ama-app e-Next.js, ingqalasizinda ye-Cloudflare, nokuhlanganiswa kwe-AI okuhlala kusebenza e-production. NgiseNingizimu Afrika, ngisebenza nawo wonke amathelo.",
     "focus_web": "Next.js & React",
     "focus_ops": "Cloudflare & DevOps",
     "focus_ai": "Ukuhlanganiswa kwe-AI",
-    "cta_primary": "Thola Isilinganiso",
-    "cta_secondary": "Buka Umsebenzi Wethu",
+    "cta_primary": "Qala iphrojekthi",
     "cta_resume": "Buka i-CV",
     "keyboard_label": "Landela ikhiybhodi",
     "keyboard_desc": "Skrola ikhasi — amakinobho ayakhanya njengoba uhamba esigabeni ngasinye"
   },
+  "ecosystem": {
+    "eyebrow": "The Open Akha Ecosystem",
+    "heading": "The Evolution of njmtech",
+    "intro": "Originally my personal developer hub, njmtech now serves as the personal engineering hub and testing ground for Open Akha Labs."
+  },
   "business": {
-    "serviceTiles": {
-      "label": "Esikwenzayo",
-      "heading": "Amasevisi ebhizinisi elikhula",
-      "subheading": "Kusuka kuwebhusayithi yakho yokuqala kuya ekusekelweni okuqhubekayo — kuchazwe ngokucacile, amanani kuqala.",
-      "starting_from": "Amaphakheji kusuka ku-{price}",
-      "from_price": "Kusuka ku-{price}",
-      "view_all": "Buka wonke amasevisi →"
-    },
-    "socialProof": {
-      "stat_0": "Amaphrojekthi alethwe",
-      "stat_1": "Amaklayenti anelisekile",
-      "stat_2": "Iminyaka yolwazi"
-    },
-    "testimonials": {
-      "label": "Impendulo yamaklayenti",
-      "heading": "Ithembelwe ngosomabhizinisi baseNingizimu Afrika"
-    },
     "responseTime": {
       "message": "Siphendula phakathi kwe-{time} ngosuku lomsebenzi"
     },
     "contactCta": {
       "heading": "Ukulungele ukuqala?",
-      "subheading": "Sitshele ngephrojekthi yakho — sizophendula ngesilinganiso esicacile nesikhathi.",
+      "subheading": "Sitshele ngephrojekthi yakho — sizobuyela kuwe maduze.",
       "response_time": "Isikhathi sokuphendula: {time}",
       "whatsapp": "Xhumana nge-WhatsApp",
       "form_link": "Noma sebenzisa ifomu lokuxhumana"
     }
-  },
-  "servicesPage": {
-    "label": "Amasevisi",
-    "heading": "Amanani &",
-    "heading_gradient": "Amaphakheji",
-    "subheading": "Amanani akuqala acacile kusevisi ngayinye. Izilinganiso zokugcina zincike kobubanzi — sizoqinisekisa ngaphambi kokuqala umsebenzi.",
-    "from_price": "Kusuka ku-{price}",
-    "quote_cta": "Thola isilinganiso nge-WhatsApp",
-    "not_sure": "Awuqinisekile ukuthi yisiphi isevisi efanele?",
-    "contact_link": "Xhumana nathi ukuze uthole isincomo"
   },
   "work": {
     "label": "Iphothifoliyo",
@@ -84,15 +60,16 @@
     "solution": "Isixazululo",
     "result": "Umphumela",
     "live_link": "Buka isayithi ebukhoma",
-    "empty": "Izifundo zamacala ziyeza maduze."
+    "empty": "Izifundo zamacala ziyeza maduze.",
+    "ecosystem_note": "Selected builds and case studies by Open Akha Studio."
   },
   "aboutPage": {
     "label": "Mayelana",
     "heading": "Mayelana ne-NJMTECH",
+    "role_badge": "Founder & Lead Engineer Portal",
     "founder_heading": "Umsunguli",
     "values_heading": "Indlela esisebenza ngayo",
     "industries_heading": "Izimboni esisebenzela zona",
-    "cta_services": "Buka amasevisi namanani",
     "cta_contact": "Xhumana nathi"
   },
   "skills": {
@@ -110,8 +87,8 @@
     "heading": "Izinsizakalo",
     "heading_gradient": "Nobuchwepheshe",
     "subheading": "Indawo ephelele yezinsizakalo zokuthuthukisa ukuze izimvo zakho zibe yiqiniso ngobuchwepheshe banamuhla.",
-    "cta": "Buka amasevisi namanani",
-    "cta_sub": "Thola isilinganiso",
+    "cta": "Qala Ingxoxo",
+    "cta_sub": "Unephrojekthi engqondweni? Asisho.",
     "item_0_title": "Ukuthuthukisa Iwebhusayithi",
     "item_0_desc": "Ukwakha izinhlelo ze-web ezisetshenziswa ngendlela ekhethekile, ezisebenza kahle, kusetshenziswa izinsizakalo zanamuhla njengeReact, Next.js, neVue.js.",
     "item_1_title": "Ukuthuthukisa Izinhlelo Zeselula",
@@ -144,9 +121,9 @@
   },
   "contact": {
     "label": "Xhumana",
-    "heading": "Thola",
-    "heading_gradient": "Isilinganiso",
-    "subheading": "I-WhatsApp iyindlela esheshayo yokufinyelela kithi. Yabelana ngephrojekthi yakho sizophendula namanani nezinyathelo ezilandelayo.",
+    "heading": "Ake",
+    "heading_gradient": "Sixhumane",
+    "subheading": "I-WhatsApp iyindlela esheshayo yokufinyelela kithi. Thumela umlayezo sizobuyela kuwe maduze.",
     "whatsapp_cta": "Sithumelele umlayezo nge-WhatsApp",
     "response_note": "Sihlose ukuphendula phakathi kwe-{time} ngosuku lomsebenzi.",
     "info_heading": "Ezinye izindlela zokuxhumana",
@@ -227,7 +204,6 @@
     "toggle_ai": "Vula/Vala Umsizi we-AI",
     "reset_ai": "Setha Kabusha Ingxoxo Nomsizi we-AI",
     "nav_home": "Yiya Ekhaya",
-    "nav_services": "Yiya Emasevisini",
     "nav_work": "Yiya Emsebenzini",
     "nav_about": "Yiya Emayelana",
     "nav_contact": "Yiya Ekuxhumaneni",

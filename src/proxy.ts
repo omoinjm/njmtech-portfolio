@@ -5,7 +5,7 @@ export default createMiddleware(routing);
 
 export const config = {
   matcher: [
-    // Match all paths except API, _next, static files
-    "/((?!api|_next|_vercel|.*\\..*).*)",
+    // Match all paths except API, _next, static files, and the Sanity Studio
+    "/((?!api|_next|_vercel|studio|.*\\..*).*)",
   ],
 };

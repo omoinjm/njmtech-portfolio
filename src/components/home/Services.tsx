@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import Link from "next/link";
 import {
   Bot,
   Cloud,
@@ -95,18 +94,15 @@ export const Services = () => {
               transition={{ duration: 0.6, delay: 0.55 }}
               className="mt-8 flex flex-col sm:flex-row items-center lg:items-start gap-4"
             >
-              <Link
-                href="/services"
+              <a
+                href="/contact"
                 className="inline-flex px-6 py-3 rounded-full gradient-bg text-foreground text-sm font-semibold hover:opacity-90 transition-all hover:scale-105"
               >
                 {t("cta")}
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex px-6 py-3 rounded-full border border-border text-sm font-semibold hover:bg-card transition-colors"
-              >
+              </a>
+              <p className="text-muted-foreground text-sm self-center">
                 {t("cta_sub")}
-              </Link>
+              </p>
             </motion.div>
           </div>
         </div>

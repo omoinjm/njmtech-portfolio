@@ -16,8 +16,8 @@ export class ChatClient {
     this.transport = transport;
   }
 
-  async send(messages: ChatMessage[]): Promise<ChatResponse> {
-    return this.transport.sendMessage(messages);
+  async send(messages: ChatMessage[], turnstileToken?: string | null): Promise<ChatResponse> {
+    return this.transport.sendMessage(messages, turnstileToken);
   }
 
   onEvent(callback: (event: TransportEvent) => void): void {

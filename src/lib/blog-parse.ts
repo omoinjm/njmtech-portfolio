@@ -7,10 +7,20 @@ export interface BlogPostMeta {
   excerpt: string;
   tags: string[];
   draft?: boolean;
+  description?: string;
+  author?: string;
+  coverImage?: string;
+  coverImageAlt?: string;
+  ogImage?: string;
+  lastUpdated?: string;
 }
 
 export interface BlogPost extends BlogPostMeta {
   content: string;
+}
+
+function optionalString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim().length > 0 ? value : undefined;
 }
 
 export function parseBlogMarkdown(raw: string, fallbackSlug?: string): BlogPost | null {
@@ -38,6 +48,12 @@ export function parseBlogMarkdown(raw: string, fallbackSlug?: string): BlogPost 
     excerpt,
     tags,
     draft,
+    description: optionalString(data.description),
+    author: optionalString(data.author),
+    coverImage: optionalString(data.coverImage),
+    coverImageAlt: optionalString(data.coverImageAlt),
+    ogImage: optionalString(data.ogImage),
+    lastUpdated: optionalString(data.lastUpdated),
     content: content.trim(),
   };
 }

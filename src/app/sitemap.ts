@@ -13,13 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${siteConfig.url}/services`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.95,
-    },
-    {
-      url: `${siteConfig.url}/work`,
+      url: `${siteConfig.url}/projects`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,

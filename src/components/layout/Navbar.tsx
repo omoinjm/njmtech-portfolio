@@ -15,8 +15,7 @@ import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
 const NAV_I18N_KEYS: Record<string, string> = {
-  "/services": "services",
-  "/work": "work",
+  "/projects": "projects",
   "/about": "about",
   "/contact": "contact",
 };
@@ -61,10 +60,9 @@ export const Navbar = ({ data }) => {
       }
 
       if (event.altKey && event.key === "1") router.push("/");
-      if (event.altKey && event.key === "2") router.push("/services");
-      if (event.altKey && event.key === "3") router.push("/work");
-      if (event.altKey && event.key === "4") router.push("/about");
-      if (event.altKey && event.key === "5") router.push("/contact");
+      if (event.altKey && event.key === "2") router.push("/projects");
+      if (event.altKey && event.key === "3") router.push("/about");
+      if (event.altKey && event.key === "4") router.push("/contact");
       if (event.key === "Escape" && isMobileMenuOpen) setIsMobileMenuOpen(false);
     };
 
@@ -118,7 +116,7 @@ export const Navbar = ({ data }) => {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {t(getNavLabelKey(link.url) as "services" | "work" | "about" | "contact")}
+                {t(getNavLabelKey(link.url) as "services" | "projects" | "about" | "contact")}
               </Link>
             ))}
           </nav>
@@ -183,7 +181,7 @@ export const Navbar = ({ data }) => {
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {t(getNavLabelKey(link.url) as "services" | "work" | "about" | "contact")}
+                  {t(getNavLabelKey(link.url) as "services" | "projects" | "about" | "contact")}
                 </Link>
               ))}
             </div>

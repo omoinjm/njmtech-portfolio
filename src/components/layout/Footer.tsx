@@ -7,8 +7,7 @@ import { SOCIAL_LINKS } from "@/lib/social-links";
 import { SocialLinkIcon } from "@/components/layout/SocialLinkIcon";
 
 const FOOTER_NAV_I18N: Record<string, string> = {
-  "/services": "services",
-  "/work": "work",
+  "/projects": "projects",
   "/about": "about",
   "/contact": "contact",
   "/blog": "blog",
@@ -31,6 +30,7 @@ export const Footer = ({ data: _data }) => {
             <p className="text-muted-foreground text-sm mt-1">
               © {currentYear} {t("copyright")}
             </p>
+            <p className="text-xs text-muted-foreground/60 mt-1">{t("ecosystem_note")}</p>
 
             <nav
               aria-label="Site sections"
@@ -45,7 +45,7 @@ export const Footer = ({ data: _data }) => {
                   {tNav(
                     (FOOTER_NAV_I18N[item.path] ?? item.name.toLowerCase()) as
                       | "services"
-                      | "work"
+                      | "projects"
                       | "about"
                       | "contact"
                       | "blog",

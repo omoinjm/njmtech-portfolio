@@ -17,7 +17,7 @@ export interface IChatTransport {
   /**
    * Send a message and wait for a full response (Unary).
    */
-  sendMessage(messages: ChatMessage[]): Promise<ChatResponse>;
+  sendMessage(messages: ChatMessage[], turnstileToken?: string | null): Promise<ChatResponse>;
 
   /**
    * Subscribe to real-time events (Streaming/Status).

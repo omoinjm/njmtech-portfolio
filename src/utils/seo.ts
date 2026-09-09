@@ -69,7 +69,7 @@ export const pageConfig: Record<string, SEOProps> = {
     title:
       "NJMTECH | Professional Web Design & Development in South Africa",
     description:
-      "NJMTECH builds fast, mobile-first websites and digital services for South African businesses. Website design from R4 999, hosting, SEO, AI automation, and WhatsApp support.",
+      "NJMTECH is the personal engineering portfolio of Nhlanhla Junior Malaza — showcasing projects, technical writing, and ways to get in touch.",
     canonical: `${siteConfig.url}/`,
     keywords: [
       "NJMTECH",
@@ -109,23 +109,6 @@ export const pageConfig: Record<string, SEOProps> = {
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   },
 
-  work: {
-    title: "Our Work — Case Studies",
-    description:
-      "NJMTECH portfolio case studies — real websites and digital projects for South African clients, with challenges, solutions, and measurable results.",
-    canonical: `${siteConfig.url}/work`,
-    keywords: [
-      "NJMTECH portfolio",
-      "web design case studies",
-      "website projects South Africa",
-      "NJMTECH work",
-      "client projects Johannesburg",
-    ],
-    ogType: "website",
-    robots:
-      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-  },
-
   projects: {
     title: "Projects",
     description:
@@ -149,9 +132,9 @@ export const pageConfig: Record<string, SEOProps> = {
   },
 
   contact: {
-    title: "Contact NJMTECH — Get a Quote",
+    title: "Contact NJMTECH",
     description:
-      "Contact NJMTECH for a website or digital services quote. WhatsApp-first support with replies within 4 business hours. Based in Johannesburg, serving South Africa.",
+      "Get in touch with Nhlanhla Junior Malaza (NJMTECH) — WhatsApp-first contact with replies within 4 business hours. Based in Johannesburg, South Africa.",
     canonical: `${siteConfig.url}/contact`,
     keywords: [
       "contact Nhlanhla Junior Malaza",
@@ -213,23 +196,6 @@ export const pageConfig: Record<string, SEOProps> = {
       "email terms of service",
       "NJMTECH email terms",
       "Gmail app terms",
-    ],
-    ogType: "website",
-    robots: "index, follow",
-  },
-
-  services: {
-    title: "Services & Pricing",
-    description:
-      "NJMTECH services and pricing — website design from R4 999, hosting, SEO, social media, AI automation, and training for South African businesses.",
-    canonical: `${siteConfig.url}/services`,
-    keywords: [
-      "NJMTECH services",
-      "website design pricing South Africa",
-      "web development packages",
-      "SEO services Johannesburg",
-      "hosting South Africa",
-      "AI automation services",
     ],
     ogType: "website",
     robots: "index, follow",
@@ -579,16 +545,22 @@ export function generateArticleSchema(post: {
   publishedAt: string;
   excerpt: string;
   tags: string[];
+  description?: string;
+  author?: string;
+  coverImage?: string;
+  lastUpdated?: string;
 }) {
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description: post.excerpt,
+    description: post.description ?? post.excerpt,
+    image: post.coverImage ? [post.coverImage] : undefined,
     datePublished: post.publishedAt,
+    dateModified: post.lastUpdated ?? post.publishedAt,
     author: {
       "@type": "Person",
-      name: "Nhlanhla Junior Malaza",
+      name: post.author ?? "Nhlanhla Junior Malaza",
       url: siteConfig.url,
     },
     publisher: {

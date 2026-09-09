@@ -11,8 +11,8 @@ const envSchema = z.object({
 
   // Private variables (server-only — never expose to client)
   EMAIL_MAIL: z.string().email(),
-  EMAIL_USER: z.string().email(),
-  EMAIL_APP_PASS: z.string(),
+  RESEND_API_KEY: z.string(),
+  RESEND_EMAIL_DOMAIN: z.string(),
   D1_ACCOUNT_ID: z.string().optional(),
   D1_DATABASE_ID: z.string().optional(),
   D1_API_TOKEN: z.string().optional(),
@@ -64,8 +64,8 @@ class ConfigService {
             process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
           NEXT_PUBLIC_RESUME_URL: process.env.NEXT_PUBLIC_RESUME_URL,
           EMAIL_MAIL: process.env.EMAIL_MAIL ?? "",
-          EMAIL_USER: process.env.EMAIL_USER ?? "",
-          EMAIL_APP_PASS: process.env.EMAIL_APP_PASS ?? "",
+          RESEND_API_KEY: process.env.RESEND_API_KEY ?? "",
+          RESEND_EMAIL_DOMAIN: process.env.RESEND_EMAIL_DOMAIN ?? "",
           D1_ACCOUNT_ID: process.env.D1_ACCOUNT_ID,
           D1_DATABASE_ID: process.env.D1_DATABASE_ID,
           D1_API_TOKEN: process.env.D1_API_TOKEN,
