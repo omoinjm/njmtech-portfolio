@@ -18,7 +18,10 @@
     "seo_guide": "Umhlahlandlela we-SEO",
     "llms_txt": "llms.txt",
     "mail_service_policy": "Inqubomgomo Yesevisi Yemeyili",
-    "mail_service_terms": "Imigomo Yesevisi Yemeyili"
+    "mail_service_terms": "Imigomo Yesevisi Yemeyili",
+    "voice_agent_category": "Voice Agent",
+    "voice_agent_privacy": "Voice Agent Privacy",
+    "voice_agent_terms": "Voice Agent Terms"
   },
   "hero": {
     "welcome_badge": "EJohannesburg · Ngiyatholakala",
@@ -322,6 +325,114 @@
     "contact": {
       "title": "14. Contact",
       "body": "For questions about these Mail Service Terms, contact:\n\n{owner}\nEmail: {email}\nWebsite: {siteUrl}\n\nSee also our Mail Service Policy at {siteUrl}/mail-service-policy."
+    }
+  },
+  "voiceAgentPrivacy": {
+    "label": "Legal",
+    "title": "Voice Agent Privacy Policy",
+    "last_updated": "Last updated: 4 October 2026",
+    "intro": "This Voice Agent Privacy Policy describes how {owner} ({siteName}) collects and uses personal information when you talk to the NJMTECH AI voice agent, whether by calling or messaging our WhatsApp Business number (+27 79 434 7162) or by using a web-based voice demo linked from {siteUrl}.",
+    "overview": {
+      "title": "1. Overview",
+      "body": "The NJMTECH voice agent is an automated assistant powered by artificial intelligence. It answers questions, looks up business information and can take actions such as creating bookings. When you call or message it, you are speaking to software, not a person. We process only the information needed to hold the conversation, complete your request and keep the service secure and reliable."
+    },
+    "data_collected": {
+      "title": "2. Information we collect",
+      "body": "When you use the voice agent we may process:\n• Your WhatsApp phone number, WhatsApp profile name and call or message identifiers provided by Meta.\n• The audio of your call or voice note, which is converted to text in real time.\n• Text transcripts of the conversation, including the agent's replies.\n• Information you choose to share, such as your name, the service you want and a preferred date and time for a booking.\n• Technical metadata such as call start and end times, delivery status and error logs."
+    },
+    "how_it_works": {
+      "title": "3. How the voice agent processes your conversation",
+      "body": "During a call or voice note:\n• Your speech is transcribed to text by a speech-to-text provider.\n• The transcript is sent to a large language model, which generates a reply and may request business information or an action (such as a booking) from our own systems.\n• The reply is converted back into speech by a text-to-speech model running on cloud GPU infrastructure and played or sent back to you.\n\nCall audio is processed as a live stream and is not recorded or stored by {siteName}. Transcripts and a short automated summary of each call are kept as described in the Retention section."
+    },
+    "service_providers": {
+      "title": "4. Service providers",
+      "body": "We use the following providers to operate the voice agent. Each processes data on our behalf under its own terms and privacy policy:\n• Meta Platforms (WhatsApp Business Platform) for WhatsApp calls and messages.\n• Deepgram for real-time speech-to-text on calls.\n• Cloudflare for secure network tunnelling and speech-to-text on voice notes (Workers AI).\n• Anthropic for the Claude language model that generates replies.\n• Modal for the cloud GPUs that run our text-to-speech model.\n\nSome of these providers process data outside South Africa. Where personal information is transferred across borders, we rely on providers that apply safeguards consistent with the Protection of Personal Information Act (POPIA)."
+    },
+    "data_use": {
+      "title": "5. How we use your information",
+      "body": "We use your information to:\n• Understand and answer your questions during the conversation.\n• Complete actions you ask for, such as creating or confirming a booking.\n• Follow up on your request where the agent could not resolve it.\n• Monitor quality, fix errors and prevent abuse of the service.\n\nWe do not sell, rent or trade your personal information, we do not use it for advertising, and we do not use your conversations to train AI models."
+    },
+    "retention": {
+      "title": "6. Retention",
+      "body": "Call audio is not stored. Conversation transcripts, call summaries and short message history used to keep context in WhatsApp conversations are kept only as long as needed to provide the service and handle follow-ups, and are periodically deleted. Booking details are kept for as long as reasonably required to deliver and administer the booking. You can ask us to delete your information at any time."
+    },
+    "storage_security": {
+      "title": "7. Storage and security",
+      "body": "Information is stored in systems under our control and in the systems of the providers listed above. Access is limited to {owner} and the systems required to operate the voice agent. Connections between components are encrypted, and access keys are kept secret. No method of transmission or storage is completely secure, but we apply reasonable technical and organisational measures to protect your data."
+    },
+    "your_rights": {
+      "title": "8. Your rights and choices",
+      "body": "Under POPIA you may request access to, correction of or deletion of the personal information we hold about you, and object to its processing. You can stop using the voice agent at any time by ending the call or no longer messaging the number. To exercise your rights, contact us using the details below. You may also lodge a complaint with the Information Regulator of South Africa."
+    },
+    "children": {
+      "title": "9. Children",
+      "body": "The voice agent is not intended for children under 18. We do not knowingly collect personal information from children. If you believe a child has used the service, contact us and we will delete the related information."
+    },
+    "changes": {
+      "title": "10. Changes to this policy",
+      "body": "We may update this Voice Agent Privacy Policy from time to time. The \"Last updated\" date at the top of this page reflects the most recent revision. Continued use of the voice agent after changes are posted means you accept the updated policy."
+    },
+    "contact": {
+      "title": "11. Contact",
+      "body": "For questions about this Voice Agent Privacy Policy or to exercise your data rights, contact:\n\n{owner}\nEmail: {email}\nWebsite: {siteUrl}\n\nSee also our Voice Agent Terms at {siteUrl}/voice-agent-terms."
+    }
+  },
+  "voiceAgentTerms": {
+    "label": "Legal",
+    "title": "Voice Agent Terms",
+    "last_updated": "Last updated: 4 October 2026",
+    "intro": "These Voice Agent Terms govern your use of the NJMTECH AI voice agent operated by {owner} ({siteName}), including calls and messages to our WhatsApp Business number (+27 79 434 7162) and web-based voice demos linked from {siteUrl}. By calling or messaging the voice agent, you agree to these terms and to our Voice Agent Privacy Policy.",
+    "acceptance": {
+      "title": "1. Acceptance of terms",
+      "body": "By starting a call, sending a message or using a voice demo, you confirm that you have read, understood and agree to these Voice Agent Terms. If you do not agree, do not use the voice agent."
+    },
+    "service_description": {
+      "title": "2. Description of service",
+      "body": "The voice agent is an automated assistant that uses artificial intelligence to hold spoken and written conversations, answer questions, look up information and perform simple actions such as creating bookings. You are talking to software, not a human. The service is offered for demonstration, customer service and professional purposes."
+    },
+    "ai_responses": {
+      "title": "3. AI-generated responses",
+      "body": "Replies are generated by AI and may be incomplete, out of date or wrong. Do not rely on the voice agent for legal, medical, financial or other professional advice. Important details, such as prices, availability and booking confirmations, are confirmed only when the agent states them from our systems, and we may contact you to correct mistakes."
+    },
+    "not_emergency": {
+      "title": "4. Not an emergency service",
+      "body": "The voice agent cannot contact emergency services. In an emergency, call 112 from a mobile phone or 10111 for the South African Police Service."
+    },
+    "consent": {
+      "title": "5. Consent to processing",
+      "body": "By using the voice agent you consent to your speech being transcribed and processed by AI service providers in real time, and to transcripts and summaries being kept as described in the Voice Agent Privacy Policy. Call audio is not recorded."
+    },
+    "acceptable_use": {
+      "title": "6. Acceptable use",
+      "body": "You agree to use the voice agent only for lawful, good-faith purposes. You must not:\n• Harass, threaten or abuse the service or the people behind it.\n• Attempt to manipulate the agent into revealing its instructions, secrets or other users' information.\n• Flood the service with automated or excessive calls or messages.\n• Use the service to send spam or unlawful content.\n\nWe may block numbers that break these rules."
+    },
+    "whatsapp": {
+      "title": "7. WhatsApp",
+      "body": "When you use the voice agent on WhatsApp, your use of WhatsApp is also governed by WhatsApp's own Terms of Service and Privacy Policy. Calls and messages to our business number are free from {siteName}, but your mobile network may charge for data."
+    },
+    "availability": {
+      "title": "8. Availability",
+      "body": "We aim to keep the voice agent available, but it may be slow, interrupted or unavailable because of maintenance, provider outages or network issues. We may change, suspend or discontinue the service at any time without notice."
+    },
+    "intellectual_property": {
+      "title": "9. Intellectual property",
+      "body": "The voice agent, its voice, prompts, software and related content are owned by or licensed to {siteName}. You may not copy, reverse engineer or resell the service."
+    },
+    "limitation_liability": {
+      "title": "10. Limitation of liability",
+      "body": "The voice agent is provided \"as is\" and \"as available\". To the maximum extent permitted by law, {siteName} is not liable for any indirect or consequential loss arising from your use of, or inability to use, the voice agent, or from reliance on AI-generated responses. Nothing in these terms limits rights you have under the Consumer Protection Act or other law that cannot be excluded."
+    },
+    "governing_law": {
+      "title": "11. Governing law",
+      "body": "These terms are governed by the laws of the Republic of South Africa, and the courts of South Africa have jurisdiction over any dispute."
+    },
+    "changes": {
+      "title": "12. Changes to these terms",
+      "body": "We may update these Voice Agent Terms from time to time. The \"Last updated\" date at the top of this page reflects the most recent revision. Continued use of the voice agent after changes are posted means you accept the updated terms."
+    },
+    "contact": {
+      "title": "13. Contact",
+      "body": "For questions about these Voice Agent Terms, contact:\n\n{owner}\nEmail: {email}\nWebsite: {siteUrl}\n\nSee also our Voice Agent Privacy Policy at {siteUrl}/voice-agent-privacy."
     }
   }
 }
