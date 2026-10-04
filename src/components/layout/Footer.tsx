@@ -113,6 +113,30 @@ export const Footer = ({ data: _data }) => {
                 </Link>
               </div>
 
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span className="text-[0.65rem] font-semibold uppercase tracking-wider text-muted-foreground/45">
+                  {t("voice_agent_category")}
+                </span>
+                <span className="text-muted-foreground/20 text-xs" aria-hidden="true">
+                  |
+                </span>
+                <Link
+                  href="/voice-agent-privacy"
+                  className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+                >
+                  {t("voice_agent_privacy")}
+                </Link>
+                <span className="text-muted-foreground/30 text-xs" aria-hidden="true">
+                  ·
+                </span>
+                <Link
+                  href="/voice-agent-terms"
+                  className="text-xs text-muted-foreground/60 hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+                >
+                  {t("voice_agent_terms")}
+                </Link>
+              </div>
+
               <Link
                 href="/llms.txt"
                 target="_blank"

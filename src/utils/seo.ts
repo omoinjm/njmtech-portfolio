@@ -235,6 +235,37 @@ export const pageConfig: Record<string, SEOProps> = {
     robots: "index, follow",
   },
 
+  "voice-agent-privacy": {
+    title: "Voice Agent Privacy Policy",
+    description:
+      "How the NJMTECH AI voice agent collects, processes and protects your information when you call or message our WhatsApp Business number, in line with POPIA.",
+    canonical: `${siteConfig.url}/voice-agent-privacy`,
+    keywords: [
+      "voice agent privacy policy",
+      "AI voice agent privacy",
+      "WhatsApp AI agent privacy",
+      "NJMTECH voice agent",
+      "POPIA privacy policy",
+    ],
+    ogType: "website",
+    robots: "index, follow",
+  },
+
+  "voice-agent-terms": {
+    title: "Voice Agent Terms",
+    description:
+      "Terms of use for the NJMTECH AI voice agent, including WhatsApp calls and messages, AI-generated responses, bookings and acceptable use.",
+    canonical: `${siteConfig.url}/voice-agent-terms`,
+    keywords: [
+      "voice agent terms",
+      "AI voice agent terms of service",
+      "WhatsApp AI agent terms",
+      "NJMTECH voice agent terms",
+    ],
+    ogType: "website",
+    robots: "index, follow",
+  },
+
   "coming-soon": {
     title: "Coming Soon | Nhlanhla Junior Malaza",
     description: "Exciting new content and features coming soon to NJMTECH",
