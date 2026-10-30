@@ -25,7 +25,7 @@ export const siteConfig = {
   name: "NJMTECH",
   shortName: "NJMTECH",
   description:
-    "NJMTECH — professional web design, development, hosting, and digital services for South African businesses. Fast delivery, clear pricing, WhatsApp support.",
+    "Professional portfolio of Nhlanhla Junior Malaza — Software Developer, DevOps Engineer, and AI Integrations Specialist based in South Africa",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://njmtech.co.za",
   email: "njmalaza@outlook.com",
   telephone: "+27 83 276 6443",
@@ -41,14 +41,6 @@ export const siteConfig = {
     country: "South Africa",
     countryCode: "ZA",
   },
-  services: [
-    "Website Design & Development",
-    "Hosting & Maintenance",
-    "SEO & Digital Marketing",
-    "Social Media Management",
-    "AI Integration & Automation",
-    "Training & Support",
-  ],
   logo: "/logo.png",
   ogImage: "/opengraph-image",
   locales: ["en_ZA", "en_US"],
@@ -67,44 +59,52 @@ function getSameAsLinks() {
 export const pageConfig: Record<string, SEOProps> = {
   home: {
     title:
-      "NJMTECH | Professional Web Design & Development in South Africa",
+      "NJMTECH Official Site | Software Developer Portfolio — Nhlanhla Malaza",
     description:
-      "NJMTECH is the personal engineering portfolio of Nhlanhla Junior Malaza — showcasing projects, technical writing, and ways to get in touch.",
+      "Official NJMTECH portfolio of Nhlanhla Junior Malaza (NJMTech) — Software Developer, DevOps Engineer, and AI Integrations Specialist. Explore projects, read the blog, or contact for collaborations.",
     canonical: `${siteConfig.url}/`,
     keywords: [
-      "NJMTECH",
-      "NJMTech",
-      "web design South Africa",
-      "website development Johannesburg",
-      "professional web design",
-      "small business website",
-      "website design South Africa",
-      "web developer Johannesburg",
-      "WhatsApp website quote",
-      "SEO South Africa",
-      "hosting South Africa",
-      "Nhlanhla Malaza",
+      "Nhlanhla",
+      "Nhlanhla Junior",
       "Nhlanhla Junior Malaza",
+      "Nhlanhla Malaza",
+      "Junior Malaza",
+      "NJMTech",
+      "njmtech",
+      "NJM",
+      "njmalaza",
+      "software developer South Africa",
+      "devops engineer South Africa",
+      "AI integrations specialist",
+      "next.js developer",
+      "react developer",
+      "typescript developer",
+      "full stack developer",
+      "portfolio",
+      "web developer portfolio",
+      "South Africa developer",
     ],
-    ogType: "website",
+    ogType: "profile",
     robots:
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   },
 
   about: {
-    title: "About NJMTECH",
+    title: "About Nhlanhla Malaza",
     description:
-      "NJMTECH is a Johannesburg-based web studio helping South African businesses get online with websites, hosting, and digital tools. Founded by full-stack developer Nhlanhla Junior Malaza.",
+      "About Nhlanhla Malaza (Nhlanhla Junior Malaza, NJMTech) — a Johannesburg-based Software Developer, DevOps Engineer, and AI Integrations Specialist. Background, skills, and professional profile.",
     canonical: `${siteConfig.url}/about`,
     keywords: [
-      "about NJMTECH",
-      "web studio Johannesburg",
-      "website design company South Africa",
       "Nhlanhla Malaza",
       "Nhlanhla Junior Malaza",
-      "small business web design",
+      "about Nhlanhla Malaza",
+      "NJMTech",
+      "software developer South Africa",
+      "devops engineer Johannesburg",
+      "full stack developer",
+      "AI integrations specialist",
     ],
-    ogType: "website",
+    ogType: "profile",
     robots:
       "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   },
@@ -132,19 +132,15 @@ export const pageConfig: Record<string, SEOProps> = {
   },
 
   contact: {
-    title: "Contact NJMTECH",
+    title: "Contact",
     description:
-      "Get in touch with Nhlanhla Junior Malaza (NJMTECH) — WhatsApp-first contact with replies within 4 business hours. Based in Johannesburg, South Africa.",
+      "Get in touch with Nhlanhla Junior Malaza — questions, ideas, collaborations, or just to say hello.",
     canonical: `${siteConfig.url}/contact`,
     keywords: [
       "contact Nhlanhla Junior Malaza",
-      "hire software developer South Africa",
       "Nhlanhla Junior contact",
       "NJMTech contact",
-      "freelance developer South Africa",
-      "hire full stack developer",
       "collaboration",
-      "project inquiry",
     ],
     ogType: "website",
     robots:
@@ -332,7 +328,7 @@ export function generateOrganizationSchema() {
     sameAs: getSameAsLinks(),
     contactPoint: {
       "@type": "ContactPoint",
-      contactType: "Customer Service",
+      contactType: "General Inquiries",
       telephone: siteConfig.telephone,
       email: siteConfig.email,
       availableLanguage: "English",
@@ -340,36 +336,6 @@ export function generateOrganizationSchema() {
   };
 }
 
-/**
- * Generate ProfessionalService schema for branded search and local entity signals
- */
-export function generateProfessionalServiceSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "@id": `${siteConfig.url}/#professional-service`,
-    name: siteConfig.name,
-    url: siteConfig.url,
-    image: `${siteConfig.url}${siteConfig.logo}`,
-    description: siteConfig.description,
-    email: siteConfig.email,
-    telephone: siteConfig.telephone,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: siteConfig.location.city,
-      addressRegion: siteConfig.location.region,
-      addressCountry: siteConfig.location.countryCode,
-    },
-    areaServed: {
-      "@type": "Country",
-      name: siteConfig.location.country,
-    },
-    founder: { "@id": `${siteConfig.url}/#person` },
-    sameAs: getSameAsLinks(),
-    serviceType: siteConfig.services,
-    availableLanguage: ["en"],
-  };
-}
 
 /**
  * Generate WebSite schema for search engines
@@ -407,7 +373,7 @@ export function generateWebsiteSchema() {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/work?q={search_term_string}`,
+        urlTemplate: `${siteConfig.url}/projects?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
@@ -723,7 +689,6 @@ export default {
   pageConfig,
   generatePersonSchema,
   generateOrganizationSchema,
-  generateProfessionalServiceSchema,
   generateWebsiteSchema,
   generateSiteNavigationSchema,
   generateBlogPageSchema,

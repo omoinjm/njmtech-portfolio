@@ -1,10 +1,7 @@
 {
   "nav": {
-    "work": "Work",
-    "about": "About",
     "contact": "Contact",
     "blog": "Blog",
-    "whatsapp": "WhatsApp",
     "projects": "Projects",
     "links": "Links"
   },
@@ -76,7 +73,6 @@
   },
   "footer": {
     "copyright": "All rights reserved.",
-    "ecosystem_note": "njmtech — Founder & Lead Engineer Portal for Open Akha Labs, Inc.",
     "guides_category": "Guides",
     "mail_category": "Mail Service",
     "keyboard_guide": "Keyboard Guide",
@@ -102,45 +98,6 @@
     "keyboard_label": "Follow the keyboard",
     "keyboard_desc": "Scroll the page — the keys light up as you move through each section"
   },
-  "ecosystem": {
-    "eyebrow": "The Open Akha Ecosystem",
-    "heading": "The Evolution of njmtech",
-    "intro": "Originally my personal developer hub, njmtech now serves as the personal engineering hub and testing ground for Open Akha Labs."
-  },
-  "business": {
-    "responseTime": {
-      "message": "We reply within {time} on business days"
-    },
-    "contactCta": {
-      "heading": "Ready to get started?",
-      "subheading": "Tell us about your project — we'll get back to you soon.",
-      "response_time": "Typical response: {time}",
-      "whatsapp": "Chat on WhatsApp",
-      "form_link": "Or use the contact form"
-    }
-  },
-  "work": {
-    "label": "Portfolio",
-    "heading": "Our",
-    "heading_gradient": "Work",
-    "subheading": "Real projects with challenges, solutions, and measurable results for South African clients.",
-    "industry": "Industry",
-    "challenge": "Challenge",
-    "solution": "Solution",
-    "result": "Result",
-    "live_link": "View live site",
-    "empty": "Case studies coming soon — check back shortly.",
-    "ecosystem_note": "Selected builds and case studies by Open Akha Studio."
-  },
-  "aboutPage": {
-    "label": "About",
-    "heading": "About NJMTECH",
-    "role_badge": "Founder & Lead Engineer Portal",
-    "founder_heading": "Founder",
-    "values_heading": "How we work",
-    "industries_heading": "Industries we serve",
-    "cta_contact": "Get in touch"
-  },
   "skills": {
     "label": "Keyboard Skills",
     "heading": "Skills &",
@@ -150,26 +107,6 @@
     "idle_title": "Tech Stack",
     "idle_desc_desktop": "Move through this section, then hover a key to inspect the part of my stack it represents.",
     "idle_desc_mobile": "Scroll into the section and hover a key to inspect the part of my stack it represents."
-  },
-  "services": {
-    "label": "What I Do",
-    "heading": "Services &",
-    "heading_gradient": "Expertise",
-    "subheading": "A full range of development services to bring your ideas to life with cutting-edge technology.",
-    "cta": "Start a Conversation",
-    "cta_sub": "Have a project in mind? Let's talk.",
-    "item_0_title": "Web Development",
-    "item_0_desc": "Building responsive, performant web applications using modern frameworks like React, Next.js, and Vue.js.",
-    "item_1_title": "Mobile Development",
-    "item_1_desc": "Creating cross-platform mobile apps with React Native and Flutter for iOS and Android.",
-    "item_2_title": "Cloud Solutions",
-    "item_2_desc": "Designing and deploying scalable cloud infrastructure on AWS, GCP, and Azure.",
-    "item_3_title": "AI Integrations",
-    "item_3_desc": "Integrating AI and machine learning capabilities into applications to automate workflows and deliver intelligent user experiences.",
-    "item_4_title": "Backend Development",
-    "item_4_desc": "Building robust APIs, microservices, and database architectures for enterprise applications.",
-    "item_5_title": "DevOps & CI/CD",
-    "item_5_desc": "Implementing automated pipelines, containerization, and infrastructure as code."
   },
   "newsletter": {
     "badge": "Stay Updated",
@@ -192,13 +129,9 @@
     "label": "Get In Touch",
     "heading": "Let's",
     "heading_gradient": "Connect",
-    "subheading": "WhatsApp is the fastest way to reach us. Send a message and we'll get back to you soon.",
-    "whatsapp_cta": "Message us on WhatsApp",
-    "response_note": "We aim to reply within {time} on business days.",
-    "info_heading": "Other ways to reach us",
-    "info_desc": "Prefer email or the form below? We monitor all channels and respond within our SLA.",
-    "form_heading": "Send a message",
-    "form_desc": "We'll email you back — usually within the same business day.",
+    "subheading": "Questions, ideas, or just want to say hello? My inbox is always open.",
+    "info_heading": "Contact Information",
+    "info_desc": "Feel free to reach out through any of these channels. I typically respond within 24 hours.",
     "email_label": "Email",
     "phone_label": "WhatsApp",
     "whatsapp_prefill": "Hi, I just came from your website. I'd like to get in touch.",
@@ -215,7 +148,7 @@
     "submit": "Send Message",
     "submitting": "Sending...",
     "toast_success_title": "Message Sent! ✉️",
-    "toast_success_desc": "We'll get back to you within 4 business hours.",
+    "toast_success_desc": "I'll get back to you within 24 hours.",
     "toast_error_title": "Failed to send",
     "toast_error_desc": "Something went wrong. Please try again.",
     "toast_network_title": "Network error",
@@ -251,7 +184,6 @@
     "ask_anything": "Ask anything",
     "placeholder": "Ask about skills, services, projects, contact...",
     "chip_about": "Who is Nhlanhla?",
-    "chip_services": "Services",
     "chip_skills": "Tech stack",
     "chip_projects": "Projects",
     "chip_contact": "Contact",
@@ -273,10 +205,8 @@
     "toggle_ai": "Toggle AI Assistant",
     "reset_ai": "Reset AI Assistant Chat",
     "nav_home": "Navigate to Home",
-    "nav_work": "Navigate to Work",
-    "nav_about": "Navigate to About",
     "nav_contact": "Navigate to Contact",
-    "nav_projects": "Navigate to Work",
+    "nav_projects": "Navigate to Projects",
     "nav_blog": "Navigate to Blog",
     "close": "Close Assistant or Menus",
     "show": "Show Keyboard Shortcuts"

@@ -38,7 +38,6 @@ const steps = [
       { text: "LinkedIn: add https://njmtech.co.za as your website", done: false, link: "https://www.linkedin.com/in/njmalaza" },
       { text: "GitHub: set Website field to https://njmtech.co.za", done: false, link: "https://github.com/njmalaza" },
       { text: "Twitter/X: add njmtech.co.za to your bio link", done: false, link: "https://twitter.com/njmalaza" },
-      { text: "Create a Google Business Profile for NJMTech", done: false, link: "https://business.google.com" },
     ],
   },
   {
@@ -114,7 +113,6 @@ const sections = [
     tips: [
       { label: "Backlinks", detail: "Get reputable sites to link to yours. Quality beats quantity every time." },
       { label: "Social profiles", detail: "Add your website URL to LinkedIn, GitHub, and Twitter — these are trusted backlinks." },
-      { label: "Google Business Profile", detail: "Create a free profile to appear in Maps and the knowledge panel.", link: "https://business.google.com" },
       { label: 'rel="me" links', detail: 'Add <link rel="me"> in your site head pointing to your social profiles.' },
       { label: "Content sharing", detail: "Publish articles linking back to your site. LinkedIn and dev.to are great sources." },
     ],

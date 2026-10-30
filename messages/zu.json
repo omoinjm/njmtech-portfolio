@@ -1,10 +1,7 @@
 {
   "nav": {
-    "work": "Umsebenzi",
-    "about": "Mayelana",
     "contact": "Xhumana",
     "blog": "Ibhulogi",
-    "whatsapp": "WhatsApp",
     "projects": "Imisebenzi",
     "links": "Izixhumanisi"
   },
@@ -76,7 +73,6 @@
   },
   "footer": {
     "copyright": "Wonke amalungelo agcinwe.",
-    "ecosystem_note": "njmtech — Founder & Lead Engineer Portal for Open Akha Labs, Inc.",
     "guides_category": "Imihlahlandlela",
     "mail_category": "Isevisi Yemeyili",
     "keyboard_guide": "Umhlahlandlela Wekhiybhodi",
@@ -102,45 +98,6 @@
     "keyboard_label": "Landela ikhiybhodi",
     "keyboard_desc": "Skrola ikhasi — amakinobho ayakhanya njengoba uhamba esigabeni ngasinye"
   },
-  "ecosystem": {
-    "eyebrow": "The Open Akha Ecosystem",
-    "heading": "The Evolution of njmtech",
-    "intro": "Originally my personal developer hub, njmtech now serves as the personal engineering hub and testing ground for Open Akha Labs."
-  },
-  "business": {
-    "responseTime": {
-      "message": "Siphendula phakathi kwe-{time} ngosuku lomsebenzi"
-    },
-    "contactCta": {
-      "heading": "Ukulungele ukuqala?",
-      "subheading": "Sitshele ngephrojekthi yakho — sizobuyela kuwe maduze.",
-      "response_time": "Isikhathi sokuphendula: {time}",
-      "whatsapp": "Xhumana nge-WhatsApp",
-      "form_link": "Noma sebenzisa ifomu lokuxhumana"
-    }
-  },
-  "work": {
-    "label": "Iphothifoliyo",
-    "heading": "Umsebenzi",
-    "heading_gradient": "Wethu",
-    "subheading": "Amaphrojekthi angempela nezinselelo, izixazululo, nemiphumela ebonakalayo eklanyelwe amaklayenti aseNingizimu Afrika.",
-    "industry": "Imboni",
-    "challenge": "Inselelo",
-    "solution": "Isixazululo",
-    "result": "Umphumela",
-    "live_link": "Buka isayithi ebukhoma",
-    "empty": "Izifundo zamacala ziyeza maduze.",
-    "ecosystem_note": "Selected builds and case studies by Open Akha Studio."
-  },
-  "aboutPage": {
-    "label": "Mayelana",
-    "heading": "Mayelana ne-NJMTECH",
-    "role_badge": "Founder & Lead Engineer Portal",
-    "founder_heading": "Umsunguli",
-    "values_heading": "Indlela esisebenza ngayo",
-    "industries_heading": "Izimboni esisebenzela zona",
-    "cta_contact": "Xhumana nathi"
-  },
   "skills": {
     "label": "Amakhono Ekhiybhodi",
     "heading": "Amakhono",
@@ -150,26 +107,6 @@
     "idle_title": "Izinto Zobuchwepheshe",
     "idle_desc_desktop": "Hambela kulesi sigaba, bese usho phezu kwengcezu ukuze uhlole ingxenye yezinto zami.",
     "idle_desc_mobile": "Skrola ungene kulesi sigaba, bese usho phezu kwengcezu ukuze uhlole ingxenye yezinto zami."
-  },
-  "services": {
-    "label": "Engikwenzayo",
-    "heading": "Izinsizakalo",
-    "heading_gradient": "Nobuchwepheshe",
-    "subheading": "Indawo ephelele yezinsizakalo zokuthuthukisa ukuze izimvo zakho zibe yiqiniso ngobuchwepheshe banamuhla.",
-    "cta": "Qala Ingxoxo",
-    "cta_sub": "Unephrojekthi engqondweni? Asisho.",
-    "item_0_title": "Ukuthuthukisa Iwebhusayithi",
-    "item_0_desc": "Ukwakha izinhlelo ze-web ezisetshenziswa ngendlela ekhethekile, ezisebenza kahle, kusetshenziswa izinsizakalo zanamuhla njengeReact, Next.js, neVue.js.",
-    "item_1_title": "Ukuthuthukisa Izinhlelo Zeselula",
-    "item_1_desc": "Ukwakha izinhlelo ze-mobile ezisebenza kuzo zombili izinhlelo ngeReact Native neFlutter ze-iOS ne-Android.",
-    "item_2_title": "Izisombululo Zefu",
-    "item_2_desc": "Ukwakha nokufaka isikhungo se-cloud esikhulayo ku-AWS, GCP, ne-Azure.",
-    "item_3_title": "Ukuhlanganisa i-AI",
-    "item_3_desc": "Ukufaka amakhono e-AI nokufunda kwezinto eziphilayo ezinhlelweni ukuze kuzenzeke imisebenzi ngokwayo nokuletha izimpendulo ezihlakanipha kubasebenzisi.",
-    "item_4_title": "Ukuthuthukisa Inhlangothi Yangemuva",
-    "item_4_desc": "Ukwakha ama-API anekhono, ama-microservice, nezakhiwo ze-database ezinkampanini ezinkulu.",
-    "item_5_title": "I-DevOps Nokuhlanganisa Okuqhubekayo",
-    "item_5_desc": "Ukufaka izinhlelo ze-CI/CD ezizenzakalayo, ukufaka izinto ezisezitsheni, nezakhiwo zemishini."
   },
   "newsletter": {
     "badge": "Hlala Uzwile",
@@ -192,13 +129,9 @@
     "label": "Xhumana",
     "heading": "Ake",
     "heading_gradient": "Sixhumane",
-    "subheading": "I-WhatsApp iyindlela esheshayo yokufinyelela kithi. Thumela umlayezo sizobuyela kuwe maduze.",
-    "whatsapp_cta": "Sithumelele umlayezo nge-WhatsApp",
-    "response_note": "Sihlose ukuphendula phakathi kwe-{time} ngosuku lomsebenzi.",
-    "info_heading": "Ezinye izindlela zokuxhumana",
-    "info_desc": "Ukhetha i-imeyili noma ifomu ngezansi? Silandelela zonke iziteshi futhi siphendula ngaphakathi kwesikhathi sethu.",
-    "form_heading": "Thumela umlayezo",
-    "form_desc": "Sizokuthumelela i-imeyili — ngokuvamile ngosuku lomsebenzi olufanayo.",
+    "subheading": "Unemibuzo, imibono, noma ufuna nje ukubingelela? Ibhokisi lami lemiyalezo lihlala livulekile.",
+    "info_heading": "Ulwazi Lokuxhumana",
+    "info_desc": "Zizwa ukhululekile ukuxhumana nami ngawo noma muphi walamazindlela. Ngijwayele ukuphendula phakathi nehora lama-24.",
     "email_label": "I-imeyili",
     "phone_label": "WhatsApp",
     "whatsapp_prefill": "Sawubona, ngisanda kuvela kuwebhusayithi yakho. Ngingathanda ukuxhumana nawe.",
@@ -215,7 +148,7 @@
     "submit": "Thumela Umlayezo",
     "submitting": "Iyathunyelwa...",
     "toast_success_title": "Umlayezo Uthunyelwe! ✉️",
-    "toast_success_desc": "Sizobuyela kuwe phakathi kwamahora ama-4 omsebenzi.",
+    "toast_success_desc": "Ngizophendula phakathi nehora lama-24.",
     "toast_error_title": "Ukuthumela kwehlulekile",
     "toast_error_desc": "Kukhona okungahambanga kahle. Sicela uzame futhi.",
     "toast_network_title": "Iphutha lenethiwekhi",
@@ -251,7 +184,6 @@
     "ask_anything": "Buza noma yini",
     "placeholder": "Buza ngamakhono, izinsizakalo, imisebenzi, ukuxhumana...",
     "chip_about": "Ubani uNhlanhla?",
-    "chip_services": "Izinsizakalo",
     "chip_skills": "Izinto Zobuchwepheshe",
     "chip_projects": "Imisebenzi",
     "chip_contact": "Xhumana",
@@ -273,10 +205,8 @@
     "toggle_ai": "Vula/Vala Umsizi we-AI",
     "reset_ai": "Setha Kabusha Ingxoxo Nomsizi we-AI",
     "nav_home": "Yiya Ekhaya",
-    "nav_work": "Yiya Emsebenzini",
-    "nav_about": "Yiya Emayelana",
     "nav_contact": "Yiya Ekuxhumaneni",
-    "nav_projects": "Yiya Emsebenzini",
+    "nav_projects": "Yiya Emisebenzi",
     "nav_blog": "Yiya Ebhulogini",
     "close": "Vala Umsizi Noma Imenyu",
     "show": "Bonisa Izinqamuleli Zekhiybhodi"

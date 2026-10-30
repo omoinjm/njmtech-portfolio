@@ -3,16 +3,9 @@
 import { useTranslations } from "next-intl";
 import { useToast } from "@/hooks/use-toast";
 import { motion, useInView } from "framer-motion";
-import { Github, Linkedin, Mail, MapPin, MessageCircle, Phone, Send, Twitter } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, Phone, Send, Twitter } from "lucide-react";
 import { useRef, useState } from "react";
 import { buildWhatsAppUrl, WHATSAPP_DISPLAY } from "@/lib/social-links";
-import {
-  BUSINESS_CONTACT,
-  RESPONSE_TIME,
-  getGeneralQuoteUrl,
-} from "@/lib/business-content";
-import { ResponseTimePromise } from "@/components/business/ResponseTimePromise";
-import { Button } from "@/components/ui/button";
 import { TurnstileWidget } from "@/components/TurnstileWidget";
 import { useTurnstile } from "@/hooks/use-turnstile";
 
@@ -73,15 +66,8 @@ export const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const whatsappUrl = getGeneralQuoteUrl();
-
   const contactItems = [
-    {
-      icon: Mail,
-      label: t("email_label"),
-      value: BUSINESS_CONTACT.email,
-      href: `mailto:${BUSINESS_CONTACT.email}`,
-    },
+    { icon: Mail, label: t("email_label"), value: "njmalaza@outlook.com", href: "mailto:njmalaza@outlook.com" },
     {
       icon: Phone,
       label: t("phone_label"),
@@ -89,7 +75,7 @@ export const Contact = () => {
       href: buildWhatsAppUrl(t("whatsapp_prefill")),
       external: true,
     },
-    { icon: MapPin, label: t("location_label"), value: BUSINESS_CONTACT.location, href: "#" },
+    { icon: MapPin, label: t("location_label"), value: "Johannesburg", href: "#" },
   ];
 
   return (
@@ -112,19 +98,7 @@ export const Contact = () => {
           <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
             {t("heading")} <span className="gradient-text">{t("heading_gradient")}</span>
           </h1>
-          <p className="text-muted-foreground mb-6">{t("subheading")}</p>
-          <div className="flex justify-center mb-8">
-            <ResponseTimePromise />
-          </div>
-          <Button asChild size="lg" className="rounded-full px-10">
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="w-5 h-5 mr-2" />
-              {t("whatsapp_cta")}
-            </a>
-          </Button>
-          <p className="text-sm text-muted-foreground mt-4">
-            {t("response_note", { time: RESPONSE_TIME })}
-          </p>
+          <p className="text-muted-foreground">{t("subheading")}</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
@@ -193,8 +167,6 @@ export const Contact = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="p-8 rounded-2xl bg-card border border-border"
           >
-            <h2 className="text-xl font-bold mb-2">{t("form_heading")}</h2>
-            <p className="text-sm text-muted-foreground mb-6">{t("form_desc")}</p>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>

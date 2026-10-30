@@ -37,7 +37,6 @@ type KeyboardPose = {
 type HomeSectionId =
   | "hero"
   | "skills"
-  | "services"
   | "projects"
   | "contact"
   | "newsletter";
@@ -88,23 +87,6 @@ const SECTION_CONFIGS: Record<HomeSectionId, SectionConfig> = {
     glowOpacity: 0.22,
     floatAmplitude: 0.04,
     floatSpeed: 0.62,
-  },
-  services: {
-    pose: {
-      pitch: 0.64,
-      yaw: 0.5,
-      roll: 0.1,
-      x: -1.45,
-      y: -0.02,
-      scale: 0.94,
-    },
-    skillIds: ["docker", "kubernetes", "azure", "nodejs", "postgresql", "cicd"],
-    idlePitch: 0.018,
-    idleRoll: 0.02,
-    idleYaw: 0.055,
-    glowOpacity: 0.1,
-    floatAmplitude: 0.06,
-    floatSpeed: 0.6,
   },
   projects: {
     pose: {

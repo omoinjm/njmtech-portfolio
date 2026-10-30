@@ -2,7 +2,6 @@ import HomePage from '@/components/home/Index';
 import {
   generateOrganizationSchema,
   generatePersonSchema,
-  generateProfessionalServiceSchema,
   generateProfilePageSchema,
   generateSiteNavigationSchema,
   generateWebsiteSchema,
@@ -60,10 +59,6 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema()) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(generateProfessionalServiceSchema()) }}
       />
       <script
         type="application/ld+json"

@@ -5,7 +5,6 @@
 export const OMOI_VOICE_CACHE_KEYS = {
   welcome: "welcome",
   about: "about",
-  services: "services",
   skills: "skills",
   projects: "projects",
   contact: "contact",
@@ -20,13 +19,12 @@ export type OmoiVoiceCacheKey =
 export const OMOI_WELCOME_MESSAGE = {
   cacheKey: OMOI_VOICE_CACHE_KEYS.welcome,
   content:
-    "I-I'm Omoi. I've been assigned to protect Nhlanhla's portfolio... but what if I fail? What if a server explodes right now? *Munch*... This lollipop is the only thing keeping me sane. Ask me about his services, skills, or projects. I'll do my best to answer... if the world doesn't end first.",
+    "I-I'm Omoi. I've been assigned to protect Nhlanhla's portfolio... but what if I fail? What if a server explodes right now? *Munch*... This lollipop is the only thing keeping me sane. Ask me about his skills, projects, or blog. I'll do my best to answer... if the world doesn't end first.",
 } as const;
 
 /** Prompt chips — `id` is the D1 `cache_key` for pre-generated audio. */
 export const OMOI_PROMPT_CHIPS = [
   { id: OMOI_VOICE_CACHE_KEYS.about, prompt: "Who is Nhlanhla Junior Malaza?" },
-  { id: OMOI_VOICE_CACHE_KEYS.services, prompt: "What services do you offer?" },
   { id: OMOI_VOICE_CACHE_KEYS.skills, prompt: "What technologies do you work with?" },
   { id: OMOI_VOICE_CACHE_KEYS.projects, prompt: "Can I see the projects?" },
   { id: OMOI_VOICE_CACHE_KEYS.contact, prompt: "How can I get in touch?" },
@@ -37,7 +35,6 @@ export type OmoiPromptChipId = (typeof OMOI_PROMPT_CHIPS)[number]["id"];
 
 export type OmoiPromptChipLabelKey =
   | "chip_about"
-  | "chip_services"
   | "chip_skills"
   | "chip_projects"
   | "chip_contact"
@@ -45,7 +42,6 @@ export type OmoiPromptChipLabelKey =
 
 const PROMPT_CHIP_LABEL_KEYS: Record<OmoiPromptChipId, OmoiPromptChipLabelKey> = {
   about: "chip_about",
-  services: "chip_services",
   skills: "chip_skills",
   projects: "chip_projects",
   contact: "chip_contact",
@@ -66,7 +62,6 @@ const S3_VOICE_BASE =
 export const OMOI_VOICE_CACHE_URLS: Partial<Record<OmoiVoiceCacheKey, string>> = {
   welcome: `${S3_VOICE_BASE}/733911b86d5036919736e655722d8e3363c678986783011a6814058dcfa8709d_fcrsth.wav`,
   about: `${S3_VOICE_BASE}/37f94b48cf633d48d3eb5558e4d83519d1ffeffa826391f4f4bd9f62ae9bdc61_irzs9g.wav`,
-  services: `${S3_VOICE_BASE}/c2cff6f05c9ab441cc1ce52ecba6142a5ac49064a721540e6bcb528b011b69b1_nl0vff.wav`,
   skills: `${S3_VOICE_BASE}/45002da0e0b7d12351c0e200f9f503fc8c6f1a1bfa8490f2be031065f46cff9c_zyvi8p.wav`,
   projects: `${S3_VOICE_BASE}/2a7ee9be7352a673da7642103fe8d2e6e01d5b3b7b39331c5ff9b6e831b28f11_mwhpu5.wav`,
   contact: `${S3_VOICE_BASE}/f8a46aa0d60e0ee6d0cb16088e875b61310450915819f171ed56274f2069fd6d_guw7sp.wav`,

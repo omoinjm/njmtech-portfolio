@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { useCallback, useState } from "react";
 import { Hero } from "./Hero";
 import { Newsletter } from "./Newsletter";
-import { Services } from "./Services";
 import { Skills } from "./Skills";
 import type { KeyboardSkill } from "./skills-keyboard-data";
 
@@ -36,7 +35,6 @@ export default function HomePage() {
       <main className="relative z-10">
         <Hero />
         <Skills activeSkill={activeSkill} />
-        <Services />
         <Newsletter />
       </main>
     </div>
