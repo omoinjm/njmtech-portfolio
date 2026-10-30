@@ -41,13 +41,6 @@ export const siteConfig = {
     country: "South Africa",
     countryCode: "ZA",
   },
-  services: [
-    "Web Development",
-    "DevOps Engineering",
-    "AI Integrations",
-    "Cloud Infrastructure",
-    "Technical Consulting",
-  ],
   logo: "/logo.png",
   ogImage: "/opengraph-image",
   locales: ["en_ZA", "en_US"],
@@ -90,7 +83,6 @@ export const pageConfig: Record<string, SEOProps> = {
       "portfolio",
       "web developer portfolio",
       "South Africa developer",
-      "freelance developer",
     ],
     ogType: "profile",
     robots:
@@ -142,17 +134,13 @@ export const pageConfig: Record<string, SEOProps> = {
   contact: {
     title: "Contact",
     description:
-      "Get in touch with Nhlanhla Junior Malaza for project inquiries, collaborations, or professional opportunities. South Africa-based software developer available for freelance and full-time work.",
+      "Get in touch with Nhlanhla Junior Malaza — questions, ideas, collaborations, or just to say hello.",
     canonical: `${siteConfig.url}/contact`,
     keywords: [
       "contact Nhlanhla Junior Malaza",
-      "hire software developer South Africa",
       "Nhlanhla Junior contact",
       "NJMTech contact",
-      "freelance developer South Africa",
-      "hire full stack developer",
       "collaboration",
-      "project inquiry",
     ],
     ogType: "website",
     robots:
@@ -209,22 +197,6 @@ export const pageConfig: Record<string, SEOProps> = {
     robots: "index, follow",
   },
 
-  services: {
-    title: "Services",
-    description:
-      "Professional services by Nhlanhla Junior Malaza — web development, DevOps engineering, and AI integrations tailored for modern businesses.",
-    canonical: `${siteConfig.url}/services`,
-    keywords: [
-      "services Nhlanhla Junior Malaza",
-      "web development services",
-      "devops services",
-      "AI integration services",
-      "consulting South Africa",
-      "NJMTech services",
-    ],
-    ogType: "website",
-    robots: "index, follow",
-  },
 
   "coming-soon": {
     title: "Coming Soon | Nhlanhla Junior Malaza",
@@ -326,7 +298,7 @@ export function generateOrganizationSchema() {
     sameAs: getSameAsLinks(),
     contactPoint: {
       "@type": "ContactPoint",
-      contactType: "Customer Service",
+      contactType: "General Inquiries",
       telephone: siteConfig.telephone,
       email: siteConfig.email,
       availableLanguage: "English",
@@ -334,36 +306,6 @@ export function generateOrganizationSchema() {
   };
 }
 
-/**
- * Generate ProfessionalService schema for branded search and local entity signals
- */
-export function generateProfessionalServiceSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "@id": `${siteConfig.url}/#professional-service`,
-    name: siteConfig.name,
-    url: siteConfig.url,
-    image: `${siteConfig.url}${siteConfig.logo}`,
-    description: siteConfig.description,
-    email: siteConfig.email,
-    telephone: siteConfig.telephone,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: siteConfig.location.city,
-      addressRegion: siteConfig.location.region,
-      addressCountry: siteConfig.location.countryCode,
-    },
-    areaServed: {
-      "@type": "Country",
-      name: siteConfig.location.country,
-    },
-    founder: { "@id": `${siteConfig.url}/#person` },
-    sameAs: getSameAsLinks(),
-    serviceType: siteConfig.services,
-    availableLanguage: ["en"],
-  };
-}
 
 /**
  * Generate WebSite schema for search engines
@@ -711,7 +653,6 @@ export default {
   pageConfig,
   generatePersonSchema,
   generateOrganizationSchema,
-  generateProfessionalServiceSchema,
   generateWebsiteSchema,
   generateSiteNavigationSchema,
   generateBlogPageSchema,
