@@ -57,15 +57,22 @@ jobs:
         run: pnpm exec playwright install chromium --with-deps
 
       - name: Trigger Vercel → D1 sync (optional)
+        # Truly optional: the Worker has its own 6-hourly cron, so a failed or
+        # unreachable /sync must NOT abort the screenshot capture below.
+        continue-on-error: true
         env:
           WORKER_SYNC_URL: ${{ secrets.WORKER_SYNC_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           if [ -n "$WORKER_SYNC_URL" ] && [ -n "$CRON_SECRET" ]; then
             echo "POST $WORKER_SYNC_URL/sync"
-            curl -sf -X POST "$WORKER_SYNC_URL/sync" \
+            if curl -sf -X POST "$WORKER_SYNC_URL/sync" \
               -H "Authorization: Bearer $CRON_SECRET" \
-              -H "Content-Type: application/json"
+              -H "Content-Type: application/json"; then
+              echo "Pre-sync OK."
+            else
+              echo "Pre-sync failed (worker returned an error or was unreachable) — continuing; Worker cron runs independently."
+            fi
           else
             echo "WORKER_SYNC_URL or CRON_SECRET not set — skipping pre-sync (Worker cron may have already run)."
           fi
