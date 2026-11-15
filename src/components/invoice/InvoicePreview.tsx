@@ -1,6 +1,6 @@
 "use client";
 
-import { computeInvoiceTotals, formatZar } from "@/lib/invoice";
+import { computeInvoiceTotals, formatMoney } from "@/lib/invoice";
 import type { Invoice } from "@/types/invoice_model";
 import { siteConfig } from "@/utils/seo";
 
@@ -10,6 +10,7 @@ interface InvoicePreviewProps {
 
 export function InvoicePreview({ invoice }: InvoicePreviewProps) {
   const totals = computeInvoiceTotals(invoice);
+  const money = (amount: number) => formatMoney(amount, invoice.currency);
   const taxPercent = invoice.taxPercent ?? 0;
 
   return (
@@ -101,10 +102,10 @@ export function InvoicePreview({ invoice }: InvoicePreviewProps) {
                   {item.quantity}
                 </td>
                 <td className="py-3 pr-3 align-top tabular-nums">
-                  {formatZar(item.unitPrice)}
+                  {money(item.unitPrice)}
                 </td>
                 <td className="py-3 text-right align-top tabular-nums">
-                  {formatZar(item.quantity * item.unitPrice)}
+                  {money(item.quantity * item.unitPrice)}
                 </td>
               </tr>
             ))}
@@ -114,7 +115,7 @@ export function InvoicePreview({ invoice }: InvoicePreviewProps) {
                   {field.label || "Additional amount"}
                 </td>
                 <td className="py-3 text-right align-top tabular-nums">
-                  {formatZar(field.amount)}
+                  {money(field.amount)}
                 </td>
               </tr>
             ))}
@@ -127,21 +128,21 @@ export function InvoicePreview({ invoice }: InvoicePreviewProps) {
           <div className="flex justify-between gap-6">
             <dt className="text-muted-foreground">Subtotal</dt>
             <dd className="tabular-nums font-medium">
-              {formatZar(totals.subtotal)}
+              {money(totals.subtotal)}
             </dd>
           </div>
           {taxPercent > 0 ? (
             <div className="flex justify-between gap-6">
               <dt className="text-muted-foreground">Tax ({taxPercent}%)</dt>
               <dd className="tabular-nums font-medium">
-                {formatZar(totals.tax)}
+                {money(totals.tax)}
               </dd>
             </div>
           ) : null}
           <div className="flex justify-between gap-6 border-t border-border pt-2 text-base">
             <dt className="font-semibold">Total</dt>
             <dd className="tabular-nums font-bold gradient-text">
-              {formatZar(totals.total)}
+              {money(totals.total)}
             </dd>
           </div>
         </dl>

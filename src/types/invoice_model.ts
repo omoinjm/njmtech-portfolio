@@ -1,3 +1,7 @@
+export const INVOICE_CURRENCIES = ["ZAR", "USD"] as const;
+
+export type InvoiceCurrency = (typeof INVOICE_CURRENCIES)[number];
+
 export type InvoiceParty = {
   name: string;
   email?: string;
@@ -23,7 +27,7 @@ export type Invoice = {
   number: string;
   issuedAt: string;
   dueAt?: string;
-  currency: "ZAR";
+  currency: InvoiceCurrency;
   from: InvoiceParty;
   to: InvoiceParty;
   lineItems: InvoiceLineItem[];
@@ -47,7 +51,7 @@ export type InvoiceListItem = {
   number: string;
   toName: string;
   total: number;
-  currency: "ZAR";
+  currency: InvoiceCurrency;
   issuedAt: string;
   updatedAt: string;
 };

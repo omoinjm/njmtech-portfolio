@@ -78,13 +78,13 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/projects",
-        destination: "/work",
+        source: "/work",
+        destination: "/projects",
         permanent: true,
       },
       {
-        source: "/:locale(zu)/projects",
-        destination: "/:locale/work",
+        source: "/:locale(zu)/work",
+        destination: "/:locale/projects",
         permanent: true,
       },
     ];

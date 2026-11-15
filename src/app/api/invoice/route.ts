@@ -9,6 +9,7 @@ import {
   saveInvoice,
 } from "@/services/invoice-storage.service";
 import { logger } from "@/utils/logger";
+import { INVOICE_CURRENCIES } from "@/types/invoice_model";
 
 const partySchema = z.object({
   name: z.string().trim().min(1).max(200),
@@ -35,7 +36,7 @@ const invoiceSchema = z.object({
   number: z.string().trim().min(1).max(80),
   issuedAt: z.string().trim().min(1).max(40),
   dueAt: z.string().trim().max(40).optional().or(z.literal("")),
-  currency: z.literal("ZAR"),
+  currency: z.enum(INVOICE_CURRENCIES).default("ZAR"),
   from: partySchema,
   to: partySchema,
   lineItems: z.array(lineItemSchema).max(100),

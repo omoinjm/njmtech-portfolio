@@ -1,5 +1,6 @@
 import type {
   Invoice,
+  InvoiceCurrency,
   InvoiceCustomField,
   InvoiceLineItem,
   InvoiceTotals,
@@ -100,10 +101,18 @@ export function computeInvoiceTotals(invoice: Invoice): InvoiceTotals {
   };
 }
 
-export function formatZar(amount: number): string {
-  return new Intl.NumberFormat("en-ZA", {
+const CURRENCY_LOCALES: Record<InvoiceCurrency, string> = {
+  ZAR: "en-ZA",
+  USD: "en-US",
+};
+
+export function formatMoney(
+  amount: number,
+  currency: InvoiceCurrency = "ZAR",
+): string {
+  return new Intl.NumberFormat(CURRENCY_LOCALES[currency] ?? "en-ZA", {
     style: "currency",
-    currency: "ZAR",
+    currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Number.isFinite(amount) ? amount : 0);

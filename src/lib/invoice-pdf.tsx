@@ -6,7 +6,7 @@ import {
   StyleSheet,
   renderToBuffer,
 } from "@react-pdf/renderer";
-import { computeInvoiceTotals, formatZar } from "@/lib/invoice";
+import { computeInvoiceTotals, formatMoney } from "@/lib/invoice";
 import type { Invoice } from "@/types/invoice_model";
 import { siteConfig } from "@/utils/seo";
 
@@ -212,6 +212,7 @@ function PartyBlock({
 
 export function InvoicePdfDocument({ invoice }: { invoice: Invoice }) {
   const totals = computeInvoiceTotals(invoice);
+  const money = (amount: number) => formatMoney(amount, invoice.currency);
   const taxPercent = invoice.taxPercent ?? 0;
   const siteHost = siteConfig.url.replace(/^https?:\/\//, "");
 
@@ -259,9 +260,9 @@ export function InvoicePdfDocument({ invoice }: { invoice: Invoice }) {
           <View key={item.id} style={styles.tableRow} wrap={false}>
             <Text style={styles.colDesc}>{item.description || "—"}</Text>
             <Text style={styles.colQty}>{item.quantity}</Text>
-            <Text style={styles.colUnit}>{formatZar(item.unitPrice)}</Text>
+            <Text style={styles.colUnit}>{money(item.unitPrice)}</Text>
             <Text style={styles.colAmount}>
-              {formatZar(item.quantity * item.unitPrice)}
+              {money(item.quantity * item.unitPrice)}
             </Text>
           </View>
         ))}
@@ -271,7 +272,7 @@ export function InvoicePdfDocument({ invoice }: { invoice: Invoice }) {
             <Text style={[styles.colDesc, { flex: 6.4 }]}>
               {field.label || "Additional amount"}
             </Text>
-            <Text style={styles.colAmount}>{formatZar(field.amount)}</Text>
+            <Text style={styles.colAmount}>{money(field.amount)}</Text>
           </View>
         ))}
 
@@ -279,17 +280,17 @@ export function InvoicePdfDocument({ invoice }: { invoice: Invoice }) {
           <View style={styles.totalsBox}>
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>Subtotal</Text>
-              <Text style={styles.totalValue}>{formatZar(totals.subtotal)}</Text>
+              <Text style={styles.totalValue}>{money(totals.subtotal)}</Text>
             </View>
             {taxPercent > 0 ? (
               <View style={styles.totalRow}>
                 <Text style={styles.totalLabel}>Tax ({taxPercent}%)</Text>
-                <Text style={styles.totalValue}>{formatZar(totals.tax)}</Text>
+                <Text style={styles.totalValue}>{money(totals.tax)}</Text>
               </View>
             ) : null}
             <View style={styles.grandRow}>
               <Text style={styles.grandLabel}>Total</Text>
-              <Text style={styles.grandValue}>{formatZar(totals.total)}</Text>
+              <Text style={styles.grandValue}>{money(totals.total)}</Text>
             </View>
           </View>
         </View>

@@ -11,7 +11,12 @@ import {
   isR2Configured,
 } from "@/lib/r2-client";
 import { computeInvoiceTotals } from "@/lib/invoice";
-import type { Invoice, InvoiceListItem } from "@/types/invoice_model";
+import {
+  INVOICE_CURRENCIES,
+  type Invoice,
+  type InvoiceCurrency,
+  type InvoiceListItem,
+} from "@/types/invoice_model";
 import { logger } from "@/utils/logger";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -49,7 +54,7 @@ export function isValidInvoice(value: unknown): value is Invoice {
     value.id.trim().length > 0 &&
     typeof value.number === "string" &&
     typeof value.issuedAt === "string" &&
-    value.currency === "ZAR" &&
+    INVOICE_CURRENCIES.includes(value.currency as InvoiceCurrency) &&
     isParty(value.from) &&
     isParty(value.to) &&
     Array.isArray(value.lineItems) &&
@@ -89,7 +94,6 @@ export async function saveInvoice(invoice: Invoice): Promise<Invoice> {
   const now = new Date().toISOString();
   const payload: Invoice = {
     ...invoice,
-    currency: "ZAR",
     updatedAt: now,
     createdAt: invoice.createdAt || now,
   };
@@ -186,7 +190,7 @@ export async function listInvoices(limit = 50): Promise<InvoiceListItem[]> {
         number: parsed.number,
         toName: parsed.to.name || "—",
         total: totals.total,
-        currency: "ZAR",
+        currency: parsed.currency,
         issuedAt: parsed.issuedAt,
         updatedAt: parsed.updatedAt,
       });

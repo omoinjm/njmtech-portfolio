@@ -22,7 +22,7 @@ import {
   createCustomField,
   createEmptyInvoice,
   createLineItem,
-  formatZar,
+  formatMoney,
   getStoredAccessToken,
   setStoredAccessToken,
   computeInvoiceTotals,
@@ -33,7 +33,11 @@ import {
   getPublicInvoiceUrl,
 } from "@/lib/invoice-download";
 import { siteConfig } from "@/utils/seo";
-import type { Invoice, InvoiceListItem } from "@/types/invoice_model";
+import {
+  INVOICE_CURRENCIES,
+  type Invoice,
+  type InvoiceListItem,
+} from "@/types/invoice_model";
 
 interface InvoiceBuilderProps {
   initialId?: string;
@@ -433,7 +437,7 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
                       {item.number} · {item.toName}
                     </span>
                     <span className="tabular-nums text-muted-foreground">
-                      {formatZar(item.total)}
+                      {formatMoney(item.total, item.currency)}
                     </span>
                   </button>
                 </li>
@@ -451,7 +455,31 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
             />
           </Field>
           <Field label={t("currency")}>
-            <Input value="ZAR" disabled className="glass-input opacity-70" />
+            <div
+              role="radiogroup"
+              aria-label={t("currency")}
+              className="grid h-10 grid-cols-2 gap-1 rounded-md border border-border bg-card/50 p-1"
+            >
+              {INVOICE_CURRENCIES.map((code) => {
+                const active = invoice.currency === code;
+                return (
+                  <button
+                    key={code}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => updateInvoice({ currency: code })}
+                    className={`rounded text-sm font-medium transition-colors ${
+                      active
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    {code}
+                  </button>
+                );
+              })}
+            </div>
           </Field>
           <Field label={t("issued_at")}>
             <Input
@@ -770,7 +798,7 @@ export function InvoiceBuilder({ initialId }: InvoiceBuilderProps) {
           <div className="rounded-lg border border-border bg-card/50 p-3">
             <p className="text-xs text-muted-foreground">{t("running_total")}</p>
             <p className="mt-1 text-2xl font-bold gradient-text tabular-nums">
-              {formatZar(totals.total)}
+              {formatMoney(totals.total, invoice.currency)}
             </p>
           </div>
         </div>
