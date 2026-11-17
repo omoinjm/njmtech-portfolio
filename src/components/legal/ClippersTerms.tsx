@@ -9,6 +9,7 @@ export const ClippersTerms = () => {
   const sections = [
     "service_description",
     "eligibility",
+    "uploads",
     "content_rights",
     "platform_terms",
     "acceptable_use",

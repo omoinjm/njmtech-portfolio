@@ -8,6 +8,7 @@ export const ClippersPolicy = () => {
 
   const sections = [
     "data_collected",
+    "uploads",
     "data_use",
     "google",
     "service_providers",
