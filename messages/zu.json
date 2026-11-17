@@ -430,5 +430,101 @@
       "title": "13. Contact",
       "body": "For questions about these Voice Agent Terms, contact:\n\n{owner}\nEmail: {email}\nWebsite: {siteUrl}\n\nSee also our Voice Agent Privacy Policy at {siteUrl}/voice-agent-privacy."
     }
+  },
+  "clippersTerms": {
+    "label": "Legal",
+    "title": "Clipper Terms of Service",
+    "last_updated": "Last updated: 17 November 2026",
+    "intro": "These Terms of Service govern the Clipper app operated by {owner} ({siteName}). Clipper is a private publishing tool: it turns long-form videos into short vertical clips and, when an authorised operator chooses to, uploads them to social media accounts that {siteName} operates, such as the Shukela Clips (@shukela_clips) accounts on YouTube, TikTok and Instagram. By connecting an account to Clipper or using it, you agree to these terms.",
+    "service_description": {
+      "title": "1. What Clipper does",
+      "body": "Clipper:\n• Processes long-form videos supplied by its operators into short clips with captions.\n• Uses automated tools, including speech-to-text and an AI model, to transcribe videos and suggest clip moments, titles, descriptions and hashtags. Operators review and can edit everything before it is published.\n• Lets operators connect YouTube, TikTok and Instagram accounts and upload or post selected clips to those accounts, or send them to the platform's drafts.\n\nClipper never posts to a connected account without an operator choosing a clip and the destination."
+    },
+    "eligibility": {
+      "title": "2. Who may use Clipper",
+      "body": "Clipper is not a public service. Access to the dashboard is restricted to operators authorised by {siteName}. Only accounts owned or managed by {siteName}, or by someone who has authorised {siteName} to publish on their behalf, may be connected."
+    },
+    "content_rights": {
+      "title": "3. Content rights",
+      "body": "Clipper may only be used with videos that:\n• {siteName} or the account owner made and owns; or\n• are published under a Creative Commons Attribution licence that allows commercial reuse and modification (Clipper checks the licence and requires a credit line); or\n• the creator has given written permission to clip and repost, with credit.\n\nCredit lines required by a licence or permission are added to captions automatically and cannot be removed. Operators are responsible for confirming rights before a source is processed. Rights holders who believe their content was used improperly can contact us (see Contact) and we will review it promptly and remove it where appropriate."
+    },
+    "platform_terms": {
+      "title": "4. Third-party platforms",
+      "body": "When Clipper publishes to a platform, that platform's own terms and policies also apply, including the YouTube Terms of Service (https://www.youtube.com/t/terms), TikTok's Terms of Service and Community Guidelines, TikTok's Music Usage Confirmation, and Instagram's Terms of Use and Community Guidelines. Clipper uses these platforms' official APIs and does not bypass their limits, review processes or privacy settings."
+    },
+    "acceptable_use": {
+      "title": "5. Acceptable use",
+      "body": "You may not use Clipper to:\n• Publish content you do not have the right to use.\n• Publish misleading, spam, hateful, harassing or otherwise unlawful content.\n• Misrepresent who created a video or remove required attribution.\n• Attempt to access accounts, data or systems you are not authorised to use."
+    },
+    "accounts": {
+      "title": "6. Connected accounts",
+      "body": "Connecting an account authorises Clipper to perform only the actions you approve on the platform's consent screen, such as uploading videos and reading basic profile information. You can disconnect an account at any time from the Clipper dashboard, and revoke Clipper's access from the platform's own settings (for example, Google Account permissions or TikTok's Manage app permissions)."
+    },
+    "availability": {
+      "title": "7. Availability",
+      "body": "Clipper is provided as is. It may be changed, suspended or discontinued at any time, and platform API changes or limits can affect what it can do."
+    },
+    "disclaimer": {
+      "title": "8. Disclaimer and liability",
+      "body": "To the extent permitted by law, {siteName} is not liable for indirect or consequential losses arising from use of Clipper, including content removed by a platform, account restrictions, or lost revenue. Nothing in these terms limits liability that cannot be limited under South African law."
+    },
+    "governing_law": {
+      "title": "9. Governing law",
+      "body": "These terms are governed by the laws of the Republic of South Africa."
+    },
+    "changes": {
+      "title": "10. Changes",
+      "body": "We may update these terms. The date at the top shows the latest version. Continued use of Clipper after a change means you accept the updated terms."
+    },
+    "contact": {
+      "title": "11. Contact",
+      "body": "Questions about these terms, or a rights or takedown request: {email}."
+    }
+  },
+  "clippersPolicy": {
+    "label": "Legal",
+    "title": "Clipper Privacy Policy",
+    "last_updated": "Last updated: 17 November 2026",
+    "intro": "This Privacy Policy explains what information the Clipper app, operated by {owner} ({siteName}), collects and how it is used. Clipper is a private tool for publishing short clips to social media accounts that {siteName} operates, such as Shukela Clips (@shukela_clips).",
+    "data_collected": {
+      "title": "1. Information we collect",
+      "body": "When an account is connected, Clipper receives and stores:\n• Access and refresh tokens issued by the platform (YouTube/Google, TikTok, Instagram), so it can post on the account's behalf.\n• Basic account information: the account or channel ID, display name and username or handle.\n• For TikTok, creator information needed to post (nickname, username, available privacy options, interaction settings and maximum video length).\n• Records of what Clipper posted: the clip, caption, privacy setting, the platform's post or video ID and link, status and any error message.\n\nClipper also stores the source videos operators submit, their transcripts and the clips produced from them. Operators sign in to the dashboard through Cloudflare Access, which records their email address."
+    },
+    "data_use": {
+      "title": "2. How we use it",
+      "body": "We use this information only to operate Clipper: to create clips, publish or upload them when an operator chooses to, show the result and link in the dashboard, and keep the service secure. We do not sell personal information, use it for advertising, or share it with anyone except the service providers below. Clipper does not read or store other users' content, followers, messages or analytics."
+    },
+    "google": {
+      "title": "3. YouTube and Google data",
+      "body": "Clipper uses YouTube API Services to upload videos and to identify the connected channel. Its use of information received from Google APIs follows the Google API Services User Data Policy, including the Limited Use requirements. See the Google Privacy Policy (https://policies.google.com/privacy) for how Google handles data. You can revoke Clipper's access at https://myaccount.google.com/permissions."
+    },
+    "service_providers": {
+      "title": "4. Service providers",
+      "body": "Clipper runs on:\n• Cloudflare (dashboard hosting, database, video storage and sign-in).\n• Amazon Web Services (video processing on GPU servers, and an AI model via Amazon Bedrock to transcribe videos and suggest clips).\n• Infisical (encrypted storage of application secrets).\n• Google/YouTube, TikTok and Meta/Instagram, through their official APIs, when content is published.\nEach provider processes data under its own terms and privacy policy."
+    },
+    "storage_security": {
+      "title": "5. Storage and security",
+      "body": "Account tokens are encrypted (AES-256-GCM) before they are stored. The dashboard is only reachable by authorised operators, and connections use HTTPS. No system is perfectly secure, but we take reasonable measures to protect the information we hold."
+    },
+    "retention": {
+      "title": "6. Retention",
+      "body": "Tokens and account details are kept until the account is disconnected in the dashboard, which deletes them. Post records are kept as a history of what was published. Uploaded source videos are deleted from storage after 30 days; finished clips are kept until an operator deletes them."
+    },
+    "your_rights": {
+      "title": "7. Your choices and rights",
+      "body": "You can disconnect an account in the Clipper dashboard or revoke access from the platform's settings at any time. Under the Protection of Personal Information Act (POPIA) you may ask what personal information we hold, and ask us to correct or delete it, by contacting us."
+    },
+    "children": {
+      "title": "8. Children",
+      "body": "Clipper is not intended for children and is not used to collect information from them."
+    },
+    "changes": {
+      "title": "9. Changes",
+      "body": "We may update this policy. The date at the top shows the latest version."
+    },
+    "contact": {
+      "title": "10. Contact",
+      "body": "Privacy questions or requests: {email}."
+    }
   }
 }

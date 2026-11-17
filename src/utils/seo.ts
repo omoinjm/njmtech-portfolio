@@ -197,6 +197,24 @@ export const pageConfig: Record<string, SEOProps> = {
     robots: "index, follow",
   },
 
+  "clippers-terms": {
+    title: "Clipper Terms of Service",
+    description:
+      "Terms of service for Clipper, NJMTECH's private tool that turns long-form videos into short clips and publishes them to its own YouTube, TikTok and Instagram accounts.",
+    canonical: `${siteConfig.url}/clippers-terms`,
+    keywords: ["Clipper terms", "terms of service", "NJMTECH Clipper", "Shukela Clips"],
+    ogType: "website",
+    robots: "index, follow",
+  },
+  "clippers-policy": {
+    title: "Clipper Privacy Policy",
+    description:
+      "How Clipper, NJMTECH's clip publishing tool, handles account tokens and data from YouTube, TikTok and Instagram.",
+    canonical: `${siteConfig.url}/clippers-policy`,
+    keywords: ["Clipper privacy policy", "privacy policy", "NJMTECH Clipper", "Shukela Clips"],
+    ogType: "website",
+    robots: "index, follow",
+  },
   "voice-agent-privacy": {
     title: "Voice Agent Privacy Policy",
     description:
